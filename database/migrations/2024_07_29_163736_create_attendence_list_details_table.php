@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('daftar_hadir_details', function (Blueprint $table) {
+        Schema::create('attendence_list_details', function (Blueprint $table) {
             $table->id();
+            $table->string('attendence_student'); //alfa/hadir
+            $table->string('course_status');
+            $table->foreignId('attendence_list_id')->constrained()->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('daftar_hadir_details');
+        Schema::dropIfExists('attendence_list_details');
     }
 };

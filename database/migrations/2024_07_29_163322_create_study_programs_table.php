@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jurnals', function (Blueprint $table) {
+        Schema::create('study_programs', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jurnals');
+        Schema::dropIfExists('study_programs');
     }
 };
