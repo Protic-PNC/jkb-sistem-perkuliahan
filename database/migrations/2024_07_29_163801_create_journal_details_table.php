@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('journal_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('attendence_list_detail_id')->constrained()->onDelete('cascade');
+            $table->string('material');
+            $table->boolean('has_acc_student');
+            $table->boolean('has_acc_lecturer');
+            $table->foreignId('attendence_list_detail_id')->constrained()->onDelete('cascade'); //untuk ambil jumlah hadir->count()
+            $table->foreignId('journal_id')->constrained()->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('attendence_student'); //alfa/hadir
             $table->string('course_status');
+            $table->boolean('has_acc_student');
+            $table->boolean('has_acc_lecturer');
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->foreignId('attendence_list_id')->constrained()->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();

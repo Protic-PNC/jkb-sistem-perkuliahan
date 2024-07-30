@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('attendence_lists', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
+            $table->string('code_al');
+            $table->boolean('has_finished');
+            $table->boolean('has_acc_head_departement');
             $table->foreignId('lecturer_id')->constrained()->onDelete('cascade');
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->boolean('has_finished');
+            $table->foreignId('student_class_id')->constrained()->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });
