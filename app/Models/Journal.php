@@ -14,7 +14,7 @@ class Journal extends Model
         'has_finished',
         'has_acc_head_departement',
         'lecturer_id',
-        'course_id',
+        'course_lecturer_id',
         'student_class_id',
     ];
 
@@ -28,7 +28,5 @@ class Journal extends Model
         return $this->hasOne(StudentClass::class);
     }
 
-    public function journal_detail(){ //attendence list details
-        return $this->belongsTo(JournalDetail::class);
-    }
+    
 }

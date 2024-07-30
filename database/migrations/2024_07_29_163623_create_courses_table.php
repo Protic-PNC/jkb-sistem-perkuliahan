@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('name');
             $table->integer('sks');
             $table->integer('hours');
-            $table->foreignId('student_class_id')->constrained()->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

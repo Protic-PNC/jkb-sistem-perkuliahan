@@ -19,8 +19,6 @@ return new class extends Migration
             $table->integer('nidn');
             $table->integer('nip');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->foreignId('position_id')->constrained()->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

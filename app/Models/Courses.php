@@ -21,4 +21,11 @@ class Courses extends Model
     public function lecturer(){
         return $this->belongsTo(Lecturer::class);
     }
+    public function studentClasses()
+    {
+        //pivot table (many to many)
+        return $this->belongsToMany(StudentClass::class, 'course_classes','student_class_id', 'course_id')->wherePivotNull('deleted_at')
+        ->withPivot('id');
+    
+    }
 }

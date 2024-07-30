@@ -15,7 +15,7 @@ class AttendenceList extends Model
         'has_finished',
         'has_acc_head_departement',
         'lecturer_id',
-        'course_id',
+        'course_lecturer_id', //ambil properti dari courses
         'student_class_id',
     ];
 

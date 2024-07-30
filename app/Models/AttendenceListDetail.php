@@ -11,15 +11,15 @@ class AttendenceListDetail extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'attendence_list_id',
+        'student_id',
         'attendence_student',
         'course_status',
         'has_acc_student',
         'has_acc_lecturer',
-        'student_id',
-        'attendence_list_id',
     ];
 
-    public function al(){ //attendence list
-        return $this->hasOne(AttendenceList::class);
-    }
+    //buat method jumlah hadir
+
+    
 }

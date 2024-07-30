@@ -23,6 +23,17 @@ class Student extends Model
     } 
 
     public function student_class(){
-        return $this->hasOne(StudentClass::class);
+        return $this->belongsTo(StudentClass::class);
+    }
+
+    public function attendence_list(){
+        //pivot table (many to many)
+        return $this->belongsToMany(AttendenceList::class, 'attendence_list_details','student_id', 'attendence_list_id')->wherePivotNull('deleted_at')
+        ->withPivot('id');
+    }
+    public function journal(){
+        //pivot table (many to many)
+        return $this->belongsToMany(AttendenceList::class, 'journal_details','student_id', 'journal_id')->wherePivotNull('deleted_at')
+        ->withPivot('id');
     }
 }
