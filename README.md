@@ -1,66 +1,258 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistem Informasi Perkuliahan (SIPerkuliahan)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Deskripsi Proyek
+SIPerkuliahan adalah sistem informasi yang mengelola data perkuliahan termasuk daftar hadir (attendance list) dan jurnal kuliah (journal). Sistem ini memiliki tiga peran utama: mahasiswa, dosen, dan super admin.
 
-## About Laravel
+## Fitur Utama
+- **Manajemen Mahasiswa**
+- **Manajemen Dosen**
+- **Manajemen Program Studi**
+- **Manajemen Kelas Mahasiswa**
+- **Manajemen Posisi/Jabatan Dosen**
+- **Manajemen Mata Kuliah**
+- **Manajemen Daftar Hadir**
+- **Manajemen Jurnal Kuliah**
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Teknologi yang Digunakan
+- **Laravel**: Framework PHP untuk pengembangan aplikasi web
+- **Laravel Breeze**: Untuk otentikasi
+- **Laravel Spatie**: Untuk manajemen peran dan izin
+- **MySQL**: Basis data relasional
+- **Tailwind CSS**: Framework CSS untuk desain antarmuka
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Instalasi
+1. Clone repositori:
+    ```sh
+    git clone https://github.com/Protic-PNC/jkb-sistem-perkuliahan.git
+    ```
+2. Masuk ke direktori proyek:
+    ```sh
+    cd jkb-sistem-perkuliahan
+    ```
+3. Install dependensi:
+    ```sh
+    composer install
+    npm install
+    npm run dev
+    ```
+4. Salin file `.env`:
+    ```sh
+    cp .env.example .env
+    ```
+5. Generate key aplikasi:
+    ```sh
+    php artisan key:generate
+    ```
+6. Konfigurasi file `.env` sesuai dengan lingkungan pengembangan Anda.
+7. Migrasi dan seeder database:
+    ```sh
+    php artisan migrate --seed
+    ```
+8. Jalankan server pengembangan:
+    ```sh
+    php artisan serve
+    ```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Penggunaan
+### Peran
+- **Mahasiswa**
+  - Melihat daftar hadir
+  - Mengonfirmasi kehadiran
+- **Dosen**
+  - Memasukkan data kehadiran mahasiswa
+  - Mengonfirmasi jurnal kuliah
+- **Super Admin**
+  - Mengelola data mahasiswa, dosen, program studi, kelas mahasiswa, posisi, dan mata kuliah
+  - Mengirimkan konfirmasi ke head departemen pada daftar hadir dan jurnal
 
-## Learning Laravel
+## Login
+- Menggunakan Laravel Breeze untuk otentikasi.
+- Menggunakan Laravel Spatie untuk manajemen peran dan izin.
+- Super admin dibuat menggunakan seeder.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## ERD (Entity Relationship Diagram)
+Berikut adalah diagram hubungan antar tabel dalam sistem ini:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```mermaid
+erDiagram
+    USERS {
+        id INT PK
+        name VARCHAR
+        avatar VARCHAR
+        email VARCHAR
+        email_verified_at TIMESTAMP
+        password VARCHAR
+        remember_token VARCHAR
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+    LECTURERS {
+        id INT PK
+        name VARCHAR
+        number_phone INT
+        address VARCHAR
+        nidn INT
+        nip INT
+        user_id INT FK
+        course_id INT FK
+        position_id INT FK
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+        deleted_at TIMESTAMP
+    }
+    STUDENTS {
+        id INT PK
+        nim INT
+        name VARCHAR
+        address VARCHAR
+        number_phone INT
+        user_id INT FK
+        student_class_id INT FK
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+        deleted_at TIMESTAMP
+    }
+    STUDY_PROGRAMS {
+        id INT PK
+        name VARCHAR
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+        deleted_at TIMESTAMP
+    }
+    STUDENT_CLASSES {
+        id INT PK
+        name VARCHAR
+        academic_year VARCHAR
+        study_program_id INT FK
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+        deleted_at TIMESTAMP
+    }
+    POSITIONS {
+        id INT PK
+        name VARCHAR
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+        deleted_at TIMESTAMP
+    }
+    COURSES {
+        id INT PK
+        code VARCHAR
+        name VARCHAR
+        sks INT
+        hours INT
+        student_class_id INT FK
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+        deleted_at TIMESTAMP
+    }
+    ATTENDENCE_LISTS {
+        id INT PK
+        code_al VARCHAR
+        has_finished BOOLEAN
+        has_acc_head_departement BOOLEAN
+        lecturer_id INT FK
+        course_id INT FK
+        student_class_id INT FK
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+        deleted_at TIMESTAMP
+    }
+    ATTENDENCE_LIST_DETAILS {
+        id INT PK
+        attendence_student VARCHAR
+        course_status VARCHAR
+        has_acc_student BOOLEAN
+        has_acc_lecturer BOOLEAN
+        student_id INT FK
+        attendence_list_id INT FK
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+        deleted_at TIMESTAMP
+    }
+    JOURNALS {
+        id INT PK
+        has_finished BOOLEAN
+        has_acc_head_departement BOOLEAN
+        lecturer_id INT FK
+        course_id INT FK
+        student_class_id INT FK
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+        deleted_at TIMESTAMP
+    }
+    JOURNAL_DETAILS {
+        id INT PK
+        material VARCHAR
+        has_acc_student BOOLEAN
+        has_acc_lecturer BOOLEAN
+        attendence_list_detail_id INT FK
+        journal_id INT FK
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+        deleted_at TIMESTAMP
+    }
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    USERS ||--|{ LECTURERS : has_one
+    USERS ||--|{ STUDENTS : has_one
+    LECTURERS }o--|| USERS : belongs_to
+    LECTURERS }o--|| COURSES : belongs_to
+    LECTURERS }o--|| POSITIONS : belongs_to
+    STUDENTS }o--|| USERS : belongs_to
+    STUDENTS }o--|| STUDENT_CLASSES : belongs_to
+    STUDENT_CLASSES }o--|| STUDY_PROGRAMS : belongs_to
+    COURSES }o--|| STUDENT_CLASSES : belongs_to
+    ATTENDENCE_LISTS }o--|| LECTURERS : belongs_to
+    ATTENDENCE_LISTS }o--|| COURSES : belongs_to
+    ATTENDENCE_LISTS }o--|| STUDENT_CLASSES : belongs_to
+    ATTENDENCE_LIST_DETAILS }o--|| ATTENDENCE_LISTS : belongs_to
+    ATTENDENCE_LIST_DETAILS }o--|| STUDENTS : belongs_to
+    JOURNALS }o--|| LECTURERS : belongs_to
+    JOURNALS }o--|| COURSES : belongs_to
+    JOURNALS }o--|| STUDENT_CLASSES : belongs_to
+    JOURNAL_DETAILS }o--|| ATTENDENCE_LIST_DETAILS : belongs_to
+    JOURNAL_DETAILS }o--|| JOURNALS : belongs_to
+```
 
-## Laravel Sponsors
+## Flowchart
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Flowchart di bawah ini memberikan gambaran tentang alur kerja dalam Sistem Informasi Perkuliahan (SIPerkuliahan). Diagram ini menunjukkan bagaimana pengguna dengan peran berbeda (mahasiswa, dosen, dan super admin) berinteraksi dengan sistem dan mengelola data yang relevan.
 
-### Premium Partners
+```mermaid
+flowchart TD
+    A[Login] --> B[Dashboard]
+    B --> C[Mahasiswa]
+    B --> D[Dosen]
+    B --> E[Super Admin]
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+    C --> F[Lihat Daftar Hadir]
+    C --> G[Konfirmasi Kehadiran]
 
-## Contributing
+    D --> H[Masukkan Data Kehadiran]
+    D --> I[Konfirmasi Jurnal Kuliah]
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    E --> J[Kelola Data Mahasiswa]
+    E --> K[Kelola Data Dosen]
+    E --> L[Kelola Program Studi]
+    E --> M[Kelola Kelas Mahasiswa]
+    E --> N[Kelola Posisi/Jabatan Dosen]
+    E --> O[Kelola Mata Kuliah]
+    E --> P[Konfirmasi Kehadiran dan Jurnal]
+```
 
-## Code of Conduct
+## Kontribusi
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Kami sangat mengapresiasi kontribusi dari komunitas untuk membuat proyek ini lebih baik. Jika Anda ingin berkontribusi, silakan ikuti langkah-langkah berikut:
 
-## Security Vulnerabilities
+1. Fork repositori ini.
+2. Buat branch fitur baru (`git checkout -b fitur-anda`).
+3. Commit perubahan Anda (`git commit -am 'Menambahkan fitur ABC'`).
+4. Push ke branch (`git push origin fitur-anda`).
+5. Buat Pull Request di GitHub.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Pastikan untuk menulis deskripsi yang jelas tentang perubahan yang Anda lakukan agar kami dapat memahami dan mengevaluasi kontribusi Anda dengan lebih baik. Jangan ragu untuk mendiskusikan ide atau masalah yang Anda hadapi di bagian Issues.
 
-## License
+## Lisensi
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Proyek ini dilisensikan di bawah MIT License. Untuk informasi lebih lanjut, silakan baca file [LICENSE](LICENSE).
+
