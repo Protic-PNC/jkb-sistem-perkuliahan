@@ -44,4 +44,9 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/');
     }
+
+    public function create2(): View
+    {
+        return view('users.create');
+    }
 }
