@@ -1,19 +1,11 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+    
+    @section('name_page', 'Dashboard')
+    @section('name_main', 'Dashboard')
 
-    @section('content')
-    <div class="container px-6 py-8 mx-auto">
-        <h3 class="text-3xl font-medium text-gray-700">Dashboard</h3>
-
-        
-
-        <div class="mt-8">
-
-        </div>
+    
+    
+        @section('content')
 
         <div class="flex flex-col mt-8">
             <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
@@ -332,7 +324,9 @@
                 </div>
             </div>
         </div>
+        @endsection
+    
     </div>
-    @endsection
+    
 </x-app-layout>
 
