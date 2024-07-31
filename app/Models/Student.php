@@ -14,6 +14,7 @@ class Student extends Model
         'nim',
         'name',
         'address',
+        'signature',
         'user_id',
         'student_class_id',
     ];
@@ -31,9 +32,5 @@ class Student extends Model
         return $this->belongsToMany(AttendenceList::class, 'attendence_list_details','student_id', 'attendence_list_id')->wherePivotNull('deleted_at')
         ->withPivot('id');
     }
-    public function journal(){
-        //pivot table (many to many)
-        return $this->belongsToMany(AttendenceList::class, 'journal_details','student_id', 'journal_id')->wherePivotNull('deleted_at')
-        ->withPivot('id');
-    }
+    
 }

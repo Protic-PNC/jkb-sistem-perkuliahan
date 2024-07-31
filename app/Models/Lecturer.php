@@ -16,6 +16,7 @@ class Lecturer extends Model
         'address',
         'nidn',
         'nip',
+        'signature',
         'user_id',
         'course_id',
         'position_id',

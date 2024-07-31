@@ -25,7 +25,14 @@ class Journal extends Model
         return $this->belongsTo(Courses::class);
     }
     public function student_class(){
-        return $this->hasOne(StudentClass::class);
+        return $this->belongsTo(StudentClass::class);
+    }
+
+    public function attendenceList(){
+        return $this->belongsTo(AttendenceList::class);
+    }
+    public function journalDetails(){
+        return $this->hasMany(JournalDetail::class);
     }
 
     

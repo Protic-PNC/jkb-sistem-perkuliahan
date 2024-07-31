@@ -26,10 +26,14 @@ class AttendenceList extends Model
         return $this->belongsTo(Courses::class);
     }
     public function student_class(){
-        return $this->hasOne(StudentClass::class);
+        return $this->belongsTo(StudentClass::class);
     }
 
-    public function al_detail(){ //attendence list details
-        return $this->belongsTo(AttendenceListDetail::class);
+    public function attendenceListDetails(){ //attendence list details
+        return $this->hasMany(AttendenceListDetail::class);
     }
+
+    public function journal(){
+        return $this->hasOne(Journal::class);
+    } //1 daftar hadir punay 1 jurnal
 }

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('number_phone');
             $table->string('address');
+            $table->string('signature')->nullable(); //ttd
             $table->integer('nidn');
             $table->integer('nip');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');

@@ -19,6 +19,19 @@ class AttendenceListDetail extends Model
         'has_acc_lecturer',
     ];
 
+    public function attendenceList(){
+        return $this->belongsTo(AttendenceList::class);
+    }
+
+    public function student(){
+        return $this->belongsTo(Student::class);
+    }
+
+    public function journalDetail(){
+        return $this->hasOne(JournalDetail::class);
+    }
+
+
     //buat method jumlah hadir
 
     

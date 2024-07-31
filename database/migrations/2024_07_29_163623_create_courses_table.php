@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('code');
             $table->string('name');
-            $table->integer('sks');
-            $table->integer('hours');
+            $table->integer('sks'); //1 sks = 8pertemuan
+            $table->integer('hours'); //2 jam
+            $table->integer('meeting')->nullable(); //pertemuan(meeting) diisi $meeting = banyak sks * 8 pertemuan
             $table->softDeletes();
             $table->timestamps();
         });

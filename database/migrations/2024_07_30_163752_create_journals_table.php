@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('journals', function (Blueprint $table) {
-            $table->id();
-            $table->boolean('has_finished');
+            $table->id(); //id = foreach sebanyak sks x pertemuan dalam semester, //jika id pertemuan <= banyak pertemuan belum selesai pending, ==  menunggu persetujuan wait, klo disetujui==finished dibagian has_finished
+            $table->foreignId('attendence_list_id')->constrained()->onDelete('cascade');
+            $table->string('has_finished'); //
             $table->boolean('has_acc_head_departement');
             $table->foreignId('lecturer_id')->constrained()->onDelete('cascade');
             $table->foreignId('course_id')->constrained()->onDelete('cascade');

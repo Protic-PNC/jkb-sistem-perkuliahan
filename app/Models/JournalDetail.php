@@ -18,11 +18,13 @@ class JournalDetail extends Model
         'journal_id',
     ];
 
-    public function journal(){ //attendence list
-        return $this->hasOne(Journal::class);
+    public function journal(){ //attendence list, attendencelist dan journal 
+        return $this->belongsTo(Journal::class);
     }
 
-    public function al_detail(){ //attendence list
+    public function attendenceListDetail(){
         return $this->belongsTo(AttendenceListDetail::class);
     }
+
+    
 }

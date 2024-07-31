@@ -15,6 +15,7 @@ class Courses extends Model
         'name',
         'sks',
         'hours',
+        'meeting',
         'student_class_id',
     ];
 
