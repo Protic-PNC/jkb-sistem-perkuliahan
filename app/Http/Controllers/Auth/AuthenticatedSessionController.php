@@ -45,8 +45,5 @@ class AuthenticatedSessionController extends Controller
         return redirect('/');
     }
 
-    public function showUserCreation(): View
-    {
-        return view('admin.users.index');
-    }
+    
 }

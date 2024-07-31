@@ -5,6 +5,7 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentClassController;
 use App\Http\Controllers\StudyProgramController;
+use App\Http\Controllers\UserController;
 use App\Models\StudyProgram;
 use Illuminate\Support\Facades\Route;
 
@@ -25,8 +26,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('study_programs', StudyProgramController::class)->middleware('role:super_admin');
         Route::resource('student_classes', StudentClassController::class)->middleware('role:super_admin');
         Route::resource('positions', PositionController::class)->middleware('role:super_admin');
-        Route::get('/users/showUserCreation', [AuthenticatedSessionController::class, 'showUserCreation'])->name('users.showUserCreation')->middleware('role:super_admin');
-        Route::post('/users/storeUserCreation', [AuthenticatedSessionController::class, 'storeUserCreation'])->name('users.storeUserCreation')->middleware('role:super_admin');
+        Route::resource('users', UserController::class)->middleware('role:super_admin');
+        
     });
 
 });

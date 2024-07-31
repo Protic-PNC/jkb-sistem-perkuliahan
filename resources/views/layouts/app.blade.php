@@ -31,17 +31,7 @@
                     </button>
     
                     <div class="relative mx-4 lg:mx-0">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                            <svg class="w-5 h-5 text-gray-500" viewBox="0 0 24 24" fill="none">
-                                <path
-                                    d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                </path>
-                            </svg>
-                        </span>
-    
-                        <input class="w-32 pl-10 pr-4 rounded-md form-input sm:w-64 focus:border-indigo-600" type="text"
-                            placeholder="Search">
+                       @yield('search')
                     </div>
                 </div>
     
@@ -128,13 +118,11 @@
                     </div>
                 </div>
             </header>
+            
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
-                <div class="container px-6 py-8 mx-auto">
-                    <h3 class="text-3xl font-medium text-gray-700">@yield('name_main')</h3>
+                <div class="container px-6 pt-6 mx-auto">
+                    <h3 class="text-2xl font-medium text-gray-700">@yield('name_main')</h3>
             
-                    <div class="mt-8">
-            
-                    </div>
                     @yield('content')
                 </div>
             </main>
