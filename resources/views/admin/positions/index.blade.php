@@ -24,8 +24,8 @@
         <!-- Card for Table -->
         <div class="bg-white shadow-md rounded-lg p-6">
             <div class="mb-3">
-                <a href="{{ route('admin.study_programs.create') }}">
-                    <button type="button" class="text-white bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-yellow-300  dark:focus:ring-yellow-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Tambah Program Studi</button>
+                <a href="{{ route('admin.positions.create') }}">
+                    <button type="button" class="text-white bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-yellow-300  dark:focus:ring-yellow-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Tambah Jabatan</button>
                 </a>
             </div>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -36,9 +36,6 @@
                                 No 
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Jenjang 
-                            </th>
-                            <th scope="col" class="px-6 py-3">
                                 Nama 
                             </th>
                             <th scope="col" class="px-6 py-3">
@@ -47,20 +44,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($prodis as $study_program)
+                        @forelse ($positions as $position)
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                                 {{ $loop->iteration }}
                             </th>
                             <td class="px-6 py-4 text-slate-800">
-                                {{ $study_program->jenjang }}
+                                {{ $position->name }}
                             </td>
                             <td class="px-6 py-4 text-slate-800">
-                                {{ $study_program->name }}
-                            </td>
-                            <td class="px-6 py-4 text-slate-800">
-                                <a href="{{ route('admin.study_programs.edit', $study_program->id) }}" class="font-medium text-yellow-600 dark:text-yellow-500 hover:underline">Edit</a>
-                                <form action="{{ route('admin.study_programs.destroy', $study_program->id) }}" method="POST" style="display:inline;">
+                                <a href="{{ route('admin.positions.edit', $position->id) }}" class="font-medium text-yellow-600 dark:text-yellow-500 hover:underline">Edit</a>
+                                <form action="{{ route('admin.positions.destroy', $position->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="font-medium text-red-600 dark:text-red-500 hover:underline">Hapus</button>
@@ -69,7 +63,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-4 text-center">Belum Ada Prodi</td>
+                            <td colspan="4" class="px-6 py-4 text-center">Belum Ada Data Jabatan</td>
                         </tr>
                         @endforelse
                     </tbody>

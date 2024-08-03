@@ -23,7 +23,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::prefix('admin')->name('admin.')->group(function(){
-        
         Route::resource('users', UserController::class)->middleware('role:super_admin');
         Route::resource('study_programs', StudyProgramController::class)->middleware('role:super_admin');
         Route::resource('student_classes', StudentClassController::class)->middleware('role:super_admin');
