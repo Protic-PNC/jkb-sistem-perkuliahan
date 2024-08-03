@@ -11,11 +11,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 </head>
 
 <body class="min-h-screen bg-gray-100" style="background: #edf2f7;">
     <div>
-        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 
         <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-200">
             <div :class="sidebarOpen ? 'block' : 'hidden'" @click="sidebarOpen = false"
@@ -28,11 +28,9 @@
                         <button @click="sidebarOpen = true" class="text-gray-500 focus:outline-none lg:hidden">
                             <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M4 6H20M4 12H20M4 18H11" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round"></path>
+                                    stroke-linecap="round" stroke-linejoin="round">X</path>
                             </svg>
                         </button>
-
-                        
                     </div>
 
                     <div class="flex items-center">
@@ -131,17 +129,12 @@
                 <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
                     <div class="container px-6 pt-6 mx-auto my-6">
                         <h3 class="text-2xl font-medium text-gray-700">@yield('name_main')</h3>
-
                         @yield('content')
                     </div>
                 </main>
             </div>
         </div>
     </div>
+    @stack('after-script')
 </body>
-
-@stack('after-script')
-
-
-
 </html>

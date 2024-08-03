@@ -1,6 +1,6 @@
 <x-app-layout>
     @section('name_page', 'Hallo')
-    @section('name_main', 'Program Studi')
+    @section('name_main', 'Jabatan')
 
     @section('search')
     <span class="absolute inset-y-0 left-0 flex items-center pl-3">

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('attendence_lists', function (Blueprint $table) {
             $table->id(); //id = foreach sebanyak sks x pertemuan dalam semester, jika id pertemuan <= banyak pertemuan belum selesai pending, ==  menunggu persetujuan wait, klo disetujui==finished dibagian has_finished
             $table->string('code_al');
-            $table->string('has_finished'); 
+            $table->string('has_finished'); //jika perulangan id selesai has_finished=1 
             $table->boolean('has_acc_head_departement');
             $table->foreignId('lecturer_id')->constrained()->onDelete('cascade');
             $table->foreignId('course_lecturer_id')->constrained()->onDelete('cascade');

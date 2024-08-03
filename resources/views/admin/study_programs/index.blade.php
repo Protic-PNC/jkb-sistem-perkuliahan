@@ -29,8 +29,8 @@
                 </a>
             </div>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
-                    <thead class="text-xs text-gray-700 uppercase bg-yellow-500 dark:bg-gray-700 dark:text-gray-400">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3 ">
+                    <thead class="text-xs text-gray-700 uppercase bg-yellow-500 dark:bg-gray-700 dark:text-gray-400 ">
                         <tr class="text-white">
                             <th scope="col" class="px-6 py-3">
                                 No 
@@ -41,17 +41,17 @@
                             <th scope="col" class="px-6 py-3">
                                 Nama 
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-6 py-3 text-center">
                                 Action
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($prodis as $study_program)
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 ">
+                            <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                                 {{ $loop->iteration }}
-                            </th>
+                            </td>
                             <td class="px-6 py-4 text-slate-800">
                                 {{ $study_program->jenjang }}
                             </td>
@@ -59,12 +59,18 @@
                                 {{ $study_program->name }}
                             </td>
                             <td class="px-6 py-4 text-slate-800">
-                                <a href="{{ route('admin.study_programs.edit', $study_program->id) }}" class="font-medium text-yellow-600 dark:text-yellow-500 hover:underline">Edit</a>
-                                <form action="{{ route('admin.study_programs.destroy', $study_program->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="font-medium text-red-600 dark:text-red-500 hover:underline">Hapus</button>
-                                </form>
+                                <div class="flex space-x-2 justify-center">
+                                    <a href="{{ route('admin.study_programs.edit', $study_program->id) }}" class="inline-block w-20 text-center font-medium bg-yellow-600 text-white px-3 py-2 rounded-md hover:bg-yellow-700 transition duration-300">
+                                        Edit
+                                    </a>
+                                    <form action="{{ route('admin.study_programs.destroy', $study_program->id) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="w-20 font-medium bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300">
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @empty

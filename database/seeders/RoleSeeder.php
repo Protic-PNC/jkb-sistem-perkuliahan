@@ -29,14 +29,23 @@ class RoleSeeder extends Seeder
             'name' => 'Adisa L',
             'avatar' => 'images/avatar-default.svg',
             'email' => 'adisa@admin.com',
+            'role' => 'super_admin',
             'password' => bcrypt('12345678'),
+            
         ]);
 
+        // $userMahasiswa = User::create([
+        //     'name' => 'adrian',
+        //     'avatar' => 'images/avatar-default.svg',
+        //     'email' => 'adrian@mahasiswa.com',
+        //     'password' => bcrypt('12345678'),
+            
+        // ]);
+
+        //$userMahasiswa->assignRole($mahasiswaRole);
         $userSuperAdmin->assignRole($superAdminRole);
 
-        $userSuperAdmin->assignRole($superAdminRole);
-
-        // Add debug information
+        //Add debug information
         Log::info('User created with ID: ' . $userSuperAdmin->id);
         Log::info('Assigned role: ' . $superAdminRole->name);
         Log::info('User roles after assignment: ' . $userSuperAdmin->roles->pluck('name'));
