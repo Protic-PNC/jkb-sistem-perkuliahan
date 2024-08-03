@@ -1,6 +1,5 @@
 <x-app-layout>
     @section('name_page', 'Hallo')
-    @section('name_main', 'Program Studi')
 
     @section('search')
     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -24,24 +23,27 @@
         <!-- Card for Table -->
         <div class="bg-white shadow-md rounded-lg p-6">
             <div class="mb-3">
-                <a href="{{ route('admin.study_programs.create') }}">
-                    <button type="button" class="text-white bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-yellow-300  dark:focus:ring-yellow-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Tambah Program Studi</button>
+                <a href="{{ route('admin.student_classes.create') }}">
+                    <button type="button" class="text-white bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:focus:ring-yellow-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Tambah Kelas</button>
                 </a>
             </div>
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            {{-- <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
                     <thead class="text-xs text-gray-700 uppercase bg-yellow-500 dark:bg-gray-700 dark:text-gray-400">
-                        <tr class="text-white">
-                            <th scope="col" class="px-6 py-3">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-white">
                                 ID 
                             </th>
-                            <th scope="col" class="px-6 py-3">
-                                Jenjang 
-                            </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-6 py-3 text-white">
                                 Nama 
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-6 py-3 text-white">
+                                Tahun Akademik 
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-white">
+                                Prodi 
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-white">
                                 Action
                             </th>
                         </tr>
@@ -49,16 +51,16 @@
                     <tbody>
                         @forelse ($prodis as $study_program)
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {{ $study_program->id }}
                             </th>
-                            <td class="px-6 py-4 text-slate-800">
+                            <td class="px-6 py-4">
                                 {{ $study_program->jenjang }}
                             </td>
-                            <td class="px-6 py-4 text-slate-800">
+                            <td class="px-6 py-4">
                                 {{ $study_program->name }}
                             </td>
-                            <td class="px-6 py-4 text-slate-800">
+                            <td class="px-6 py-4">
                                 <a href="{{ route('admin.study_programs.edit', $study_program->id) }}" class="font-medium text-yellow-600 dark:text-yellow-500 hover:underline">Edit</a>
                                 <form action="{{ route('admin.study_programs.destroy', $study_program->id) }}" method="POST" style="display:inline;">
                                     @csrf
@@ -74,7 +76,7 @@
                         @endforelse
                     </tbody>
                 </table>
-            </div>
+            </div> --}}
         </div>
     </div>
     @endsection

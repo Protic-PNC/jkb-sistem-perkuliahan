@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StudentClass;
+use App\Models\StudyProgram;
 use Illuminate\Http\Request;
 
 class StudentClassController extends Controller
@@ -12,7 +13,7 @@ class StudentClassController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.student_class.index');
     }
 
     /**
@@ -20,7 +21,8 @@ class StudentClassController extends Controller
      */
     public function create()
     {
-        //
+        $prodis=StudyProgram::all();
+        return view('admin.student_class.create', compact('prodis'));
     }
 
     /**
