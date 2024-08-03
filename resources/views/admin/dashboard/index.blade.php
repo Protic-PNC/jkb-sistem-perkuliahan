@@ -4,7 +4,8 @@
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
-    @section('name_page', 'Dashboard')
+    @section('name_page', 'Hallo, ')
+    @section('name_main', 'Dashboard')
     
     @section('content')
 <div class="container px-6 py-8 mx-auto">

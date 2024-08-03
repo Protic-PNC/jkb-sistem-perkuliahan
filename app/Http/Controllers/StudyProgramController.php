@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\StudyProgram;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class StudyProgramController extends Controller
 {
@@ -12,7 +14,8 @@ class StudyProgramController extends Controller
      */
     public function index()
     {
-        //
+        $prodis = StudyProgram::all();
+        return view('admin.study_programs.index', compact('prodis'));
     }
 
     /**
@@ -20,7 +23,7 @@ class StudyProgramController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.study_programs.create');
     }
 
     /**
@@ -28,7 +31,20 @@ class StudyProgramController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name'=>'required|string|max:255',
+        ]);
+        DB::beginTransaction();
+        try{
+            $newProdi= StudyProgram::create($validated);
+            DB::commit();
+            return redirect()->route('admin.study_programs.index')->with('succes', 'Program Studi Berhasil Disimpan');
+        }catch(\Exception $e){
+            DB::rollBack();
+
+            return redirect()->back()->with('error', 'System eror'.$e->getMessage());
+        }
+        
     }
 
     /**

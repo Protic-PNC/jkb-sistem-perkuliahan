@@ -32,9 +32,7 @@
                             </svg>
                         </button>
 
-                        <div class="relative mx-4 lg:mx-0">
-                            @yield('search')
-                        </div>
+                        
                     </div>
 
                     <div class="flex items-center">
