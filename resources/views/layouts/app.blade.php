@@ -140,4 +140,8 @@
     </div>
 </body>
 
+@stack('after-script')
+
+
+
 </html>
