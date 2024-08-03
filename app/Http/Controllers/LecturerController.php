@@ -12,7 +12,7 @@ class LecturerController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.lecturer.index');
     }
 
     /**
@@ -20,7 +20,9 @@ class LecturerController extends Controller
      */
     public function create()
     {
-        //
+
+        return view('admin.lecturer.create');
+       
     }
 
     /**
@@ -28,7 +30,15 @@ class LecturerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $user = $lecturer->user;
+
+        // DB::transaction(function() use ($fundraiser, $user){
+            
+        //     if(!$user->hasRole('fundraiser')){
+        //         $user->assignRole('fundraiser');
+        //     }
+        // });
+        // return redirect()->route('admin.fundraisers.index');
     }
 
     /**

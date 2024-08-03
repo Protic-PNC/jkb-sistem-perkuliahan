@@ -16,9 +16,10 @@ return new class extends Migration
             $table->integer('nim');
             $table->string('name');
             $table->string('address');
+            $table->string('email'); //juga users, password == pw.nim
             $table->string('signature')->nullable();
             $table->integer('number_phone');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->integer('avatar');
             $table->foreignId('student_class_id')->constrained()->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();

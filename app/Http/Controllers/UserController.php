@@ -22,6 +22,7 @@ class UserController extends Controller
     public function create()
     {
         return view('admin.users.create');
+
     }
 
     /**
@@ -29,7 +30,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
