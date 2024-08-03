@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('study_programs', function (Blueprint $table) {
             $table->id();
+            $table->string('jenjang'); //D3/D4
             $table->string('name');
-            $table->softDeletes();
             $table->timestamps();
         });
     }

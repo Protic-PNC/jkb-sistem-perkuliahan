@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('lecturers', function (Blueprint $table) {
             $table->id();
-            $table->integer('nidn');
-            $table->integer('nip'); 
             $table->string('name');
             $table->integer('number_phone');
-            $table->string('email'); //juga users, password = pw.nidn
             $table->string('address');
             $table->string('signature')->nullable(); //ttd
-            $table->integer('avatar');
+            $table->integer('nidn');
+            $table->integer('nip');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });
