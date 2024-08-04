@@ -29,7 +29,6 @@ class RoleSeeder extends Seeder
             'name' => 'Adisa L',
             'avatar' => 'images/avatar-default.svg',
             'email' => 'adisa@admin.com',
-            'role' => 'super_admin',
             'password' => bcrypt('12345678'),
             
         ]);

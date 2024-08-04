@@ -64,19 +64,23 @@
                                         {{ $user->email }}
                                     </td>
                                     <td class="px-6 py-4 text-slate-800">
-                                        {{ $user->role }}
+                                        @foreach ($user->roles as $role)
+                                            {{ $role->name }}
+                                            @if (!$loop->last),
+                                            @endif
+                                        @endforeach
                                     </td>
                                     <td class="px-6 py-4 text-slate-800">
                                         <a href="{{ route('admin.study_programs.edit', $user->id) }}"
                                             class="font-medium p-3 bg-yellow-600 text-white dark:text-white yellow-500 hover:underline">Edit</a>
-                                        @if ($user->role == 'dosen')
+                                        @if ($user->hasRole('dosen'))
                                             <a href="{{ route('lecture.lecturers.create', $user->id) }}"
                                                 class="font-medium text-yellow-600 dark:text-yellow-500 hover:underline">Lengkapi
                                                 Identitas Dosen</a>
-                                        @elseif($user->role == 'mahasiswa')
+                                        @elseif($user->hasRole('mahasiswa'))
                                             <a href="{{ route('student.students.create', $user->id) }}"
                                                 class="font-medium text-yellow-600 dark:text-yellow-500 hover:underline">Lengkapi
-                                                Identitas Mahasiswa</a>
+                                                Identitas</a>
                                         @endif
                                         <form action="{{ route('admin.study_programs.destroy', $user->id) }}" method="POST"
                                             style="display:inline;">
@@ -87,15 +91,15 @@
                                         </form>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="px-6 py-4 text-center">Belum Ada Prodi</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="px-6 py-4 text-center">Belum Ada Prodi</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-    @endsection
-</x-app-layout>
+        @endsection
+    </x-app-layout>

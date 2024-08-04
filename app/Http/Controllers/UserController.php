@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,8 +18,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(5);
-        return view('admin.users.index', compact('users'));
+        $users = User::with('roles')->get(); // Mengambil semua pengguna beserta rolenya
+
+    return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -26,7 +28,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+        $roles = Role::all();
+        return view('admin.users.create', compact('roles'));
     }
 
     /**
@@ -34,39 +37,42 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'role' => 'required|string|max:255',
-            'password' => 'required|string|min:8',
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8',
+            'role' => 'required|exists:roles,name',
             'avatar' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         ]);
-
-        DB::beginTransaction();
-
+    
+        $data = $request->only(['name', 'email', 'password']);
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            $data['avatar'] = $avatarPath;
+        }
+    
         try {
-            $validated['password'] = Hash::make($validated['password']);
-
-            if ($request->hasFile('avatar')) {
-                $avatarPath = $request->file('avatar')->store('avatars', 'public');
-                $validated['avatar'] = $avatarPath;
-            }
-
-            $newUser = User::create($validated);
-            $role = Role::where('name', $validated['role'])->firstOrFail();
-
-            // Assign role ke user
-            $newUser->assignRole($role);
-
-            Auth::login($newUser);
+            DB::beginTransaction();
+    
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => bcrypt($data['password']),
+                'avatar' => $data['avatar'] ?? null,
+            ]);
+    
+            $user->assignRole($request->role);
+    
             DB::commit();
-            return redirect()->route('admin.users.index')->with('succes', 'Program Studi Berhasil Disimpan');
+    
+            
+    
+            return redirect()->route('admin.users.index')->with('success', 'User berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
-
             return redirect()
                 ->back()
-                ->with('error', 'System eror' . $e->getMessage());
+                ->with('error', 'System error: ' . $e->getMessage());
         }
     }
 
