@@ -6,7 +6,7 @@
             <div class="bg-white shadow-md rounded-lg p-6">
                 <h2 class="text-xl font-semibold mb-4">Melengkapi Identitas Mahasiswa</h2>
 
-                <form action="{{ route('student.students.store', $user) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('student.students.store', $user->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="grid gap-6 mb-6 md:grid-cols-2">
 
@@ -52,9 +52,9 @@
                             </select>
                         </div>
                         <div>
-                            
+                            <label for="student_class_id" class="hidden">Kelas</label>
                             <input type="text" id="user_id" name="user_id" value="{{ $user->id }}"
-                                class="bg-yellow-50 border border-yellow-500 text-yellow-900 placeholder-yellow-700 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 w-full p-2.5 hidden">
+                                class="hidden">
                         </div>
                     </div>
 

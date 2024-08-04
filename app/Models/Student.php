@@ -11,12 +11,13 @@ class Student extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable= [
-        'nim',
         'name',
+        'nim',
         'address',
-        'signature',
-        'user_id',
+        'number_phone',
         'student_class_id',
+        'user_id',
+        'signature',
     ];
 
     public function user(){

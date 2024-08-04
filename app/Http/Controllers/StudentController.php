@@ -44,21 +44,19 @@ class StudentController extends Controller
             'user_id' => 'required|exists:users,id',
             'signature' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         ]);
+        if ($request->hasFile('signature')) {
+            $signaturePath = $request->file('signature')->store('signatures', 'public');
+            $data['signature'] = $signaturePath;
+        }
         try {
             DB::beginTransaction();
-
             $data = $validated;
-            
-            if ($request->hasFile('signature')) {
-                $signaturePath = $request->file('signature')->store('signatures', 'public');
-                $data['signature'] = $signaturePath;
-            }
+    
             $student = Student::create($data);
-
+    
             DB::commit();
-            
-
-            return redirect()->route('student.students.index')->with('success', 'User berhasil disimpan');
+    
+            return redirect()->route('admin.users.index')->with('success', 'User Mahasiswa berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()
