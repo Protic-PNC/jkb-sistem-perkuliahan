@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    
 </head>
 
 <body class="min-h-screen bg-gray-100" style="background: #edf2f7;">
@@ -46,6 +47,10 @@
                                     </path>
                                 </svg>
                             </button>
+
+                            {{-- <div class="relative mx-4 lg:mx-0">
+                                @yield('search')
+                            </div> --}}
 
                             <div x-show="notificationOpen" @click="notificationOpen = false"
                                 class="fixed inset-0 z-10 w-full h-full" style="display: none;"></div>
@@ -127,7 +132,7 @@
                 </header>
 
                 <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
-                    <div class="container px-6 pt-6 mx-auto my-6">
+                    <div class="container px-6 pt-6 mx-auto">
                         <h3 class="text-2xl font-medium text-gray-700">@yield('name_main')</h3>
                         @yield('content')
                     </div>

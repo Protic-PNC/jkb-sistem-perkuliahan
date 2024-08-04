@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use App\Models\StudentClass;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
@@ -18,17 +21,50 @@ class StudentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($userId)
     {
-        return view('student.students.create');
+        $student_class = StudentClass::all();
+
+        $user = User::find($userId);
+        
+        return view('student.students.create', compact('student_class', 'user'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request )
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'nim' => 'required|string|unique:students,nim',
+            'address' => 'required|string',
+            'number_phone' => 'required|string',
+            'student_class_id' => 'required|exists:student_classes,id',
+            'user_id' => 'required|exists:users,id',
+            'signature' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+        ]);
+        try {
+            DB::beginTransaction();
+
+            $data = $validated;
+            
+            if ($request->hasFile('signature')) {
+                $signaturePath = $request->file('signature')->store('signatures', 'public');
+                $data['signature'] = $signaturePath;
+            }
+            $student = Student::create($data);
+
+            DB::commit();
+            
+
+            return redirect()->route('student.students.index')->with('success', 'User berhasil disimpan');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()
+                ->back()
+                ->with('error', 'System error: ' . $e->getMessage());
+        }
     }
 
     /**

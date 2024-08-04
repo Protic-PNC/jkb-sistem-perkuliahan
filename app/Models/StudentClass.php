@@ -19,8 +19,9 @@ class StudentClass extends Model
     public function study_program(){
         return $this->belongsTo(StudyProgram::class);
     }
-    public function students(){
-        return $this->hasMany(Student::class);
+    public function students()
+    {
+        return $this->hasMany(Student::class, 'student_class_id');
     }
 
     

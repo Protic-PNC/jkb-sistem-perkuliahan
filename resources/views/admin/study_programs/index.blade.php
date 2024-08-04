@@ -66,7 +66,7 @@
                                     <form action="{{ route('admin.study_programs.destroy', $study_program->id) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="w-20 font-medium bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300">
+                                        <button type="submit" class="font-medium  bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline">
                                             Hapus
                                         </button>
                                     </form>

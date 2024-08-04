@@ -34,72 +34,63 @@
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
                         <thead class="text-xs text-gray-700 uppercase bg-yellow-500 dark:bg-gray-700 dark:text-gray-400">
                             <tr class="text-white">
-                                <th scope="col" class="px-6 py-3">
-                                    No
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Username
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Email
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Role
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Action
-                                </th>
+                                <th scope="col" class="px-6 py-3">No</th>
+                                <th scope="col" class="px-6 py-3">Username</th>
+                                <th scope="col" class="px-6 py-3">Email</th>
+                                <th scope="col" class="px-6 py-3">Role</th>
+                                <th scope="col" class="px-6 py-3">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($users as $user)
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                                        {{ $loop->iteration }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
                                     </td>
-                                    <td class="px-6 py-4 text-slate-800">
-                                        {{ $user->name }}
-                                    </td>
-                                    <td class="px-6 py-4 text-slate-800">
-                                        {{ $user->email }}
-                                    </td>
+                                    <td class="px-6 py-4 text-slate-800">{{ $user->name }}</td>
+                                    <td class="px-6 py-4 text-slate-800">{{ $user->email }}</td>
                                     <td class="px-6 py-4 text-slate-800">
                                         @foreach ($user->roles as $role)
                                             {{ $role->name }}
-                                            @if (!$loop->last),
+                                            @if (!$loop->last)
+                                                ,
                                             @endif
                                         @endforeach
                                     </td>
-                                    <td class="px-6 py-4 text-slate-800">
-                                        <a href="{{ route('admin.study_programs.edit', $user->id) }}"
-                                            class="font-medium p-3 bg-yellow-600 text-white dark:text-white yellow-500 hover:underline">Edit</a>
+                                    <td class="flex space-x-2 justify-end">
                                         @if ($user->hasRole('dosen'))
                                             <a href="{{ route('lecture.lecturers.create', $user->id) }}"
-                                                class="font-medium text-yellow-600 dark:text-yellow-500 hover:underline">Lengkapi
-                                                Identitas Dosen</a>
+                                                class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
+                                                Lengkapi Identitas Dosen
+                                            </a>
                                         @elseif($user->hasRole('mahasiswa'))
                                             <a href="{{ route('student.students.create', $user->id) }}"
-                                                class="font-medium text-yellow-600 dark:text-yellow-500 hover:underline">Lengkapi
-                                                Identitas</a>
+                                                class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
+                                                Lengkapi Identitas
+                                            </a>
                                         @endif
                                         <form action="{{ route('admin.study_programs.destroy', $user->id) }}" method="POST"
                                             style="display:inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="font-medium text-red-600 dark:text-red-500 hover:underline">Hapus</button>
+                                                class="inline-block text-center font-medium bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300">
+                                                Hapus
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="4" class="px-6 py-4 text-center">Belum Ada Prodi</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-6 py-4 text-center">Belum Ada Prodi</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
-        @endsection
-    </x-app-layout>
+        </div>
+
+
+    @endsection
+</x-app-layout>

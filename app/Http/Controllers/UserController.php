@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\StudentClass;
 use App\Models\User;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Auth\Events\Validated;
@@ -19,8 +20,8 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('roles')->get(); // Mengambil semua pengguna beserta rolenya
-
-    return view('admin.users.index', compact('users'));
+       
+        return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -44,29 +45,27 @@ class UserController extends Controller
             'role' => 'required|exists:roles,name',
             'avatar' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         ]);
-    
+
         $data = $request->only(['name', 'email', 'password']);
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
             $data['avatar'] = $avatarPath;
         }
-    
+
         try {
             DB::beginTransaction();
-    
+
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => bcrypt($data['password']),
                 'avatar' => $data['avatar'] ?? null,
             ]);
-    
+
             $user->assignRole($request->role);
-    
+
             DB::commit();
-    
-            
-    
+
             return redirect()->route('admin.users.index')->with('success', 'User berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();

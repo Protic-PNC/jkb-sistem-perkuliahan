@@ -31,11 +31,17 @@ Route::middleware('auth')->group(function () {
         Route::resource('student_classes', StudentClassController::class)->middleware('role:super_admin');
         Route::resource('positions', PositionController::class)->middleware('role:super_admin');   
     });
+
+    
     Route::prefix('lecture')->name('lecture.')->group(function(){
         Route::resource('lecturers', LecturerController::class)->middleware('role:super_admin|dosen');
     });
+
+    Route::get('/students/create/{userId}', [StudentController::class, 'create'])->name('student.students.create');
+    Route::post('/students/store/{userId}', [StudentController::class, 'store'])->name('student.students.store');
     Route::prefix('student')->name('student.')->group(function(){
-    Route::resource('students', StudentController::class)->middleware('role:super_admin|mahasiswa');
+    
+    //Route::resource('students', StudentController::class)->middleware('role:super_admin|mahasiswa');
     });
 
 });
