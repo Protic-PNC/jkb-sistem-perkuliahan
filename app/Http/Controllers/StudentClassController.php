@@ -14,9 +14,9 @@ class StudentClassController extends Controller
      */
     public function index()
     {
-
+        $prodis = StudyProgram::select('id', 'name')->get();
         $studentClasses = StudentClass::with('study_program')->orderBy('academic_year', 'asc')->get();
-        return view('admin.student_class.index', compact('studentClasses'));
+        return view('masterdata.studentClass', compact('studentClasses','prodis'));
     }
 
     /**
@@ -74,8 +74,8 @@ class StudentClassController extends Controller
      */
     public function edit(StudentClass $student_class)
     {
-        $prodis = StudyProgram::all();
-        return view('admin.student_class.edit', compact('student_class', 'prodis'));
+        // $prodis = StudyProgram::all();
+        // return view('admin.student_class.edit', compact('student_class', 'prodis'));
     }
 
     /**
@@ -93,6 +93,7 @@ class StudentClassController extends Controller
         $existing = StudentClass::where('academic_year', $validated['academic_year'])
             ->where('study_program_id', $validated['study_program_id'])
             ->first();
+            
 
         if ($existing) {
             return redirect()->back()->with('error', 'Data with the same academic year and study program already exists.');

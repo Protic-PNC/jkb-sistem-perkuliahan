@@ -15,7 +15,7 @@ class StudyProgramController extends Controller
     public function index()
     {
         $prodis = StudyProgram::all();
-        return view('admin.study_programs.index', compact('prodis'));
+        return view('masterdata.study_programs.index', compact('prodis'));
     }
 
     /**

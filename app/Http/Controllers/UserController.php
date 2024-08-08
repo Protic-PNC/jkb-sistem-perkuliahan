@@ -21,7 +21,7 @@ class UserController extends Controller
     {
         $users = User::with('roles')->get(); // Mengambil semua pengguna beserta rolenya
        
-        return view('admin.users.index', compact('users'));
+        return view('masterdata.users.index', compact('users'));
     }
 
     /**

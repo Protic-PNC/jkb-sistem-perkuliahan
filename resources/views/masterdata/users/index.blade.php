@@ -24,7 +24,7 @@
             <!-- Card for Table -->
             <div class="bg-white shadow-md rounded-lg p-6">
                 <div class="mb-3">
-                    <a href="{{ route('admin.users.create') }}">
+                    <a href="{{ route('masterdata.users.create') }}">
                         <button type="button"
                             class="text-white bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-yellow-300  dark:focus:ring-yellow-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Tambah
                             Users</button>
@@ -68,7 +68,7 @@
                                                 Lengkapi Identitas
                                             </a>
                                         @endif
-                                        <form action="{{ route('admin.study_programs.destroy', $user->id) }}" method="POST"
+                                        <form action="{{ route('masterdata.study_programs.destroy', $user->id) }}" method="POST"
                                             style="display:inline;">
                                             @csrf
                                             @method('DELETE')

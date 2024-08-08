@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::prefix('admin')->name('admin.')->group(function(){
+    Route::prefix('masterdata')->name('masterdata.')->group(function(){
         Route::resource('users', UserController::class)->middleware('role:super_admin|mahasiswa');
         Route::resource('study_programs', StudyProgramController::class)->middleware('role:super_admin');
         Route::resource('student_classes', StudentClassController::class)->middleware('role:super_admin');

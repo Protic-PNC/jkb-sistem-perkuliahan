@@ -24,7 +24,7 @@
         <!-- Card for Table -->
         <div class="bg-white shadow-md rounded-lg p-6">
             <div class="mb-3">
-                <a href="{{ route('admin.positions.create') }}">
+                <a href="{{ route('masterdata.positions.create') }}">
                     <button type="button" class="text-white bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-yellow-300  dark:focus:ring-yellow-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Tambah Jabatan</button>
                 </a>
             </div>
@@ -53,8 +53,8 @@
                                 {{ $position->name }}
                             </td>
                             <td class="px-6 py-4 text-slate-800">
-                                <a href="{{ route('admin.positions.edit', $position->id) }}" class="font-medium text-yellow-600 dark:text-yellow-500 hover:underline">Edit</a>
-                                <form action="{{ route('admin.positions.destroy', $position->id) }}" method="POST" style="display:inline;">
+                                <a href="{{ route('masterdata.positions.edit', $position->id) }}" class="font-medium text-yellow-600 dark:text-yellow-500 hover:underline">Edit</a>
+                                <form action="{{ route('masterdata.positions.destroy', $position->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="font-medium text-red-600 dark:text-red-500 hover:underline">Hapus</button>

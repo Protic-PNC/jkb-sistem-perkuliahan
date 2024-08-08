@@ -24,7 +24,7 @@
 
             @include('components.sidebar')
             <div class="flex flex-col flex-1 overflow-hidden">
-                <header class="flex items-center justify-between px-6 py-4 bg-white border-b-4 border-yellow-600">
+                <header class="flex items-center justify-between px-6 py-4 bg-white border-b-4 border-blue-600">
                     <div class="flex items-center">
                         <button @click="sidebarOpen = true" class="text-gray-500 focus:outline-none lg:hidden">
                             <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -59,18 +59,18 @@
                                 class="absolute right-0 z-10 mt-2 overflow-hidden bg-white rounded-lg shadow-xl w-80"
                                 style="width: 20rem; display: none;">
                                 <a href="#"
-                                    class="flex items-center px-4 py-3 -mx-2 text-gray-600 hover:text-white hover:bg-yellow-600">
+                                    class="flex items-center px-4 py-3 -mx-2 text-gray-600 hover:text-white hover:bg-blue-600">
                                     <img class="object-cover w-8 h-8 mx-1 rounded-full"
                                         src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=334&amp;q=80"
                                         alt="avatar">
                                     <p class="mx-2 text-sm">
                                         <span class="font-bold" href="#">Sara Salah</span> replied on the <span
-                                            class="font-bold text-yellow-400" href="#">Upload Image</span> artical
+                                            class="font-bold text-blue-400" href="#">Upload Image</span> artical
                                         . 2m
                                     </p>
                                 </a>
                                 <a href="#"
-                                    class="flex items-center px-4 py-3 -mx-2 text-gray-600 hover:text-white hover:bg-yellow-600">
+                                    class="flex items-center px-4 py-3 -mx-2 text-gray-600 hover:text-white hover:bg-blue-600">
                                     <img class="object-cover w-8 h-8 mx-1 rounded-full"
                                         src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=634&amp;q=80"
                                         alt="avatar">
@@ -80,18 +80,18 @@
                                     </p>
                                 </a>
                                 <a href="#"
-                                    class="flex items-center px-4 py-3 -mx-2 text-gray-600 hover:text-white hover:bg-yellow-600">
+                                    class="flex items-center px-4 py-3 -mx-2 text-gray-600 hover:text-white hover:bg-blue-600">
                                     <img class="object-cover w-8 h-8 mx-1 rounded-full"
                                         src="https://images.unsplash.com/photo-1450297350677-623de575f31c?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=334&amp;q=80"
                                         alt="avatar">
                                     <p class="mx-2 text-sm">
                                         <span class="font-bold" href="#">Jane Doe</span> Like Your reply on <span
-                                            class="font-bold text-yellow-400" href="#">Test with TDD</span>
+                                            class="font-bold text-blue-400" href="#">Test with TDD</span>
                                         artical . 1h
                                     </p>
                                 </a>
                                 <a href="#"
-                                    class="flex items-center px-4 py-3 -mx-2 text-gray-600 hover:text-white hover:bg-yellow-600">
+                                    class="flex items-center px-4 py-3 -mx-2 text-gray-600 hover:text-white hover:bg-blue-600">
                                     <img class="object-cover w-8 h-8 mx-1 rounded-full"
                                         src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=398&amp;q=80"
                                         alt="avatar">
@@ -118,11 +118,11 @@
                                 class="absolute right-0 z-10 w-48 mt-2 overflow-hidden bg-white rounded-md shadow-xl"
                                 style="display: none;">
                                 <a href="{{ route('profile.edit') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-600 hover:text-white">Profile</a>
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-600 hover:text-white">Profile</a>
 
                                 <form method="POST" action="{{ route('logout') }}">
                                     <button type="submit"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-600 hover:text-white w-full text-left">Logout</button>
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-600 hover:text-white w-full text-left">Logout</button>
                                     @csrf
                                 </form>
 
@@ -131,9 +131,36 @@
                     </div>
                 </header>
 
-                <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
+                <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
                     <div class="container px-6 pt-6 mx-auto">
-                        <h3 class="text-2xl font-medium text-gray-700">@yield('name_main')</h3>
+                        <h3 class="text-xl font-bold text-gray-700">@yield('name_main')</h3>
+                        <div class="page-header mb-4">
+                            <div class="page-header-breadcrumb">
+                                <ul class="breadcrumb flex space-x-2">
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ route('dashboard.index') }}" class="text-blue-500 hover:text-blue-700">
+                                            <i class="feather icon-home"></i>
+                                        </a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <span class="text-gray-500">/</span>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <span class="text-gray-500">@yield('main_folder')</span>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <span class="text-gray-500">/</span>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ route('masterdata.study_programs.index') }}" class="text-blue-500 hover:text-blue-700">
+                                            @yield('descendant_folder')
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        
                         @yield('content')
                     </div>
                 </main>

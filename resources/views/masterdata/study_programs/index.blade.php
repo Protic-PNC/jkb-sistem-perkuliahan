@@ -1,6 +1,8 @@
 <x-app-layout>
     @section('name_page', 'Hallo')
-    @section('name_main', 'Program Studi')
+   
+    @section('main_folder', 'Admin')
+    @section('descendant_folder', 'Program Studi')
 
     @section('search')
     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -12,25 +14,22 @@
         </svg>
     </span>
     
-    <input class="w-32 pl-10 pr-4 rounded-md form-input sm:w-64 focus:border-yellow-600" type="text"
+    <input class="w-32 pl-10 pr-4 rounded-md form-input sm:w-64 focus:border-indigo-600" type="text"
         placeholder="Search">
     @endsection
 
     @section('content')
-    <div class="mx-auto p-6">
-        <!-- Card for Add Button -->
-        
-
-        <!-- Card for Table -->
-        <div class="bg-white shadow-md rounded-lg p-6">
+    <hr class="2xl">
+    <section class="bg-white dark:bg-gray-900">
+        <div class="py-4 px-2 mx-auto max-w-4xl lg:py-8">
             <div class="mb-3">
-                <a href="{{ route('admin.study_programs.create') }}">
-                    <button type="button" class="text-white bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-yellow-300  dark:focus:ring-yellow-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Tambah Program Studi</button>
+                <a href="{{ route('masterdata.study_programs.create') }}">
+                    <button type="button" class="text-white bg-gradient-to-r from-indigo-500 via-indigo-600 to-indigo-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-indigo-300  dark:focus:ring-indigo-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Tambah Program Studi</button>
                 </a>
             </div>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3 ">
-                    <thead class="text-xs text-gray-700 uppercase bg-yellow-500 dark:bg-gray-700 dark:text-gray-400 ">
+                    <thead class="text-xs text-gray-700 uppercase bg-indigo-500 dark:bg-gray-700 dark:text-gray-400 ">
                         <tr class="text-white">
                             <th scope="col" class="px-6 py-3">
                                 No 
@@ -60,10 +59,10 @@
                             </td>
                             <td class="px-6 py-4 text-slate-800">
                                 <div class="flex space-x-2 justify-center">
-                                    <a href="{{ route('admin.study_programs.edit', $study_program->id) }}" class="inline-block w-20 text-center font-medium bg-yellow-600 text-white px-3 py-2 rounded-md hover:bg-yellow-700 transition duration-300">
+                                    <a href="{{ route('masterdata.study_programs.edit', $study_program->id) }}" class="inline-block w-20 text-center font-medium bg-indigo-600 text-white px-3 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                         Edit
                                     </a>
-                                    <form action="{{ route('admin.study_programs.destroy', $study_program->id) }}" method="POST" class="inline-block">
+                                    <form action="{{ route('masterdata.study_programs.destroy', $study_program->id) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="font-medium  bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline">
@@ -82,6 +81,6 @@
                 </table>
             </div>
         </div>
-    </div>
+    </section>
     @endsection
 </x-app-layout>
