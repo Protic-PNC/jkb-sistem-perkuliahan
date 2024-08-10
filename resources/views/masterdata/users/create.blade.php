@@ -1,5 +1,6 @@
 <x-app-layout>
-    @section('name_page', 'Users')
+    @section('main_folder', 'Master Data')
+    @section('descendant_folder', 'Users')
 
     @section('content')
         

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\PositionController;
@@ -30,6 +31,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('study_programs', StudyProgramController::class)->middleware('role:super_admin');
         Route::resource('student_classes', StudentClassController::class)->middleware('role:super_admin');
         Route::resource('positions', PositionController::class)->middleware('role:super_admin');   
+        Route::resource('courses', CoursesController::class)->middleware('role:super_admin');   
+        
     });
 
     

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('sks'); //1 sks = 8pertemuan
             $table->integer('hours'); //2 jam
-            $table->integer('meeting')->nullable(); //pertemuan(meeting) diisi $meeting = banyak sks * 8 pertemuan
+            $table->float('meeting')->nullable(); //pertemuan(meeting) diisi $meeting = banyak sks * 8 pertemuan
             $table->softDeletes();
             $table->timestamps();
         });

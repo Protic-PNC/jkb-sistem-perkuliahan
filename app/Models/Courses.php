@@ -13,6 +13,7 @@ class Courses extends Model
     protected $fillable = [
         'code',
         'name',
+        'type',
         'sks',
         'hours',
         'meeting',

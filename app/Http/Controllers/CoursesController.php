@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Courses;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CoursesController extends Controller
 {
@@ -12,7 +13,8 @@ class CoursesController extends Controller
      */
     public function index()
     {
-        //
+        $courses = Courses::all();
+        return view('masterdata.courses.index', compact('courses'));
     }
 
     /**
@@ -20,7 +22,7 @@ class CoursesController extends Controller
      */
     public function create()
     {
-        //
+         return view('masterdata.courses.create');
     }
 
     /**
@@ -28,7 +30,31 @@ class CoursesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'code' => 'required|string',
+            'type' => 'required|string',
+            'sks' => 'required|integer',
+            'hours' => 'required|integer',
+        ]);
+            $hoursPerSKS = 16; // 16 jam per SKS
+            $totalHours = $validated['sks'] * $hoursPerSKS;
+            
+            $meeting = ceil($totalHours / $validated['hours']); // Pembulatan ke atas
+            // Tambahkan meeting ke data yang akan disimpan
+            $validated['meeting'] = $meeting;
+            
+        try {
+            DB::beginTransaction();
+            // Buat record baru
+            $newMatkul = Courses::create($validated);
+            
+            DB::commit();
+            return redirect()->route('masterdata.courses.index')->with('success', 'Mata Kuliah Berhasil Disimpan');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'System error: ' . $e->getMessage());
+        }
     }
 
     /**
