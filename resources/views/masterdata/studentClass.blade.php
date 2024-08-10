@@ -1,6 +1,6 @@
 <x-app-layout>
-    @section('name_page', 'Hallo')
-    @section('name_main', 'Kelas')
+    @sction('name_page', 'Hallo')
+    @sction('name_main', 'Kelas')
 
     @section('search')
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -17,8 +17,7 @@
     @endsection
 
     @section('content')
-
-        <div class="mx-auto p-6">
+        <div class="mx-auto p-6" id="mainModal">
             <!-- Card for Table -->
             <div class="bg-white shadow-md rounded-lg p-6">
                 <div class="mb-3">
@@ -70,12 +69,13 @@
                                             {{-- <a href="{{ route('masterdata.student_classes.edit', $student_class->id) }}"
                                                 class="inline-block w-20 text-center font-medium bg-yellow-600 text-white px-3 py-2 rounded-md hover:bg-yellow-700 transition duration-300">Edit</a> --}}
                                             <button id="updateButton" data-modal-target="updateModal"
-                                                data-modal-toggle="updateModal"
-                                                class="block text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                                                data-modal-toggle="updateModal" data-id="{{ $student_class->id }}"
+                                                class="edit-btn block text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                                                 type="button">
-                                                Edit Kelas
+                                                Edit
                                             </button>
-                                            <form action="{{ route('masterdata.student_classes.destroy', $student_class->id) }}"
+                                            <form
+                                                action="{{ route('masterdata.student_classes.destroy', $student_class->id) }}"
                                                 method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
@@ -96,7 +96,7 @@
             </div>
         </div>
 
-        {{-- Section Create start --}}
+        {{-- Create start --}}
         <div id="createModal" tabindex="-1" aria-hidden="true"
             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
             <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
@@ -106,11 +106,10 @@
                     <div
                         class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                            Edit Kelas
+                            Tambah Kelas
                         </h3>
-                        <button type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-toggle="updateModal">
+                        <button id="closeCreateModalButton"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
                             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd"
@@ -161,7 +160,7 @@
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" 
+                        <button type="submit"
                             class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
                             Tambah
                         </button>
@@ -169,7 +168,7 @@
                 </div>
             </div>
         </div>
-        </section>
+
 
         {{-- Section Create end --}}
 
@@ -189,9 +188,8 @@
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                             Edit Class
                         </h3>
-                        <a href="{{ route('masterdata.student_classes.index') }}"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-toggle="updateModal">
+                        <button type="button" onclick="closeModals()"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
                             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd"
@@ -199,7 +197,7 @@
                                     clip-rule="evenodd"></path>
                             </svg>
                             <span class="sr-only">Close modal</span>
-                        </a>
+                        </button>
                     </div>
                     <!-- Modal body -->
                     <form action="{{ route('masterdata.student_classes.update', $student_class) }}" method="POST">
@@ -246,8 +244,8 @@
 
                         </div>
                         <div class="flex items-center space-x-4">
-                            <button type="submit"
-                                class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                            <button type="submit" 
+                                class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 edit-btn">
                                 Edit
                             </button>
                             <button type="button"
@@ -266,6 +264,23 @@
             </div>
         </div>
         @push('after-script')
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+            <script>
+                function closeModals() {
+                    document.getElementById("createModal").classList.add("hidden");
+                    document.getElementById("updateModal").classList.add("hidden");
+                }
+            </script>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    // Menambahkan event listener ke button untuk menutup modal
+                    var closeButton = document.getElementById("closeCreateModalButton");
+                    closeButton.addEventListener("click", function() {
+                        closeModals(); // Panggil fungsi closeModals ketika button di-klik
+                    });
+                });
+            </script>
             <script>
                 document.addEventListener("DOMContentLoaded", function() {
                     var inputField = document.getElementById('academic_year');
@@ -275,15 +290,16 @@
             </script>
             <script>
                 document.addEventListener("DOMContentLoaded", function(event) {
+                    closeModals();
                     document.getElementById('updateButton').click();
                 });
             </script>
             <script>
                 document.addEventListener("DOMContentLoaded", function(event) {
+                    closeModals();
                     document.getElementById('createButton').click();
                 });
             </script>
         @endpush
-
     @endsection
 </x-app-layout>

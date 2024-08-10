@@ -22,7 +22,7 @@ class PositionController extends Controller
      */
     public function create()
     {
-        return view('admin.positions.create');
+        return view('masterdata.positions.create');
     }
 
     /**
@@ -38,7 +38,7 @@ class PositionController extends Controller
         try{
             $newJabatan= Position::create($validated);
             DB::commit();
-            return redirect()->route('admin.positions.index')->with('succes', 'Position Berhasil Disimpan');
+            return redirect()->route('masterdata.positions.index')->with('succes', 'Position Berhasil Disimpan');
         }catch(\Exception $e){
             DB::rollBack();
 
@@ -59,7 +59,7 @@ class PositionController extends Controller
      */
     public function edit(Position $position)
     {
-        return view('admin.positions.edit', [
+        return view('masterdata.positions.edit', [
             'position'=> $position]);
     }
 
@@ -76,7 +76,7 @@ class PositionController extends Controller
         try{
             $position->update($validated);
             DB::commit();
-            return redirect()->route('admin.positions.index')->with('succes', 'Program Studi Berhasil Disimpan');
+            return redirect()->route('masterdata.positions.index')->with('succes', 'Program Studi Berhasil Disimpan');
         }catch(\Exception $e){
             DB::rollBack();
 

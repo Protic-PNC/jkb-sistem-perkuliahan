@@ -1,6 +1,6 @@
 <x-app-layout>
-    @section('name_page', 'Hallo')
-    @section('name_main', 'Jabatan')
+    @section('main_folder', 'Master Data')
+    @section('descendant_folder', 'Jabatan')
 
     @section('search')
     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -12,7 +12,7 @@
         </svg>
     </span>
     
-    <input class="w-32 pl-10 pr-4 rounded-md form-input sm:w-64 focus:border-yellow-600" type="text"
+    <input class="w-32 pl-10 pr-4 rounded-md form-input sm:w-64 focus:border-indigo-600" type="text"
         placeholder="Search">
     @endsection
 
@@ -25,12 +25,12 @@
         <div class="bg-white shadow-md rounded-lg p-6">
             <div class="mb-3">
                 <a href="{{ route('masterdata.positions.create') }}">
-                    <button type="button" class="text-white bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-yellow-300  dark:focus:ring-yellow-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Tambah Jabatan</button>
+                    <button type="button" class="text-white bg-gradient-to-r from-indigo-500 via-indigo-600 to-indigo-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-indigo-300  dark:focus:ring-indigo-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Tambah Jabatan</button>
                 </a>
             </div>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
-                    <thead class="text-xs text-gray-700 uppercase bg-yellow-500 dark:bg-gray-700 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-indigo-500 dark:bg-gray-700 dark:text-gray-400">
                         <tr class="text-white">
                             <th scope="col" class="px-6 py-3">
                                 No 
@@ -53,17 +53,23 @@
                                 {{ $position->name }}
                             </td>
                             <td class="px-6 py-4 text-slate-800">
-                                <a href="{{ route('masterdata.positions.edit', $position->id) }}" class="font-medium text-yellow-600 dark:text-yellow-500 hover:underline">Edit</a>
-                                <form action="{{ route('masterdata.positions.destroy', $position->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="font-medium text-red-600 dark:text-red-500 hover:underline">Hapus</button>
-                                </form>
+                                <div class="flex space-x-2 justify-center">
+                                    <a href="{{ route('masterdata.positions.edit', $position->id) }}" class="inline-block w-20 text-center font-medium bg-indigo-600 text-white px-3 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
+                                        Edit
+                                    </a>
+                                    <form action="{{ route('masterdata.positions.destroy', $position->id) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="font-medium  bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline">
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-4 text-center">Belum Ada Data Jabatan</td>
+                            <td colspan="4" class="px-6 py-4 text-center">Belum Ada Data</td>
                         </tr>
                         @endforelse
                     </tbody>

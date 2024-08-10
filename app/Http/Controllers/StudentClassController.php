@@ -14,9 +14,9 @@ class StudentClassController extends Controller
      */
     public function index()
     {
-        $prodis = StudyProgram::select('id', 'name')->get();
+        
         $studentClasses = StudentClass::with('study_program')->orderBy('academic_year', 'asc')->get();
-        return view('masterdata.studentClass', compact('studentClasses','prodis'));
+        return view('masterdata.student_class.index', compact('studentClasses'));
     }
 
     /**
@@ -25,7 +25,7 @@ class StudentClassController extends Controller
     public function create()
     {
         $prodis = StudyProgram::all();
-        return view('admin.student_class.create', compact('prodis'));
+        return view('masterdata.student_class.create', compact('prodis'));
     }
 
     /**
@@ -51,7 +51,7 @@ class StudentClassController extends Controller
         try {
             $newKelas = StudentClass::create($validated);
             DB::commit();
-            return redirect()->route('admin.student_classes.index')->with('succes', 'Kelas Berhasil Disimpan');
+            return redirect()->route('masterdata.student_classes.index')->with('succes', 'Kelas Berhasil Disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -74,8 +74,8 @@ class StudentClassController extends Controller
      */
     public function edit(StudentClass $student_class)
     {
-        // $prodis = StudyProgram::all();
-        // return view('admin.student_class.edit', compact('student_class', 'prodis'));
+        $prodis = StudyProgram::all();
+        return view('masterdata.student_class.edit', compact('student_class', 'prodis'));
     }
 
     /**
@@ -101,7 +101,7 @@ class StudentClassController extends Controller
         try{
             $student_class->update($validated);
             DB::commit();
-            return redirect()->route('admin.student_class.index')->with('succes', 'Kelas Berhasil Diedit');
+            return redirect()->route('masterdata.student_class.index')->with('succes', 'Kelas Berhasil Diedit');
         }catch(\Exception $e){
             DB::rollBack();
 

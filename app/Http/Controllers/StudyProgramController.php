@@ -23,7 +23,7 @@ class StudyProgramController extends Controller
      */
     public function create()
     {
-        return view('admin.study_programs.create');
+        return view('masterdata.study_programs.create');
     }
 
     /**
@@ -39,7 +39,7 @@ class StudyProgramController extends Controller
         try{
             $newProdi= StudyProgram::create($validated);
             DB::commit();
-            return redirect()->route('admin.study_programs.index')->with('succes', 'Program Studi Berhasil Disimpan');
+            return redirect()->route('masterdata.study_programs.index')->with('succes', 'Program Studi Berhasil Disimpan');
         }catch(\Exception $e){
             DB::rollBack();
 
@@ -61,7 +61,7 @@ class StudyProgramController extends Controller
      */
     public function edit(StudyProgram $study_program)
     {
-        return view('admin.study_programs.edit', [
+        return view('masterdata.study_programs.edit', [
             'study_program'=> $study_program
         ]);
     }
@@ -79,7 +79,7 @@ class StudyProgramController extends Controller
         try{
             $study_program->update($validated);
             DB::commit();
-            return redirect()->route('admin.study_programs.index')->with('succes', 'Program Studi Berhasil Disimpan');
+            return redirect()->route('masterdata.study_programs.index')->with('succes', 'Program Studi Berhasil Disimpan');
         }catch(\Exception $e){
             DB::rollBack();
 

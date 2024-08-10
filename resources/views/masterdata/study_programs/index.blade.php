@@ -1,7 +1,7 @@
 <x-app-layout>
     @section('name_page', 'Hallo')
    
-    @section('main_folder', 'Admin')
+    @section('main_folder', 'Master Data')
     @section('descendant_folder', 'Program Studi')
 
     @section('search')
@@ -74,7 +74,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-4 text-center">Belum Ada Prodi</td>
+                            <td colspan="4" class="px-6 py-4 text-center">Belum Ada Data</td>
                         </tr>
                         @endforelse
                     </tbody>

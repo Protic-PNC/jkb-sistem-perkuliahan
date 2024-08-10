@@ -30,7 +30,7 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
-        return view('admin.users.create', compact('roles'));
+        return view('masterdata.users.create', compact('roles'));
     }
 
     /**
@@ -66,7 +66,7 @@ class UserController extends Controller
 
             DB::commit();
 
-            return redirect()->route('admin.users.index')->with('success', 'User berhasil disimpan');
+            return redirect()->route('masterdata.users.index')->with('success', 'User berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()
