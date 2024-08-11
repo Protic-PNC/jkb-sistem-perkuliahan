@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -86,9 +87,10 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        //
+        $roles = Role::all();
+        return view('masterdata.users.edit', compact('roles', 'user'));
     }
 
     /**
@@ -96,7 +98,53 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'password' => 'nullable|min:8',
+            'role' => 'required|exists:roles,name',
+            'avatar' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+        ]);
+    
+        $user = User::findOrFail($id);
+    
+        $data = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ];
+    
+        if (!empty($validated['password'])) {
+            $data['password'] = bcrypt($validated['password']);
+        }
+    
+        if ($request->hasFile('avatar')) {
+            // Delete old avatar if it exists
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+    
+            // Store new avatar
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            $data['avatar'] = $avatarPath;
+        }
+    
+        try {
+            DB::beginTransaction();
+    
+            $user->update($data);
+    
+            // Update user role
+            $user->syncRoles([$validated['role']]);
+    
+            DB::commit();
+    
+            return redirect()->route('masterdata.users.index')->with('success', 'User berhasil diperbarui');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()
+                ->back()
+                ->with('error', 'System error: ' . $e->getMessage());
+        }
     }
 
     /**

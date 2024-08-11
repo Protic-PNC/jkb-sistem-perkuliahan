@@ -17,12 +17,19 @@
     @endsection
 
     @section('content')
+    <style>
+        #success-message {
+            transition: opacity 0.5s ease-out;
+        }
+      </style>
         <div class="mx-auto p-6">
-            <!-- Card for Add Button -->
-
-
-            <!-- Card for Table -->
             <div class="bg-white shadow-md rounded-lg p-6">
+                @if (session('success'))
+                    <div id="success-message" class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
+                        role="alert">
+                        <span class="font-medium">Success!</span> {{ session('success') }}
+                    </div>
+                @endif
                 <div class="mb-3">
                     <a href="{{ route('masterdata.users.create') }}">
                         <button type="button"
@@ -68,10 +75,14 @@
                                                 Lengkapi Identitas
                                             </a>
                                         @endif
-                                        <form action="{{ route('masterdata.study_programs.destroy', $user->id) }}" method="POST"
-                                            style="display:inline;">
+                                        <form action="{{ route('masterdata.study_programs.destroy', $user->id) }}"
+                                            method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
+                                            <a href="{{ route('masterdata.users.edit', $user->id) }}"
+                                                class="inline-block w-20 text-center font-medium bg-indigo-600 text-white px-3 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
+                                                Edit
+                                            </a>
                                             <button type="submit"
                                                 class="inline-block text-center font-medium bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300">
                                                 Hapus
@@ -91,6 +102,21 @@
             </div>
         </div>
 
+        @push('scripts')
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var successMessage = document.getElementById('success-message');
+                    if (successMessage) {
+                        setTimeout(function() {
+                            successMessage.style.opacity = '0';
+                            setTimeout(function() {
+                                successMessage.remove();
+                            }, 500); // Time for fade-out transition
+                        }, 3000); // Time to show message before fading out
+                    }
+                });
+            </script>
+        @endpush
 
     @endsection
 </x-app-layout>
