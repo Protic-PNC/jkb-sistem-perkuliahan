@@ -15,7 +15,8 @@ class StudentController extends Controller
      */
     public function index()
     {
-        
+        $students= Student::all();
+        return view('masterdata.students.index', compact('students'));
     }
 
     /**
@@ -27,7 +28,7 @@ class StudentController extends Controller
 
         $user = User::find($userId);
         
-        return view('student.students.create', compact('student_class', 'user'));
+        return view('masterdata.students.create', compact('student_class', 'user'));
     }
 
     /**
@@ -56,7 +57,7 @@ class StudentController extends Controller
     
             DB::commit();
     
-            return redirect()->route('admin.users.index')->with('success', 'User Mahasiswa berhasil disimpan');
+            return redirect()->route('masterdata.users.index')->with('success', 'User Mahasiswa berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()

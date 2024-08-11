@@ -40,8 +40,10 @@ Route::middleware('auth')->group(function () {
         Route::resource('lecturers', LecturerController::class)->middleware('role:super_admin|dosen');
     });
 
-    Route::get('/students/create/{userId}', [StudentController::class, 'create'])->name('student.students.create');
+    Route::get('/students/index', [StudentController::class,'index'])->name('masterdata.students.index');
+    Route::get('/students/create/{userId}', [StudentController::class, 'create'])->name('masterdata.students.create');
     Route::post('/students/store/{userId}', [StudentController::class, 'store'])->name('student.students.store');
+    Route::delete('/a/students/destroy/{userId}', [StudentController::class, 'destroy'])->middleware('role:admin')->name('masterdata.students.destroy');
     Route::prefix('student')->name('student.')->group(function(){
     
     //Route::resource('students', StudentController::class)->middleware('role:super_admin|mahasiswa');

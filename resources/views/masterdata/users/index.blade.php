@@ -22,8 +22,8 @@
             transition: opacity 0.5s ease-out;
         }
       </style>
-        <div class="mx-auto p-6">
-            <div class="bg-white shadow-md rounded-lg p-6">
+        <section class="bg-white dark:bg-gray-900">
+            <div class="py-4 px-2 mx-auto max-w-4xl lg:py-8">
                 @if (session('success'))
                     <div id="success-message" class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
                         role="alert">
@@ -70,12 +70,12 @@
                                                 Lengkapi Identitas Dosen
                                             </a>
                                         @elseif($user->hasRole('mahasiswa'))
-                                            <a href="{{ route('student.students.create', $user->id) }}"
+                                            <a href="{{ route('masterdata.students.create', $user->id) }}"
                                                 class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                                 Lengkapi Identitas
                                             </a>
                                         @endif
-                                        <form action="{{ route('masterdata.study_programs.destroy', $user->id) }}"
+                                        <form action="{{ route('masterdata.students.destroy', $user->id) }}"
                                             method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
@@ -100,7 +100,7 @@
 
                 </div>
             </div>
-        </div>
+        </section>
 
         @push('scripts')
             <script>

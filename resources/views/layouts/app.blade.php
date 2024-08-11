@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-    
+
 </head>
 
 <body class="min-h-screen bg-gray-100" style="background: #edf2f7;">
@@ -133,18 +133,19 @@
 
                 <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
                     <div class="container px-6 pt-6 mx-auto">
-                        <h3 class="text-xl font-bold text-gray-700">@yield('name_main')</h3>
-                        <div class="page-header mb-4">
+                        <div class="page-header mb-4 flex justify-between items-center ">
                             <div class="page-header-breadcrumb">
                                 <ul class="breadcrumb flex space-x-2">
                                     <li class="breadcrumb-item">
                                         <a href="{{ route('dashboard.index') }}" class="text-blue-500 hover:text-blue-700">
-                                            <i ><svg class="h-6 w-6 text-indigo-500"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
-                                              </svg></i>
+                                            <i>
+                                                <svg class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                                                </svg>
+                                            </i>
                                         </a>
                                     </li>
-                                    
                                     <li class="breadcrumb-item">
                                         <span class="text-gray-500">@yield('main_folder')</span>
                                     </li>
@@ -153,9 +154,21 @@
                                     </li>
                                 </ul>
                             </div>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                                    <svg class="w-5 h-5 text-gray-500" viewBox="0 0 24 24" fill="none">
+                                        <path
+                                            d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        </path>
+                                    </svg>
+                                </span>
+                                <input class="w-32 pl-10 pr-4 rounded-md form-input sm:w-64 focus:border-indigo-600" type="text" placeholder="Search">
+                            </div>
                         </div>
                         
-                        
+
+
                         @yield('content')
                     </div>
                 </main>
@@ -163,5 +176,11 @@
         </div>
     </div>
     @stack('after-script')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+        }
+    </script>
 </body>
+
 </html>
