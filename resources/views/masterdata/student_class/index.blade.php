@@ -17,19 +17,26 @@
     @endsection
 
     @section('content')
+        <style>
+            #success-message {
+                transition: opacity 0.5s ease-out;
+            }
+        </style>
         <div class="mx-auto p-6" id="mainModal">
             <!-- Card for Table -->
             <div class="bg-white shadow-md rounded-lg p-6">
-                @if (session('success'))
+                @if (session('succes'))
                     <div id="success-message"
                         class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
                         role="alert">
-                        <span class="font-medium">Success!</span> {{ session('success') }}
+                        <span class="font-medium">Success!</span> {{ session('succes') }}
                     </div>
                 @endif
                 <div class="mb-3">
                     <a href="{{ route('masterdata.student_classes.create') }}">
-                        <button type="button" class="text-white bg-gradient-to-r from-indigo-500 via-indigo-600 to-indigo-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-indigo-300  dark:focus:ring-indigo-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Tambah Kelas</button>
+                        <button type="button"
+                            class="text-white bg-gradient-to-r from-indigo-500 via-indigo-600 to-indigo-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-indigo-300  dark:focus:ring-indigo-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Tambah
+                            Kelas</button>
                     </a>
                 </div>
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -71,13 +78,17 @@
                                     </td>
                                     <td class="px-6 py-4 text-slate-800">
                                         <div class="flex space-x-2 justify-center">
-                                            <a href="{{ route('masterdata.student_classes.edit', $student_class->id) }}" class="inline-block w-20 text-center font-medium bg-indigo-600 text-white px-3 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
+                                            <a href="{{ route('masterdata.student_classes.edit', $student_class->id) }}"
+                                                class="inline-block w-20 text-center font-medium bg-indigo-600 text-white px-3 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                                 Edit
                                             </a>
-                                            <form action="{{ route('masterdata.student_classes.destroy', $student_class->id) }}" method="POST" class="inline-block">
+                                            <form
+                                                action="{{ route('masterdata.student_classes.destroy', $student_class->id) }}"
+                                                method="POST" class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="font-medium  bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline">
+                                                <button type="submit"
+                                                    class="font-medium  bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline">
                                                     Hapus
                                                 </button>
                                             </form>
@@ -94,5 +105,20 @@
                 </div>
             </div>
         </div>
-    @endsection 
-    </x-app-layout>
+        @push('scripts')
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var successMessage = document.getElementById('success-message');
+                    if (successMessage) {
+                        setTimeout(function() {
+                            successMessage.style.opacity = '0';
+                            setTimeout(function() {
+                                successMessage.remove();
+                            }, 500); // Time for fade-out transition
+                        }, 3000); // Time to show message before fading out
+                    }
+                });
+            </script>
+        @endpush
+    @endsection
+</x-app-layout>

@@ -19,14 +19,19 @@
     @endsection
 
     @section('content')
+        <style>
+            #success-message {
+                transition: opacity 0.5s ease-out;
+            }
+        </style>
         <hr class="2xl">
         <section class="bg-white dark:bg-gray-900">
             <div class="py-4 px-2 mx-auto max-w-4xl lg:py-8">
-                @if (session('success'))
+                @if (session('succes'))
                     <div id="success-message"
                         class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
                         role="alert">
-                        <span class="font-medium">Success!</span> {{ session('success') }}
+                        <span class="font-medium">Success!</span> {{ session('succes') }}
                     </div>
                 @endif
                 <div class="mb-3">
@@ -95,5 +100,20 @@
                 </div>
             </div>
         </section>
+        @push('scripts')
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var successMessage = document.getElementById('success-message');
+                    if (successMessage) {
+                        setTimeout(function() {
+                            successMessage.style.opacity = '0';
+                            setTimeout(function() {
+                                successMessage.remove();
+                            }, 500); // Time for fade-out transition
+                        }, 3000); // Time to show message before fading out
+                    }
+                });
+            </script>
+        @endpush
     @endsection
 </x-app-layout>

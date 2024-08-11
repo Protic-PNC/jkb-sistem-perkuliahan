@@ -79,7 +79,7 @@ class StudyProgramController extends Controller
         try{
             $study_program->update($validated);
             DB::commit();
-            return redirect()->route('masterdata.study_programs.index')->with('succes', 'Program Studi Berhasil Disimpan');
+            return redirect()->route('masterdata.study_programs.index')->with('succes', 'Program Studi Berhasil Diedit');
         }catch(\Exception $e){
             DB::rollBack();
 
