@@ -18,11 +18,14 @@
 
     @section('content')
     <div class="mx-auto p-6">
-        <!-- Card for Add Button -->
-        
-
-        <!-- Card for Table -->
         <div class="bg-white shadow-md rounded-lg p-6">
+            @if (session('success'))
+                    <div id="success-message"
+                        class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
+                        role="alert">
+                        <span class="font-medium">Success!</span> {{ session('success') }}
+                    </div>
+                @endif
             <div class="mb-3">
                 <a href="{{ route('masterdata.positions.create') }}">
                     <button type="button" class="text-white bg-gradient-to-r from-indigo-500 via-indigo-600 to-indigo-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-indigo-300  dark:focus:ring-indigo-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Tambah Jabatan</button>

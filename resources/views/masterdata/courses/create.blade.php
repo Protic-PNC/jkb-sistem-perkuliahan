@@ -5,12 +5,18 @@
     @section('content')
 
         <section class="bg-white dark:bg-gray-900">
-            @if (session('error'))
-                <div class="alert alert-danger">
-                    <p class="py-5 bg-red-500 text-white font-bold">{{ session('error') }}</p>
-                </div>
-            @endif
             <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+                @if ($errors->any())
+                    <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+                        role="alert">
+                        <span class="font-medium">Whoops!</span> There were some problems with your input.
+                        <ul class="mt-2 list-disc pl-5">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambah Mata Kuliah</h2>
                 <form action="{{ route('masterdata.courses.store') }}" method="POST">
                     @csrf
