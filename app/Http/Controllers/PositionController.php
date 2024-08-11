@@ -91,7 +91,7 @@ class PositionController extends Controller
     {
         try{
             $position->delete();
-            return redirect()->back()->with('succes','Projects deleted sussesfully');
+            return redirect()->back()->with('succes','Position deleted sussesfully');
         }
         catch(\Exception $e){
             DB::rollBack();

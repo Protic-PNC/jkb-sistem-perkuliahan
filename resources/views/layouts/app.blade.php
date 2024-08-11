@@ -139,22 +139,17 @@
                                 <ul class="breadcrumb flex space-x-2">
                                     <li class="breadcrumb-item">
                                         <a href="{{ route('dashboard.index') }}" class="text-blue-500 hover:text-blue-700">
-                                            <i class="feather icon-home"></i>
+                                            <i ><svg class="h-6 w-6 text-indigo-500"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+                                              </svg></i>
                                         </a>
                                     </li>
-                                    <li class="breadcrumb-item">
-                                        <span class="text-gray-500">/</span>
-                                    </li>
+                                    
                                     <li class="breadcrumb-item">
                                         <span class="text-gray-500">@yield('main_folder')</span>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <span class="text-gray-500">/</span>
-                                    </li>
-                                    <li class="breadcrumb-item">
-                                        <a href="{{ route('masterdata.study_programs.index') }}" class="text-blue-500 hover:text-blue-700">
-                                            @yield('descendant_folder')
-                                        </a>
+                                        <span class="text-gray-500">@yield('descendant_folder')</span>
                                     </li>
                                 </ul>
                             </div>

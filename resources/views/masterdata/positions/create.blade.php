@@ -1,6 +1,6 @@
 <x-app-layout>
-    @section('main_folder', 'Master Data')
-    @section('descendant_folder', 'Jabatan')
+    @section('main_folder', '/ Master Data')
+    @section('descendant_folder', '/ Jabatan')
 
     @section('content')
         

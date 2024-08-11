@@ -1,6 +1,6 @@
 <x-app-layout>
-    @section('main_folder', 'Master Data')
-    @section('descendant_folder', 'Kelas')
+    @section('main_folder', '/ Master Data')
+    @section('descendant_folder', '/ Kelas')
 
     @section('content')
         <section class="bg-white dark:bg-gray-900">

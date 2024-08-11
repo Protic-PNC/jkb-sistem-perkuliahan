@@ -1,6 +1,6 @@
 <x-app-layout>
-    @section('name_page', 'Hallo')
-    @section('name_main', 'Users')
+    @section('main_folder', '/Master Data')
+    @section('descendant_folder', '/Users')
 
     @section('search')
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
