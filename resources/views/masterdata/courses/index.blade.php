@@ -1,6 +1,6 @@
 <x-app-layout>
-    @section('main_folder', 'Master Data')
-    @section('descendant_folder', 'Mata Kuliah')
+    @section('main_folder', '/ Master Data')
+    @section('descendant_folder', '/ Mata Kuliah')
 
     @section('search')
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -30,53 +30,44 @@
                             Data</button>
                     </a>
                 </div>
-                {{-- <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
                         <thead class="text-xs text-gray-700 uppercase bg-indigo-500 dark:bg-gray-700 dark:text-gray-400">
                             <tr class="text-white">
                                 <th scope="col" class="px-6 py-3">No</th>
-                                <th scope="col" class="px-6 py-3">Username</th>
-                                <th scope="col" class="px-6 py-3">Email</th>
-                                <th scope="col" class="px-6 py-3">Role</th>
-                                <th scope="col" class="px-6 py-3">Action</th>
+                                <th scope="col" class="px-6 py-3">Nama</th>
+                                <th scope="col" class="px-6 py-3">Kode</th>
+                                <th scope="col" class="px-6 py-3">Jenis</th>
+                                <th scope="col" class="px-6 py-3">SKS</th>
+                                <th scope="col" class="px-6 py-3">Lama (Jam)</th>
+                                <th scope="col" class="px-6 py-3">Pertemuan</th>
+                                <th scope="col" class="px-6 py-3">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($users as $user)
+                            @forelse ($courses as $course)
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
                                     </td>
-                                    <td class="px-6 py-4 text-slate-800">{{ $user->name }}</td>
-                                    <td class="px-6 py-4 text-slate-800">{{ $user->email }}</td>
-                                    <td class="px-6 py-4 text-slate-800">
-                                        @foreach ($user->roles as $role)
-                                            {{ $role->name }}
-                                            @if (!$loop->last)
-                                                ,
-                                            @endif
-                                        @endforeach
-                                    </td>
+                                    <td class="px-6 py-4 text-slate-800">{{ $course->name }}</td>
+                                    <td class="px-6 py-4 text-slate-800">{{ $course->code }}</td>
+                                    <td class="px-6 py-4 text-slate-800">{{ $course->type }}</td>
+                                    <td class="px-6 py-4 text-slate-800">{{ $course->sks }}</td>
+                                    <td class="px-6 py-4 text-slate-800">{{ $course->hours }}</td>
+                                    <td class="px-6 py-4 text-slate-800">{{ $course->meeting }}</td>
                                     <td class="flex space-x-2 justify-end">
-                                        @if ($user->hasRole('dosen'))
-                                            <a href="{{ route('lecture.lecturers.create', $user->id) }}"
-                                                class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
-                                                Lengkapi Identitas Dosen
+                                        <div class="flex space-x-2 justify-center">
+                                            <a href="{{ route('masterdata.courses.edit', $course->id) }}" class="inline-block w-20 text-center font-medium bg-indigo-600 text-white px-3 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
+                                                Edit
                                             </a>
-                                        @elseif($user->hasRole('mahasiswa'))
-                                            <a href="{{ route('student.students.create', $user->id) }}"
-                                                class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
-                                                Lengkapi Identitas
-                                            </a>
-                                        @endif
-                                        <form action="{{ route('masterdata.study_programs.destroy', $user->id) }}" method="POST"
-                                            style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="inline-block text-center font-medium bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300">
-                                                Hapus
-                                            </button>
-                                        </form>
+                                            <form action="{{ route('masterdata.courses.destroy', $course->id) }}" method="POST" class="inline-block">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="font-medium  bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
@@ -87,7 +78,7 @@
                         </tbody>
                     </table>
 
-                </div> --}}
+                </div>
             </div>
         </div>
 

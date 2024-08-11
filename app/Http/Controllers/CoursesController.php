@@ -68,24 +68,55 @@ class CoursesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Courses $courses)
+    public function edit(Courses $course)
     {
-        //
+        return view('masterdata.courses.edit', [
+            'course'=> $course]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Courses $courses)
+    public function update(Request $request, Courses $course)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'code' => 'required|string',
+            'type' => 'required|string',
+            'sks' => 'required|integer',
+            'hours' => 'required|integer',
+        ]);
+            $hoursPerSKS = 16; // 16 jam per SKS
+            $totalHours = $validated['sks'] * $hoursPerSKS;
+            $meeting = ceil($totalHours / $validated['hours']); // Pembulatan ke atas
+            // Tambahkan meeting ke data yang akan disimpan
+            $validated['meeting'] = $meeting;
+            DB::beginTransaction();
+        try {
+            // Buat record baru
+            $course->update($validated);
+            
+            DB::commit();
+            return redirect()->route('masterdata.courses.index')->with('success', 'Mata Kuliah Berhasil Diedit');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'System error: ' . $e->getMessage());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Courses $courses)
+    public function destroy(Courses $course)
     {
-        //
+        try{
+            $course->delete();
+            return redirect()->back()->with('succes','Course deleted sussesfully');
+        }
+        catch(\Exception $e){
+            DB::rollBack();
+
+            return redirect()->back()->with('error', 'System eror'.$e->getMessage());
+        }
     }
 }
