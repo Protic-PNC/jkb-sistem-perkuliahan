@@ -27,15 +27,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::prefix('masterdata')->name('masterdata.')->group(function(){
-        Route::resource('users', UserController::class)->middleware('role:super_admin|mahasiswa');
+        Route::resource('users', UserController::class)->middleware('role:super_admin');
         Route::resource('study_programs', StudyProgramController::class)->middleware('role:super_admin');
         Route::resource('student_classes', StudentClassController::class)->middleware('role:super_admin');
         Route::resource('positions', PositionController::class)->middleware('role:super_admin');   
         Route::resource('courses', CoursesController::class)->middleware('role:super_admin');   
         
     });
-
-    
     Route::prefix('lecture')->name('lecture.')->group(function(){
         Route::resource('lecturers', LecturerController::class)->middleware('role:super_admin|dosen');
     });

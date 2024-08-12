@@ -23,7 +23,7 @@
         }
     </style>
     <section class="bg-white dark:bg-gray-900">
-        <div class="py-4 px-2 mx-auto max-w-4xl lg:py-8">
+        <div class="py-4 px-2 mx-auto lg:py-8">
             @if (session('succes'))
                     <div id="success-message"
                         class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"

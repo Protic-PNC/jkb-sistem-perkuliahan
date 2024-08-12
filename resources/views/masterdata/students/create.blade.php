@@ -4,6 +4,17 @@
     @section('content')
         <div class="mx-auto p-6">
             <div class="bg-white shadow-md rounded-lg p-6">
+                @if ($errors->any())
+                    <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+                        role="alert">
+                        <span class="font-medium">Whoops!</span> There were some problems with your input.
+                        <ul class="mt-2 list-disc pl-5">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <h2 class="text-xl font-semibold mb-4">Melengkapi Identitas Mahasiswa</h2>
 
                 <form action="{{ route('student.students.store', $user->id) }}" method="POST" enctype="multipart/form-data">

@@ -1,12 +1,12 @@
 <x-app-layout>
-    @section('main_folder', '/Master Data')
-    @section('descendant_folder', '/Users')
+    @section('main_folder', '/ Master Data')
+    @section('descendant_folder', '/ Users')
 
     @section('content')
 
         <section class="bg-white dark:bg-gray-900">
 
-            <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+            <div class="py-4 px-2 mx-auto lg:m-8 sm:m-4">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Edit Users</h2>
                 @if ($errors->any())
                     <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
@@ -40,9 +40,9 @@
                         <div>
                             <label for="avatar" class="block mb-2 text-sm font-medium text-gray-700">Upload
                                 Profile</label>
-                                <img src="{{ Storage::url($user->avatar) }}" alt="" class="object-cover w-[120px] h-90px rounded-2xl">
                                 <input type="file" id="avatar" name="avatar" 
                                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
+                                <img src="{{ Storage::url($user->avatar) }}" alt="" class="object-cover w-[120px] h-90px rounded-2xl">
                         </div>
                         <div class="w-full">
                             <label for="password"
@@ -66,7 +66,7 @@
 
                     </div>
                     <button type="submit"
-                        class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
+                        class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                         Edit
                     </button>
                 </form>

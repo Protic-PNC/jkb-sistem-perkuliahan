@@ -18,10 +18,20 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('roles')->get(); // Mengambil semua pengguna beserta rolenya
-       
+        $query = User::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search){
+                $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $users = $query->with('roles')->paginate(5);
+        
         return view('masterdata.users.index', compact('users'));
     }
 
@@ -105,39 +115,39 @@ class UserController extends Controller
             'role' => 'required|exists:roles,name',
             'avatar' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         ]);
-    
+
         $user = User::findOrFail($id);
-    
+
         $data = [
             'name' => $validated['name'],
             'email' => $validated['email'],
         ];
-    
+
         if (!empty($validated['password'])) {
             $data['password'] = bcrypt($validated['password']);
         }
-    
+
         if ($request->hasFile('avatar')) {
             // Delete old avatar if it exists
             if ($user->avatar) {
                 Storage::disk('public')->delete($user->avatar);
             }
-    
+
             // Store new avatar
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
             $data['avatar'] = $avatarPath;
         }
-    
+
         try {
             DB::beginTransaction();
-    
+
             $user->update($data);
-    
+
             // Update user role
             $user->syncRoles([$validated['role']]);
-    
+
             DB::commit();
-    
+
             return redirect()->route('masterdata.users.index')->with('success', 'User berhasil diperbarui');
         } catch (\Exception $e) {
             DB::rollBack();

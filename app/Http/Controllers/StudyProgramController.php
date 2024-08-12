@@ -12,10 +12,20 @@ class StudyProgramController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $prodis = StudyProgram::all();
-        return view('masterdata.study_programs.index', compact('prodis'));
+        $query = StudyProgram::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search){
+                $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('jenjang', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $data = $query->paginate(5);
+        return view('masterdata.study_programs.index', compact('data'));
     }
 
     /**

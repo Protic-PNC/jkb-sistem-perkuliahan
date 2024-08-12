@@ -52,11 +52,9 @@ class StudentController extends Controller
         try {
             DB::beginTransaction();
             $data = $validated;
-    
             $student = Student::create($data);
     
             DB::commit();
-    
             return redirect()->route('masterdata.users.index')->with('success', 'User Mahasiswa berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
