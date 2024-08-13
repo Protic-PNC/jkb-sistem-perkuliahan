@@ -12,11 +12,20 @@ class StudentClassController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $query = StudentClass::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search){
+                $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('academic_year', 'LIKE', "%{$search}%");
+            });
+        }
+        $data = $query->with('study_program')->orderBy('academic_year', 'asc')->paginate(5);
         
-        $studentClasses = StudentClass::with('study_program')->orderBy('academic_year', 'asc')->get();
-        return view('masterdata.student_class.index', compact('studentClasses'));
+        return view('masterdata.student_class.index', compact('data'));
     }
 
     /**

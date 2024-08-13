@@ -11,10 +11,21 @@ class CoursesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Courses::all();
-        return view('masterdata.courses.index', compact('courses'));
+        $query = Courses::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search){
+                $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('code', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $data = $query->paginate(5);
+
+        return view('masterdata.courses.index', compact('data'));
     }
 
     /**

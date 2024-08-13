@@ -9,8 +9,15 @@
                 transition: opacity 0.5s ease-out;
             }
         </style>
+          
         <section class="bg-white dark:bg-gray-900">
+              
             <div class="py-4 px-2 mx-auto lg:m-8 sm:m-4">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Users</h3>  
+                <hr class="border-t-4 my-2 mb-6 rounded-sm bg-gray-300">
+                </div>
+                
                 @if (session('success'))
                     <div id="success-message"
                         class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"

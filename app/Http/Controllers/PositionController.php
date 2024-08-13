@@ -11,10 +11,18 @@ class PositionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $positions = Position::all();
-        return view('masterdata.positions.index', compact('positions'));
+        $query = Position::query();
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search){
+                $q->where('name', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $data = $query->paginate(5);
+        return view('masterdata.positions.index', compact('data'));
     }
 
     /**
