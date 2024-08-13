@@ -40,11 +40,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/students/index', [StudentController::class,'index'])->name('masterdata.students.index');
     Route::get('/students/create/{userId}', [StudentController::class, 'create'])->name('masterdata.students.create');
+    Route::get('/masterdata/create/{userId}', [StudentController::class, 'create'])->name('masterdata.lecturers.create');
     Route::post('/students/store/{userId}', [StudentController::class, 'store'])->name('student.students.store');
+    Route::post('/students/update/{id}', [StudentController::class, 'store'])->name('masterdata.students.update');
+    Route::get('/students/show/{userId}', [StudentController::class, 'show'])->name('masterdata.students.show');
     Route::delete('/a/students/destroy/{userId}', [StudentController::class, 'destroy'])->middleware('role:admin')->name('masterdata.students.destroy');
     Route::prefix('student')->name('student.')->group(function(){
     
-    //Route::resource('students', StudentController::class)->middleware('role:super_admin|mahasiswa');
     });
 
 });

@@ -25,10 +25,14 @@ class StudentController extends Controller
     public function create($userId)
     {
         $student_class = StudentClass::all();
+        $user= User::find($userId);
 
-        $user = User::find($userId);
-        
-        return view('masterdata.students.create', compact('student_class', 'user'));
+        $existingStudent = Student::where('user_id', $userId)->first();
+        if($existingStudent){
+            return redirect()->route('masterdata.students.show', $existingStudent->id);
+        }else{
+            return view('masterdata.students.create', compact('student_class', 'user'));
+        }
     }
 
     /**
@@ -67,9 +71,11 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Student $student)
+    public function show(Student $student, $id)
     {
-        //
+        $student_class = StudentClass::all();
+        $student= Student::find($id);
+        return view('masterdata.students.show', compact('student_class','student'));
     }
 
     /**
