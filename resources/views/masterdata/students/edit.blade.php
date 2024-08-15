@@ -19,20 +19,20 @@
                         </ul>
                     </div>
                 @endif
-                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambah Users</h2>
-                <form action="{{ route('masterdata.students.store', $user->id) }}" method="POST" enctype="multipart/form-data">
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Edit Mahasiswa</h2>
+                <form action="{{ route('masterdata.students.update', $student->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                         <div class="w-full">
                             <label for="name"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">name</label>
-                            <input type="text" name="name" id="name"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
+                            <input type="text" name="name" id="name" value="{{ $student->name }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 placeholder="Masukan Nama" required="">
                         </div>
                         <div class="w-full">
                             <label for="nim" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIM</label>
-                            <input type="text" name="nim" id="nim"
+                            <input type="text" name="nim" id="nim" value="{{ $student->nim }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 placeholder="Masukan Jumlah Jam Perkuliahan" required="">
                         </div>
@@ -41,42 +41,43 @@
                                 Tanda Tangan</label>
                             <input type="file" id="signature" name="signature"
                                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
+                                <img class="h-10 w-10" src="{{ Storage::url($student->signature) }}" alt="">
                         </div>
                         <div class="w-full">
                             <label for="address"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">address</label>
-                            <textarea type="texr" name="address" id="address"
+                            <textarea type="texr" name="address" id="address"  
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Alamat" required=""> </textarea>
+                                placeholder="Alamat" required=""> {{ $student->address }}</textarea>
                         </div>
                         <div class="w-full">
                             <label for="number_phone"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">number_phone</label>
-                            <input type="text" name="number_phone" id="number_phone"
+                            <input type="text" name="number_phone" id="number_phone" value="{{ $student->number_phone }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 placeholder="Masukan Nomor Telephone" required="">
                         </div>
                         <div>
                             <label for="student_class_id"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kelas</label>
-                            <select id="student_class_id" name="student_class_id"
+                            <select id="student_class_id" name="student_class_id" 
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option value="" disabled>Pilih Kelas</option>
+                                <option value="{{ $student->student_class_id }}">{{ $student->student_class->name }} </option>
                                 @foreach ($student_class as $sclass)
                                     <option value="{{ $sclass->id }}">{{ $sclass->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div>
-                            <label for="student_class_id" class="hidden">User</label>
-                            <input type="text" id="user_id" name="user_id" value="{{ $user->id }}"
+                            <label for="user_id" class="hidden">User</label>
+                            <input type="text" id="user_id" name="user_id" value="{{ $student->user->id }}"
                                 class="hidden">
                         </div>
 
                     </div>
                     <button type="submit"
                         class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
-                        Tambah
+                        Edit
                     </button>
                 </form>
             </div>

@@ -164,7 +164,7 @@ class UserController extends Controller
     {
         try{
             $user->delete();
-            return redirect()->back()->with('succes','Position deleted sussesfully');
+            return redirect()->back()->with('succes','Users deleted sussesfully');
         }
         catch(\Exception $e){
             DB::rollBack();

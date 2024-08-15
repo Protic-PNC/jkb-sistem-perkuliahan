@@ -28,26 +28,31 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('masterdata')->name('masterdata.')->group(function(){
         Route::resource('users', UserController::class)->middleware('role:super_admin');
+        Route::get('/students/show/{userId}', [StudentController::class, 'show'])->name('students.show');
         Route::resource('study_programs', StudyProgramController::class)->middleware('role:super_admin');
         Route::resource('student_classes', StudentClassController::class)->middleware('role:super_admin');
         Route::resource('positions', PositionController::class)->middleware('role:super_admin');   
         Route::resource('courses', CoursesController::class)->middleware('role:super_admin');   
+        Route::get('/students/index', [StudentController::class,'index'])->name('students.index');
+        Route::get('/students/create/{userId}', [StudentController::class, 'create'])->name('students.create');
+        Route::get('/students/edit/{id}', [StudentController::class,'edit'])->name('students.edit');
+        Route::post('/students/store/{userId}', [StudentController::class, 'store'])->name('students.store');
+        Route::post('/students/update/{id}', [StudentController::class, 'store'])->name('students.update');
+        Route::delete('/students/destroy/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
         
     });
+
+
     Route::prefix('lecture')->name('lecture.')->group(function(){
         Route::resource('lecturers', LecturerController::class)->middleware('role:super_admin|dosen');
     });
 
-    Route::get('/students/index', [StudentController::class,'index'])->name('masterdata.students.index');
-    Route::get('/students/create/{userId}', [StudentController::class, 'create'])->name('masterdata.students.create');
-    Route::get('/masterdata/create/{userId}', [StudentController::class, 'create'])->name('masterdata.lecturers.create');
-    Route::post('/students/store/{userId}', [StudentController::class, 'store'])->name('student.students.store');
-    Route::post('/students/update/{id}', [StudentController::class, 'store'])->name('masterdata.students.update');
-    Route::get('/students/show/{userId}', [StudentController::class, 'show'])->name('masterdata.students.show');
-    Route::delete('/a/students/destroy/{userId}', [StudentController::class, 'destroy'])->middleware('role:admin')->name('masterdata.students.destroy');
-    Route::prefix('student')->name('student.')->group(function(){
+    //students
     
-    });
+    
+    Route::get('/masterdata/create/{userId}', [StudentController::class, 'create'])->name('masterdata.lecturers.create');
+    
+    
 
 });
 
