@@ -32,12 +32,13 @@ Route::middleware('auth')->group(function () {
         Route::resource('study_programs', StudyProgramController::class)->middleware('role:super_admin');
         Route::resource('student_classes', StudentClassController::class)->middleware('role:super_admin');
         Route::resource('positions', PositionController::class)->middleware('role:super_admin');   
-        Route::resource('courses', CoursesController::class)->middleware('role:super_admin');   
+        Route::resource('courses', CoursesController::class)->middleware('role:super_admin'); 
+
         Route::get('/students/index', [StudentController::class,'index'])->name('students.index');
         Route::get('/students/create/{userId}', [StudentController::class, 'create'])->name('students.create');
         Route::get('/students/edit/{id}', [StudentController::class,'edit'])->name('students.edit');
         Route::post('/students/store/{userId}', [StudentController::class, 'store'])->name('students.store');
-        Route::post('/students/update/{id}', [StudentController::class, 'store'])->name('students.update');
+        Route::put('/students/update/{id}', [StudentController::class, 'update'])->name('students.update');
         Route::delete('/students/destroy/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
         
     });

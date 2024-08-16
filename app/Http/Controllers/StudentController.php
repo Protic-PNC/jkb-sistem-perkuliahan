@@ -100,7 +100,6 @@ class StudentController extends Controller
     {
         $student_class = StudentClass::all();
         $student = Student::find($id);
-        
 
         return view('masterdata.students.edit', compact('student_class', 'student'));
     }
@@ -108,32 +107,25 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Student $student)
+    public function update(Request $request, $id)
     {
+        $student = Student::findOrFail($id);
+
         $validated = $request->validate([
             'name' => 'required|string',
-            'nim' => [
-                'required',
-                'string',
-                Rule::unique('students', 'nim')->ignore($student->id),
-            ],
+            'nim' => ['required', 'string', Rule::unique('students', 'nim')->ignore($student->id)->whereNull('deleted_at')],
             'address' => 'required|string',
             'number_phone' => 'required|string',
             'student_class_id' => 'required|exists:student_classes,id',
-            'user_id' => 'required|exists:users,id',
+            'user_id' => ['required', Rule::exists('users', 'id')],
             'signature' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         ]);
-
+        if ($request->hasFile('signature')) {
+            $signaturePath = $request->file('signature')->store('signatures', 'public');
+            $validated['signature'] = $signaturePath;
+        }
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
-
-            // Menyimpan signature jika ada
-            if ($request->hasFile('signature')) {
-                $signaturePath = $request->file('signature')->store('signatures', 'public');
-                $validated['signature'] = $signaturePath;
-            }
-
-            // Membuat student dengan data yang sudah divalidasi
             $student->update($validated);
 
             DB::commit();
@@ -142,6 +134,7 @@ class StudentController extends Controller
             DB::rollBack();
             return redirect()
                 ->back()
+                ->withInput()
                 ->with('error', 'System error: ' . $e->getMessage());
         }
     }
