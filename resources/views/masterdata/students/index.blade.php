@@ -162,7 +162,7 @@
                         <span class="font-medium">Success!</span> {{ session('success') }}
                     </div>
                 @endif
-                <div class="mb-3 flex items-center justify-between">
+                <div class="mb-3 flex items-center justify-end">
                     
                     <form action="{{ route('masterdata.students.index') }}" method="GET" class="flex items-center">
                         <div class="relative">

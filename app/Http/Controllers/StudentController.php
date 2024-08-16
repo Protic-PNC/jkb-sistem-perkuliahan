@@ -21,7 +21,11 @@ class StudentController extends Controller
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'LIKE', "%{$search}%")->orWhere('email', 'LIKE', "%{$search}%");
+                $q->where('name', 'LIKE', "%{$search}%")->orWhere('nim', 'LIKE', "%{$search}%");
+            })->orWhere(function ($q) use ($search) {
+                $q->where('number_phone', 'LIKE', "%{$search}%");
+            })->orWhere(function ($q) use ($search) {
+                $q->where('address', 'LIKE', "%{$search}%");
             });
         }
 
@@ -144,15 +148,6 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        try {
-            $student->delete();
-            return redirect()->back()->with('succes', 'Students deleted sussesfully');
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            return redirect()
-                ->back()
-                ->with('error', 'System eror' . $e->getMessage());
-        }
+        //
     }
 }
