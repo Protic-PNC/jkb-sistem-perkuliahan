@@ -28,7 +28,6 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('masterdata')->name('masterdata.')->group(function(){
         Route::resource('users', UserController::class)->middleware('role:super_admin');
-        Route::get('/students/show/{userId}', [StudentController::class, 'show'])->name('students.show');
         Route::resource('study_programs', StudyProgramController::class)->middleware('role:super_admin');
         Route::resource('student_classes', StudentClassController::class)->middleware('role:super_admin');
         Route::resource('positions', PositionController::class)->middleware('role:super_admin');   
@@ -36,10 +35,19 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/students/index', [StudentController::class,'index'])->name('students.index');
         Route::get('/students/create/{userId}', [StudentController::class, 'create'])->name('students.create');
+        Route::get('/students/show/{userId}', [StudentController::class, 'show'])->name('students.show');
         Route::get('/students/edit/{id}', [StudentController::class,'edit'])->name('students.edit');
         Route::post('/students/store/{userId}', [StudentController::class, 'store'])->name('students.store');
         Route::put('/students/update/{id}', [StudentController::class, 'update'])->name('students.update');
         Route::delete('/students/destroy/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
+
+        Route::get('/lecturers/index', [LecturerController::class,'index'])->name('lecturers.index');
+        Route::get('/lecturers/create/{userId}', [LecturerController::class, 'create'])->name('lecturers.create');
+        Route::get('/lecturers/show/{userId}', [LecturerController::class, 'show'])->name('lecturers.show');
+        Route::get('/lecturers/edit/{id}', [LecturerController::class,'edit'])->name('lecturers.edit');
+        Route::post('/lecturers/store/{userId}', [LecturerController::class, 'store'])->name('lecturers.store');
+        Route::put('/lecturers/update/{id}', [LecturerController::class, 'update'])->name('lecturers.update');
+        Route::delete('/lecturers/destroy/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
         
     });
 
@@ -50,8 +58,6 @@ Route::middleware('auth')->group(function () {
 
     //students
     
-    
-    Route::get('/masterdata/create/{userId}', [StudentController::class, 'create'])->name('masterdata.lecturers.create');
     
     
 

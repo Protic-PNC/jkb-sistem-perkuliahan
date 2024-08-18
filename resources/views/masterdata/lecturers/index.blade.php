@@ -1,7 +1,7 @@
 
 <x-app-layout>
     @section('main_folder', '/ Master Data')
-    @section('descendant_folder', '/ Mahasiswa')
+    @section('descendant_folder', '/ Dosen')
 
 
     @section('content')
@@ -15,7 +15,7 @@
 
             <div class="py-4 px-2 mx-auto lg:m-8 sm:m-4">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Mahasiswa</h3>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Dosen</h3>
                     <hr class="border-t-4 my-2 mb-6 rounded-sm bg-gray-300">
                 </div>
                 @if ($errors->any())
@@ -38,7 +38,7 @@
                 @endif
                 <div class="mb-3 flex items-center justify-end">
                     
-                    <form action="{{ route('masterdata.students.index') }}" method="GET" class="flex items-center">
+                    <form action="{{ route('masterdata.lecturers.index') }}" method="GET" class="flex items-center">
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <svg class="w-5 h-5 text-gray-500" viewBox="0 0 24 24" fill="none">
@@ -58,7 +58,7 @@
                         </button>
 
                         @if (request('search'))
-                            <a href="{{ route('masterdata.students.index') }}"
+                            <a href="{{ route('masterdata.lecturers.index') }}"
                                 class="ml-2 bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition duration-300">
                                 Reset
                             </a>
@@ -71,7 +71,8 @@
                         <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
                             <tr class="text-white mb-3">
                                 <th scope="col" class="px-6 py-3">No</th>
-                                <th scope="col" class="px-6 py-3">NIM</th>
+                                <th scope="col" class="px-6 py-3">NIDN</th>
+                                <th scope="col" class="px-6 py-3">NIP</th>
                                 <th scope="col" class="px-6 py-3">Nama</th>
                                 <th scope="col" class="px-6 py-3">Alamat</th>
                                 <th scope="col" class="px-6 py-3">No Telefon</th>
@@ -79,16 +80,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($students as $student)
+                            @forelse ($lecturers as $lecturer)
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
                                     </td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $student->nim }}</td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $student->name }}</td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $student->address }}</td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $student->number_phone }}</td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $lecturer->nidn }}</td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $lecturer->nip }}</td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $lecturer->name }}</td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $lecturer->address }}</td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $lecturer->number_phone }}</td>
                                     <td class="px-3 py-2 flex space-x-2 justify-center ">
-                                        <a href="{{ route('masterdata.students.edit', $student->id) }}"
+                                        <a href="{{ route('masterdata.lecturers.edit', $lecturer->id) }}"
                                             class="inline-block w-20 text-center font-medium bg-yellow-400 text-white px-3 py-2 rounded-md hover:bg-yellow-500 transition duration-300">
                                             Edit
                                         </a>
@@ -103,7 +105,7 @@
                             @endforelse
                         </tbody>
                     </table>
-                    {{ $students->appends(request()->query())->onEachSide(5)->links() }}
+                    {{ $lecturers->appends(request()->query())->onEachSide(5)->links() }}
                 </div>
             </div>
         </section>

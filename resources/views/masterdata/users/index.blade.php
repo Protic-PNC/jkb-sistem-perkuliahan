@@ -99,7 +99,7 @@
                                     </td>
                                     <td class="px-3 py-2 flex space-x-2 justify-end ">
                                         @if ($user->hasRole('dosen'))
-                                            <a href="{{ route('lecture.lecturers.create', $user->id) }}"
+                                            <a href="{{ route('masterdata.lecturers.create', $user->id) }}"
                                                 class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                                 Lengkapi Identitas
                                             </a>

@@ -62,7 +62,7 @@ class StudentController extends Controller
             'number_phone' => 'required|string',
             'student_class_id' => 'required|exists:student_classes,id',
             'user_id' => 'required|exists:users,id',
-            'signature' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'signature' => 'nullable|image|mimes:png,jpg,jpeg',
         ]);
 
         try {
@@ -83,6 +83,7 @@ class StudentController extends Controller
             DB::rollBack();
             return redirect()
                 ->back()
+                ->withInput()
                 ->with('error', 'System error: ' . $e->getMessage());
         }
     }
@@ -122,7 +123,7 @@ class StudentController extends Controller
             'number_phone' => 'required|string',
             'student_class_id' => 'required|exists:student_classes,id',
             'user_id' => ['required', Rule::exists('users', 'id')],
-            'signature' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'signature' => 'nullable|image|mimes:png,jpg,jpeg',
         ]);
         if ($request->hasFile('signature')) {
             $signaturePath = $request->file('signature')->store('signatures', 'public');
