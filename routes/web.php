@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\CourseLecturerController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LecturerController;
@@ -48,6 +49,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/lecturers/store/{userId}', [LecturerController::class, 'store'])->name('lecturers.store');
         Route::put('/lecturers/update/{id}', [LecturerController::class, 'update'])->name('lecturers.update');
         Route::delete('/lecturers/destroy/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
+
+        Route::get('/courses/assign/course/lecturer/{lecturer}', [CourseLecturerController::class,'create'])->name('assign.course.lecturer');
+        Route::post('/courses/store/course/lecturer/{lecturer}', [CourseLecturerController::class,'store'])->name('store.course.lecturer');
+        Route::resource('course_lecturers', CourseLecturerController::class)->middleware('role:super_admin');
+        
         
     });
 
