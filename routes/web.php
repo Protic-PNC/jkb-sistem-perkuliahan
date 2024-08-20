@@ -5,6 +5,7 @@ use App\Http\Controllers\CourseLecturerController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LecturerController;
+use App\Http\Controllers\LecturerPositionController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentClassController;
@@ -53,14 +54,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/courses/assign/course/lecturer/{lecturer}', [CourseLecturerController::class,'create'])->name('assign.course.lecturer');
         Route::post('/courses/store/course/lecturer/{lecturer}', [CourseLecturerController::class,'store'])->name('store.course.lecturer');
         Route::resource('course_lecturers', CourseLecturerController::class)->middleware('role:super_admin');
+
+        Route::get('/courses/assign/lecturer/position/{lecturer}', [LecturerPositionController::class,'create'])->name('assign.lecturer.position');
+        Route::post('/courses/store/lecturer/position/{lecturer}', [LecturerPositionController::class,'store'])->name('store.lecturer.position');
+        Route::resource('lecturer_positions', LecturerPositionController::class)->middleware('role:super_admin');
         
         
     });
 
 
-    Route::prefix('lecture')->name('lecture.')->group(function(){
-        Route::resource('lecturers', LecturerController::class)->middleware('role:super_admin|dosen');
-    });
+    
 
     //students
     

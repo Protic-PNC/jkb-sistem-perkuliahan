@@ -1,6 +1,6 @@
 <x-app-layout>
     @section('main_folder', '/ Master Data')
-    @section('descendant_folder', '/ Daftar Mata Kuliah')
+    @section('descendant_folder', '/ Daftar Jabatan')
 
 
     @section('content')
@@ -14,7 +14,7 @@
 
             <div class="py-4 px-2 mx-auto lg:m-8 sm:m-4">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Daftar Mata Kuliah Yang Diampu
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Daftar Jabatan
                     </h3>
                     <hr class="border-t-4 my-2 mb-6 rounded-sm bg-gray-300">
                 </div>
@@ -37,22 +37,22 @@
 
                 <div class="mb-3 flex items-center justify-start">
 
-                    <form action="{{ route('masterdata.store.course.lecturer', $lecturer->id) }}" method="POST"
+                    <form action="{{ route('masterdata.store.lecturer.position', $lecturer->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         <h3 class="mb-5 font-semibold text-xl">{{ $lecturer->name }}</h3>
                         <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 mb-5">
                             
                             <div>
-                                <label for="course_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                <label for="position_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                     Mata Kuliah
                                 </label>
                                 <div class="flex">
-                                    <select id="course_id" name="course_id"
+                                    <select id="position_id" name="position_id"
                                         class="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         <option value="">Pilih mata kuliah untuk di ampu</option>
-                                        @foreach ($courses as $course)
-                                            <option value="{{ $course->id }}">{{ $course->name }}</option>
+                                        @foreach ($positions as $position)
+                                            <option value="{{ $position->id }}">{{ $position->name }}</option>
                                         @endforeach
                                     </select>
                                     <div class="justify-center items-center">
@@ -105,22 +105,19 @@
                         <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
                             <tr class="text-white mb-3">
                                 <th scope="col" class="px-6 py-3">No</th>
-                                <th scope="col" class="px-6 py-3">Nama Mata Kuliah</th>
-                                <th scope="col" class="px-6 py-3">Kode Mata Kuliah</th>
+                                <th scope="col" class="px-6 py-3">Nama Jabatan</th>
                                 <th scope="col" class="px-6 py-3 text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($lecturer->course as $course_lecturer)
+                            @forelse ($lecturer->position as $lecturer_position)
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
                                     </td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $course_lecturer->name }}</td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $course_lecturer->code }}</td>
-
-
+                                    <td class="px-3 py-2 text-slate-800">{{ $lecturer_position->name }}</td>
+                                    
                                     <td class="px-3 py-2 flex space-x-2 justify-center ">
-                                        <form action="{{ route('masterdata.course_lecturers.destroy', $course_lecturer->pivot->id) }}"
+                                        <form action="{{ route('masterdata.lecturer_positions.destroy', $lecturer_position->pivot->id) }}"
                                             method="POST" class="inline-block">
                                             @csrf
                                             @method('DELETE')
@@ -146,7 +143,7 @@
                             @endforelse
                         </tbody>
                     </table>
-                    {{-- {{ $lecturers->appends(request()->query())->onEachSide(5)->links() }} --}}
+                    {{-- {{ $lecturer_position->appends(request()->query())->onEachSide(5)->links() }} --}}
                 </div>
             </div>
         </section>

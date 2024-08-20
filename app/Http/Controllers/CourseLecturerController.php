@@ -84,7 +84,7 @@ class CourseLecturerController extends Controller
         
         try{
             $courseLecturer->delete();
-            return redirect()->back()->with('succes','Course deleted sussesfully');
+            return redirect()->back()->with('success','Course deleted sussesfully');
         }
         catch(\Exception $e){
             DB::rollBack();

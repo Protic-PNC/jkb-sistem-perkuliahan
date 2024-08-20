@@ -75,6 +75,7 @@
                                 <th scope="col" class="px-6 py-3">NIDN</th>
                                 <th scope="col" class="px-6 py-3">NIP</th>
                                 <th scope="col" class="px-6 py-3">Daftar Matakuliah</th>
+                                <th scope="col" class="px-6 py-3">Jabatan</th>
                                 <th scope="col" class="px-6 py-3 text-center">Action</th>
                             </tr>
                         </thead>
@@ -86,7 +87,8 @@
                                     <td class="px-3 py-2 text-slate-800">{{ $lecturer->name }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $lecturer->nidn }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $lecturer->nip }}</td>
-                                    <td class="px-3 py-2  justify-center text-slate-800 "><a href="{{ route('masterdata.assign.course.lecturer', $lecturer->id) }}" class="inline-block w-20 text-center font-medium bg-teal-400 text-white px-3 py-2 rounded-md hover:bg-teal-500 transition duration-300">Lihat</a></td>
+                                    <td class="px-3 py-2  justify-center text-slate-800 "><a href="{{ route('masterdata.assign.course.lecturer', $lecturer->id) }}" class="inline-block w-20 text-center font-medium bg-teal-400 text-white px-3 py-2 rounded-md hover:bg-teal-500 transition duration-300">Lihat Mata kuliah</a></td>
+                                    <td class="px-3 py-2  justify-center text-slate-800 "><a href="{{ route('masterdata.assign.lecturer.position', $lecturer->id) }}" class="inline-block w-20 text-center font-medium bg-teal-400 text-white px-3 py-2 rounded-md hover:bg-teal-500 transition duration-300">Lihat Jabatan</a></td>
                                     <td class="px-3 py-2 flex space-x-2 justify-center ">
                                         <a href="{{ route('masterdata.lecturers.edit', $lecturer->id) }}"
                                             class="inline-block w-20 text-center font-medium bg-yellow-400 text-white px-3 py-2 rounded-md hover:bg-yellow-500 transition duration-300">
