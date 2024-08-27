@@ -18,7 +18,7 @@ return new class extends Migration
             $table->boolean('has_acc_head_departement');
             $table->foreignId('course_lecturer_id')->constrained()->onDelete('cascade');
             $table->foreignId('course_class_id')->constrained()->onDelete('cascade');
-            $table->foreignId('student_cluster_id')->constrained()->onDelete('cascade');
+            $table->foreignId('student_class_id')->constrained()->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });
