@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\CourseClassController;
 use App\Http\Controllers\CourseLecturerController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\DashboardController;
@@ -51,13 +52,17 @@ Route::middleware('auth')->group(function () {
         Route::put('/lecturers/update/{id}', [LecturerController::class, 'update'])->name('lecturers.update');
         Route::delete('/lecturers/destroy/{id}', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
 
-        Route::get('/courses/assign/course/lecturer/{lecturer}', [CourseLecturerController::class,'create'])->name('assign.course.lecturer');
-        Route::post('/courses/store/course/lecturer/{lecturer}', [CourseLecturerController::class,'store'])->name('store.course.lecturer');
+        Route::get('/assign/course/lecturer/{lecturer}', [CourseLecturerController::class,'create'])->name('assign.course.lecturer');
+        Route::post('/store/course/lecturer/{lecturer}', [CourseLecturerController::class,'store'])->name('store.course.lecturer');
         Route::resource('course_lecturers', CourseLecturerController::class)->middleware('role:super_admin');
 
-        Route::get('/courses/assign/lecturer/position/{lecturer}', [LecturerPositionController::class,'create'])->name('assign.lecturer.position');
-        Route::post('/courses/store/lecturer/position/{lecturer}', [LecturerPositionController::class,'store'])->name('store.lecturer.position');
+        Route::get('/assign/lecturer/position/{lecturer}', [LecturerPositionController::class,'create'])->name('assign.lecturer.position');
+        Route::post('/store/lecturer/position/{lecturer}', [LecturerPositionController::class,'store'])->name('store.lecturer.position');
         Route::resource('lecturer_positions', LecturerPositionController::class)->middleware('role:super_admin');
+
+        Route::get('/assign/course/class/{student_class}', [CourseClassController::class,'create'])->name('assign.course.class');
+        Route::post('/store/course/class/{student_class}', [CourseClassController::class,'store'])->name('store.course.class');
+        Route::resource('course_classes', CourseClassController::class)->middleware('role:super_admin');
         
         
     });

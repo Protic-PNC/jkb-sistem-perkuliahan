@@ -24,5 +24,12 @@ class StudentClass extends Model
         return $this->hasMany(Student::class, 'student_class_id');
     }
 
+    public function course(){
+        //pivot table (many to many)
+        return $this->belongsToMany(Courses::class, 'course_classes','student_class_id', 'course_id')->wherePivotNull('deleted_at')
+        ->withPivot('id');
+    }
+    
+
     
 }

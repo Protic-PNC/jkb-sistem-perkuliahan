@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\CourseClass;
+use App\Models\Courses;
+use App\Models\StudentClass;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CourseClassController extends Controller
 {
@@ -18,17 +21,35 @@ class CourseClassController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(StudentClass $student_class)
     {
-        //
+        $courses = Courses::all();
+        return view('masterdata.course_class.create', compact('student_class', 'courses'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, StudentClass $student_class)
     {
-        //
+        // dd($request->all());
+        $validated= $request->validate([
+            'course_id'=> 'required|integer|max:255',
+        ]);
+        
+        DB::beginTransaction();
+        try{
+            
+            $validated['student_class_id']=$student_class->id;
+            $assignCourses = CourseClass::updateOrCreate($validated);
+            DB::commit();
+            return redirect()->back()->with('success', 'Course Class Assigned Succesfully!');
+        }
+        catch(\Exception $e){
+            DB::rollBack();
+
+            return redirect()->back()->with('error', 'System error'.$e->getMessage());
+        }
     }
 
     /**
@@ -58,8 +79,16 @@ class CourseClassController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CourseClass $courseClass)
+    public function destroy(CourseClass $student_class)
     {
-        //
+        try{
+            $student_class->delete();
+            return redirect()->back()->with('success','Course Class deleted sussesfully');
+        }
+        catch(\Exception $e){
+            DB::rollBack();
+
+            return redirect()->back()->with('error', 'System error'.$e->getMessage());
+        }
     }
 }
