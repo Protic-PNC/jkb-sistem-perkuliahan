@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('material');
             $table->boolean('has_acc_student');
             $table->boolean('has_acc_lecturer');
-            $table->foreignId('attendence_list_detail_id')->constrained()->onDelete('cascade'); //untuk ambil jumlah hadir->count()
+            $table->foreignId('attendence_list_detail_id')->constrained()->onDelete('cascade'); //untuk ambil jumlah hadir->count() ambil di method attendence list details
             $table->foreignId('journal_id')->constrained()->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
