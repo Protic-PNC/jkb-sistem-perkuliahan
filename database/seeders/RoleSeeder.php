@@ -44,7 +44,7 @@ class RoleSeeder extends Seeder
         $userDosen = User::create([
             'name' => 'dosen',
             'avatar' => 'images/avatar-default.svg',
-            'email' => 'dosen@mahasiswa.com',
+            'email' => 'dosen@dosen.com',
             'password' => bcrypt('12345678'),
             
         ]);
