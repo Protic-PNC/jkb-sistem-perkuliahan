@@ -20,7 +20,7 @@
         <a class="flex items-center px-6 py-2 mt-4 {{ setActive('dashboard.index') }}"
             href="{{ route('dashboard.index') }}">
             <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
+                stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
             </svg>
@@ -94,7 +94,8 @@
                 </svg>
                 <span class="mx-3">Mahasiswa</span>
             </a>
-            <a class="flex items-center px-6 py-2 mt-4 {{ setActive('masterdata.lecturer.*') }}" href="{{ route('masterdata.lecturers.index') }}">
+            <a class="flex items-center px-6 py-2 mt-4 {{ setActive('masterdata.lecturer.*') }}"
+                href="{{ route('masterdata.lecturers.index') }}">
                 <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -104,18 +105,30 @@
                 <span class="mx-3">Dosen</span>
             </a>
         @endrole
+        @php
+            $nidn = Auth::user()->lecturer->nidn ?? null;
+        @endphp
         @role('dosen')
-            <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
-                href="{{ route('lecture_document.course', ['nidn' => Auth::user()->lecturer->nidn]) }}">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z">
-                    </path>
-                </svg>
-                <span class="mx-3">Dokumen Perkuliahan</span>
-            </a>
-            
+            @if ($nidn)
+                <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
+                    href="{{ route('lecturer_document.course', ['nidn' => $nidn]) }}">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z">
+                        </path>
+                    </svg>
+                    <span class="mx-3">Dokumen Perkuliahan</span>
+                </a>
+            @else
+                <div class="flex items-center px-6 py-2 mt-4 m-4 text-red-500 bg-red-100 rounded-lg">
+                    <svg class="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <span class="mx-3">Data Dosen Tidak Lengkap. Silakan Hubungi Admin.</span>
+                </div>
+            @endif
         @endrole
         @role('mahasiswa')
             <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"

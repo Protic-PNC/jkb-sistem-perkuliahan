@@ -43,7 +43,7 @@ class CoursesController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string',
-            'code' => 'required|string',
+            'code' => 'required|string|unique:courses',
             'type' => 'required|string',
             'sks' => 'required|integer',
             'hours' => 'required|integer',
@@ -92,7 +92,7 @@ class CoursesController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string',
-            'code' => 'required|string',
+            'code' => 'required|string|unique:courses, code,' . $course->id,
             'type' => 'required|string',
             'sks' => 'required|integer',
             'hours' => 'required|integer',
@@ -111,7 +111,9 @@ class CoursesController extends Controller
             return redirect()->route('masterdata.courses.index')->with('success', 'Mata Kuliah Berhasil Diedit');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'System error: ' . $e->getMessage());
+            return redirect()->back()
+            ->withInput()
+            ->with('error', 'System error: ' . $e->getMessage());
         }
     }
 

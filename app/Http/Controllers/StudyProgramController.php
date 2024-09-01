@@ -49,7 +49,7 @@ class StudyProgramController extends Controller
         try{
             $newProdi= StudyProgram::create($validated);
             DB::commit();
-            return redirect()->route('masterdata.study_programs.index')->with('succes', 'Program Studi Berhasil Disimpan');
+            return redirect()->route('masterdata.study_programs.index')->with('success', 'Program Studi Berhasil Disimpan');
         }catch(\Exception $e){
             DB::rollBack();
 
@@ -89,7 +89,7 @@ class StudyProgramController extends Controller
         try{
             $study_program->update($validated);
             DB::commit();
-            return redirect()->route('masterdata.study_programs.index')->with('succes', 'Program Studi Berhasil Diedit');
+            return redirect()->route('masterdata.study_programs.index')->with('success', 'Program Studi Berhasil Diedit');
         }catch(\Exception $e){
             DB::rollBack();
 
@@ -105,7 +105,7 @@ class StudyProgramController extends Controller
     {
         try{
             $study_program->delete();
-            return redirect()->back()->with('succes','Projects deleted sussesfully');
+            return redirect()->back()->with('success','Projects deleted sussesfully');
         }
         catch(\Exception $e){
             DB::rollBack();

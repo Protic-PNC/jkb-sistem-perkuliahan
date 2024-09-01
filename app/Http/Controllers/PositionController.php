@@ -46,7 +46,7 @@ class PositionController extends Controller
         try{
             $newJabatan= Position::create($validated);
             DB::commit();
-            return redirect()->route('masterdata.positions.index')->with('succes', 'Position Berhasil Disimpan');
+            return redirect()->route('masterdata.positions.index')->with('success', 'Position Berhasil Disimpan');
         }catch(\Exception $e){
             DB::rollBack();
 
@@ -84,7 +84,7 @@ class PositionController extends Controller
         try{
             $position->update($validated);
             DB::commit();
-            return redirect()->route('masterdata.positions.index')->with('succes', 'Program Studi Berhasil Disimpan');
+            return redirect()->route('masterdata.positions.index')->with('success', 'Program Studi Berhasil Disimpan');
         }catch(\Exception $e){
             DB::rollBack();
 
@@ -99,7 +99,7 @@ class PositionController extends Controller
     {
         try{
             $position->delete();
-            return redirect()->back()->with('succes','Position deleted sussesfully');
+            return redirect()->back()->with('success','Position deleted sussesfully');
         }
         catch(\Exception $e){
             DB::rollBack();

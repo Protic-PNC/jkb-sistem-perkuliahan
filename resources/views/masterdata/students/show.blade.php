@@ -23,7 +23,9 @@
 
             <div class="px-8 pb-8 -mt-20 relative">
                 <div class="flex flex-col md:flex-row items-center md:items-end mb-6 mt-6">
-                    <img src="{{ Storage::url($student->user->avatar) }}" alt="Profile Picture"
+                    
+                    <img src="{{ Storage::url($student->user->avatar) }}"
+                    
                         class="w-32 h-32 rounded-full border-4 border-white dark:border-gray-800 shadow-lg mb-4 md:mb-0 md:mr-6">
                     <div class="text-center md:text-left">
                         <h2 class="text-3xl font-bold text-gray-800 dark:text-white">{{ $student->name }}</h2>
@@ -77,5 +79,6 @@
                 </div>
             </div>
         </section>
+        
     @endsection
 </x-app-layout>

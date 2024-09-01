@@ -60,7 +60,7 @@ class StudentClassController extends Controller
         try {
             $newKelas = StudentClass::create($validated);
             DB::commit();
-            return redirect()->route('masterdata.student_classes.index')->with('succes', 'Kelas Berhasil Disimpan');
+            return redirect()->route('masterdata.student_classes.index')->with('success', 'Kelas Berhasil Disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -110,7 +110,7 @@ class StudentClassController extends Controller
         try{
             $student_class->update($validated);
             DB::commit();
-            return redirect()->route('masterdata.student_class.index')->with('succes', 'Kelas Berhasil Diedit');
+            return redirect()->route('masterdata.student_class.index')->with('success', 'Kelas Berhasil Diedit');
         }catch(\Exception $e){
             DB::rollBack();
 
@@ -125,7 +125,7 @@ class StudentClassController extends Controller
     {
         try{
             $student_class->delete();
-            return redirect()->back()->with('succes','Projects deleted sussesfully');
+            return redirect()->back()->with('success','Projects deleted sussesfully');
         }
         catch(\Exception $e){
             DB::rollBack();
