@@ -53,7 +53,7 @@
                                     <td class="px-3 py-2 text-slate-800">{{ $course->name }}</td>
                                     
                                     <td class="px-3 py-2 flex space-x-2 justify-center ">
-                                        <a href="{{ route('lecturer_document.student_class', ['code' => $course->code]) }}"
+                                        <a href="{{ route('lecturer_document.student_class', ['id' => $course->id]) }}"
                                             class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                             Pilih Mata Kuliah
                                         </a>

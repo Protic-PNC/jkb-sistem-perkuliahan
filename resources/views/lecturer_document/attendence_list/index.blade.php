@@ -28,7 +28,9 @@
                 font-size: 0.8rem;
             }
 
-            
+            .table-container {
+                overflow-x: auto;
+            }
         </style>
 
         <section class="bg-white dark:bg-gray-900">
@@ -40,8 +42,9 @@
 
                 <!-- Error and success messages remain unchanged -->
 
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border border-slate-800">
+                <div class="table-container relative overflow-x-auto shadow-md sm:rounded-lg"">
+                    <table
+                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border border-slate-800">
                         <thead>
                             <tr class="bg-gray-900 text-white">
                                 <th colspan="3" class="px-6 py-3 text-center">DAFTAR HADIR KULIAH</th>
@@ -80,11 +83,12 @@
                                 Tambah Data
                             </button>
                         </a>
-    
-                        
+
+
                     </div>
-    
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4 border border-slate-800">
+
+                    <table
+                        class=" w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4 border border-slate-800">
                         <thead class="text-xs uppercase bg-gray-900 text-white">
                             <tr>
                                 <th rowspan="2" class="px-6 py-3 text-center border border-slate-800">NO</th>
@@ -103,33 +107,52 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Sample student row -->
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <td class="px-6 py-2 text-center border border-slate-800">1</td>
-                                <td class="px-6 py-2 border border-slate-800">123456</td>
-                                <td class="px-6 py-2 border border-slate-800">John Doe</td>
+                            @foreach ($students as $student)
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <td class="px-2 py-2 text-center border border-slate-800">{{ $loop->iteration }}</td>
+                                    <td class="px-2 py-2 border border-slate-800">{{ $student->nim }}</td>
+                                    <td class="px-2 py-2 border border-slate-800">{{ $student->name }}</td>
+                                    @for ($i = 1; $i <= $course->meeting; $i++)
+                                        <td class="px-1 py-1 border border-slate-800">
+                                            <div class="attendance-cell flex flex-row items-center justify-center">
+                                                <div class="text-xs font-bold border border-slate-800 p-1">A</div>
+                                                <div class="text-xs font-bold border border-slate-800 p-1">T</div>
+                                            </div>
+                                        </td>
+                                    @endfor
+                                    <td class="px-6 py-2 border border-slate-800"></td>
+                                </tr>
+                                <!-- Add more student rows as needed -->
+                            @endforeach
+                            <tr>
+                                <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800 ">Aksi
+                                </td>
                                 @for ($i = 1; $i <= $course->meeting; $i++)
-                                    <td class="px-1 py-1 border border-slate-800">
-                                        <div class="attendance-cell">
-                                            <input type="checkbox" class="form-checkbox h-3 w-3 text-yellow-600">
-                                            <input type="checkbox" class="form-checkbox h-3 w-3 text-yellow-600">
-                                        </div>
-                                    </td>
+                                    <td class="px-1 py-1 text-center border border-slate-800"><a href="#"
+                                            class="inline-flex items-center justify-center w-20 text-center font-medium bg-yellow-400 text-white px-3 py-2 rounded-md hover:bg-yellow-500 transition duration-300">
+                                            <svg class="w-5 h-5 mr-2 text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                                            </svg>
+                                            Edit
+                                        </a></td>
                                 @endfor
-                                <td class="px-6 py-2 border border-slate-800"></td>
+                                <td></td>
                             </tr>
-                            <!-- Add more student rows as needed -->
-
                             <!-- Additional rows to maintain alignment -->
                             <tr>
-                                <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800 ">Jumlah mahasiswa</td>
+                                <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800 ">Jumlah
+                                    mahasiswa</td>
                                 @for ($i = 1; $i <= $course->meeting; $i++)
                                     <td class="px-1 py-1 text-center border border-slate-800">20</td>
                                 @endfor
                                 <td></td>
                             </tr>
                             <tr>
-                                <td colspan="3" class="px-6 py-2 text-lef font-semibold border border-slate-800">Tanda tangan ketua
+                                <td colspan="3" class="px-6 py-2 text-lef font-semibold border border-slate-800">Tanda
+                                    tangan ketua
                                     kelas/mahasiswa</td>
                                 @for ($i = 1; $i <= $course->meeting; $i++)
                                     <td class="px-1 py-1 border border-slate-800">
@@ -139,7 +162,8 @@
                                 <td></td>
                             </tr>
                             <tr>
-                                <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800">Tanda tangan dosen pengampu
+                                <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800">Tanda
+                                    tangan dosen pengampu
                                 </td>
                                 @for ($i = 1; $i <= $course->meeting; $i++)
                                     <td class="px-1 py-1 border border-slate-800">
@@ -149,21 +173,24 @@
                                 <td></td>
                             </tr>
                             <tr>
-                                <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800">Tanggal pertemuan</td>
+                                <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800">Tanggal
+                                    pertemuan</td>
                                 @for ($i = 1; $i <= $course->meeting; $i++)
                                     <td class="px-1 py-1 text-center border border-slate-800">__/__/__</td>
                                 @endfor
                                 <td></td>
                             </tr>
                             <tr>
-                                <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800">Jam Perkuliahan</td>
+                                <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800">Jam
+                                    Perkuliahan</td>
                                 @for ($i = 1; $i <= $course->meeting; $i++)
                                     <td class="px-1 py-1 text-center border border-slate-800">_ s/d _</td>
                                 @endfor
                                 <td></td>
                             </tr>
                             <tr>
-                                <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800">Status pertemuan</td>
+                                <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800">Status
+                                    pertemuan</td>
                                 @for ($i = 1; $i <= $course->meeting; $i++)
                                     <td class="px-1 py-1 text-center border border-slate-800">_</td>
                                 @endfor

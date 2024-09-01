@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AttendenceList;
+use App\Models\Courses;
 use App\Models\Lecturer;
 use App\Models\StudentClass;
 use Illuminate\Http\Request;
@@ -13,25 +14,68 @@ class AttendenceListController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(string $id)
+    // public function index(string $id)
+    // {
+    //     // Retrieve the student class by its ID along with related students and courses
+    //     $student_class = StudentClass::with(['students', 'course'])
+    //         ->where('id', $id)
+    //         ->firstOrFail();
+
+    //     // Get the authenticated lecturer
+    //     $lecturer = Auth::user()->lecturer;
+
+    //     // Retrieve the specific course associated with the lecturer and the student class
+    //     $course = $lecturer
+    //         ->course()
+    //         ->whereHas('studentClasses', function ($query) use ($id) {
+    //             $query->where('student_class_id', $id);
+    //         })
+    //         ->where('courses.id', $student_class->course->first()->id) // Ensure the correct course is retrieved
+    //         ->first();
+
+    //     if ($course) {
+    //         // Calculate the semester
+    //         $semester = $student_class->calculateSemester();
+
+    //         // Calculate the academic year
+    //         $academicYear = $student_class->calculateAcademicYear($semester);
+
+    //         // Get the students for the student class
+    //         $students = $student_class->students;
+
+    //         return view('lecturer_document.attendence_list.index', compact('student_class', 'lecturer', 'course', 'semester', 'academicYear', 'students'));
+    //     } else {
+    //         // Handle the case where the course is not found or not associated with this student class
+    //         return redirect()->route('some.route')->with('error', 'Course not found or not associated with this student class.');
+    //     }
+    // }
+
+    public function index(string $studentClassId)
     {
-      $student_class = StudentClass::with(['students', 'course'])->where('id', $id)->firstOrFail();
-      $lecturer = Auth::user()->lecturer;
-      $course = $lecturer->course()->whereHas('studentClasses', function($query) use ($id) {$query->where('student_class_id', $id); })->find($id);
+        // Retrieve the student class
+        $student_class = StudentClass::with(['students', 'course'])->findOrFail($studentClassId);
+
+        // Get the authenticated lecturer
+        $lecturer = Auth::user()->lecturer;
+
+        // Get the course associated with the student class
+        $course = $student_class->course->first();
+
+        // Verify that the lecturer is associated with this course
+        if (!$lecturer->course->contains($course)) {
+            return redirect()->route('lecturer_document.course')->with('error', 'You are not authorized to access this course.');
+        }
 
         // Calculate the semester
-        if ($course) {
-            // Calculate the semester
-            $semester = $student_class->calculateSemester();
-    
-            // Calculate the academic year
-            $academicYear = $student_class->calculateAcademicYear($semester);
-    
-            return view('lecturer_document.attendence_list.index', compact('student_class', 'lecturer', 'course', 'semester', 'academicYear'));
-        } else {
-            // Handle the case where the course is not found
-            return redirect()->route('some.route')->with('error', 'Course not found or not associated with this student class.');
-        }
+        $semester = $student_class->calculateSemester();
+
+        // Calculate the academic year
+        $academicYear = $student_class->calculateAcademicYear($semester);
+
+        // Get the students for the student class
+        $students = $student_class->students;
+
+        return view('lecturer_document.attendence_list.index', compact('student_class', 'lecturer', 'course', 'semester', 'academicYear', 'students'));
     }
 
     /**
