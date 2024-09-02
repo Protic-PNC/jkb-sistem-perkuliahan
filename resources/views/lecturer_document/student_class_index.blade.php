@@ -55,7 +55,7 @@
                                     <td class="px-3 py-2 text-slate-800">{{ $class->name }}</td>
 
                                     <td class="px-3 py-2 flex space-x-2 justify-center">
-                                        <a href="{{ route('lecturer_document.attendenceList.index', ['id' => $class->id]) }}"
+                                        <a href="{{ route('lecturer_document.attendenceList.index', ['classId' => $class->id, 'courseId' => $course->id]) }} }}"
                                             class="inline-flex items-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                             <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                 fill="currentColor" viewBox="0 0 24 24">

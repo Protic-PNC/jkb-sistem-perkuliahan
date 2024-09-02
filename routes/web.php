@@ -72,7 +72,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('lecturer_document')->name('lecturer_document.')->group(function(){
         Route::get('/course/{nidn}', [LecturerDocumentController::class, 'course_index'])->name('course');
         Route::get('/student_class/{id}', [LecturerDocumentController::class, 'student_class_index'])->name('student_class');
-        Route::get('attendenceList/{id}', [AttendenceListController::class, 'index'])->name('attendenceList.index');
+        Route::get('attendenceList/{classId}/{courseId}', [AttendenceListController::class, 'index'])->name('attendenceList.index');
         Route::get('attendenceList/create/{id}', [AttendenceListController::class, 'create'])->name('attendenceList.create');
         
         Route::get('journal/{id}', [JournalController::class, 'index'])->name('journal.index');

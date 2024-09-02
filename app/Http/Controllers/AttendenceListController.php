@@ -50,16 +50,21 @@ class AttendenceListController extends Controller
     //     }
     // }
 
-    public function index(string $studentClassId)
+    public function index(string $classId, string $courseId)
     {
+        // Retrieve the course
+        $course = Courses::findOrFail($courseId);
+
         // Retrieve the student class
-        $student_class = StudentClass::with(['students', 'course'])->findOrFail($studentClassId);
+        $student_class = StudentClass::findOrFail($classId);
+
+        // Verify that the student class belongs to the course
+        if (!$course->studentClasses->contains($student_class)) {
+            return redirect()->route('lecturer_document.course')->with('error', 'Invalid student class for this course.');
+        }
 
         // Get the authenticated lecturer
         $lecturer = Auth::user()->lecturer;
-
-        // Get the course associated with the student class
-        $course = $student_class->course->first();
 
         // Verify that the lecturer is associated with this course
         if (!$lecturer->course->contains($course)) {
