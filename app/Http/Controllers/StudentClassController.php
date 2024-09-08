@@ -48,14 +48,6 @@ class StudentClassController extends Controller
             'study_program_id' => 'required|integer',
         ]);
 
-        $existing = StudentClass::where('academic_year', $validated['academic_year'])
-            ->where('study_program_id', $validated['study_program_id'])
-            ->first();
-
-        if ($existing) {
-            return redirect()->back()->with('error', 'Data with the same academic year and study program already exists.');
-        }
-
         DB::beginTransaction();
         try {
             $newKelas = StudentClass::create($validated);

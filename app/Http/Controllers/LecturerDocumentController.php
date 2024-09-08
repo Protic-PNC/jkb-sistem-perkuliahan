@@ -9,6 +9,7 @@ use App\Models\Lecturer;
 use App\Models\StudentClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LecturerDocumentController extends Controller
 {
@@ -20,15 +21,15 @@ class LecturerDocumentController extends Controller
     }
     public function student_class_index(string $id)
     {
+        //DB::enableQueryLog();
         $course = Courses::where('id', $id)->firstOrFail();
-        //$course = Courses::findOrFail($id);
-
-        // Retrieve all student classes related to the course from the pivot table (course_classes)
+        //dd(DB::getQueryLog());
+        //DB::enableQueryLog();
         $student_classes = StudentClass::whereHas('course', function ($query) use ($id) {
             $query->where('courses.id', $id);
         })->get();
-
-        return view('lecturer_document.student_class_index', compact('course', 'student_classes'));
+        //dd(DB::getQueryLog());
+    return view('lecturer_document.student_class_index', compact('course', 'student_classes'));
     }
     public function lecturer_document_index(string $id, string $nidn)
     {

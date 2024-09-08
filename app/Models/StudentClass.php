@@ -31,26 +31,25 @@ class StudentClass extends Model
     }
 
     public function calculateSemester()
-{
-    $currentYear = now()->year; // Get the current year
-    $currentMonth = now()->month; // Get the current month
+    {
+        $currentYear = now()->year; // Get the current year
+        $currentMonth = now()->month; // Get the current month
 
-    // Calculate the academic year start and end years
-    $academicYearStart = $this->academic_year;
-    $academicYearEnd = $academicYearStart + 1;
-    
-    // Determine the current semester based on the month
-    if ($currentMonth >= 7) {
-        // July - December: Semester 1 of the current academic year
-        $semester = 2 * ($currentYear - $academicYearStart) + 1;
-    } else {
-        // January - June: Semester 2 of the previous academic year
-        $semester = 2 * ($currentYear - $academicYearStart - 1) + 2;
+        // Calculate the academic year start and end years
+        $academicYearStart = $this->academic_year;
+        $academicYearEnd = $academicYearStart + 1;
+
+        // Determine the current semester based on the month
+        if ($currentMonth >= 7) {
+            // July - December: Semester 1 of the current academic year
+            $semester = 2 * ($currentYear - $academicYearStart) + 1;
+        } else {
+            // January - June: Semester 2 of the previous academic year
+            $semester = 2 * ($currentYear - $academicYearStart - 1) + 2;
+        }
+
+        return $semester;
     }
-
-    return $semester;
-}
-
 
     public function calculateAcademicYear($semester)
     {

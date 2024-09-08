@@ -10,6 +10,7 @@ use App\Http\Controllers\JournalController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\LecturerDocumentController;
 use App\Http\Controllers\LecturerPositionController;
+use App\Http\Controllers\Masterdata\A_AttendenceListController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentClassController;
@@ -66,13 +67,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/assign/course/class/{student_class}', [CourseClassController::class,'create'])->name('assign.course.class');
         Route::post('/store/course/class/{student_class}', [CourseClassController::class,'store'])->name('store.course.class');
         Route::resource('course_classes', CourseClassController::class)->middleware('role:super_admin'); 
+
+        Route::resource('attendence_lists', A_AttendenceListController::class)->middleware('role:super_admin');
     });
 
     //dosen->daftar matkul->daftar kelas->jurnal dan absensi
     Route::prefix('lecturer_document')->name('lecturer_document.')->group(function(){
         Route::get('/course/{nidn}', [LecturerDocumentController::class, 'course_index'])->name('course');
         Route::get('/student_class/{id}', [LecturerDocumentController::class, 'student_class_index'])->name('student_class');
-        Route::get('attendenceList/{classId}/{courseId}', [AttendenceListController::class, 'index'])->name('attendenceList.index');
+        Route::get('attendenceList/{classId}/{code}', [AttendenceListController::class, 'index'])->name('attendenceList.index');
         Route::get('attendenceList/create/{id}', [AttendenceListController::class, 'create'])->name('attendenceList.create');
         
         Route::get('journal/{id}', [JournalController::class, 'index'])->name('journal.index');

@@ -11,20 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //pivot
-        Schema::create('attendance_list_details', function (Blueprint $table) {
+        Schema::create('journal_detail', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('attendance_list_id')->constrained()->onDelete('cascade');
+            $table->foreignId('journal_id')->constrained()->onDelete('cascade');
             $table->integer('meeting_order'); //pertemuan ke
             $table->tinyInteger('course_status'); //1=sesuai jadwal, 2= pertukaran, 3= pengganti, 4= tambahan
-            $table->integer('start_hour')->nullable(); //jam pertemuan 1 
-            $table->integer('end_hour')->nullable(); //jam pertemuan 2 
-            $table->string('meeting_hour')->nullable(); //opsional, 1 sd 2
+            $table->string('material_course'); 
+            $table->string('learning_methods');
             $table->integer('sum_attendance_students')->nullable(); //jumlah kehadiran
             $table->boolean('has_acc_student')->default(0);
             $table->boolean('has_acc_lecturer')->default(0);
             $table->string('signature_student')->nullable();
             $table->string('signature_lecturer')->nullable();
+            $table->string('signature_kaprodi')->nullable();
+            $table->string('signature_kajur')->nullable();
+            $table->date('date_signature_kaprodi')->nullable();
+            $table->date('date_signature_kajur')->nullable();
             $table->timestamps();
         });
     }
@@ -34,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attendance_list_details');
+        Schema::dropIfExists('journal_detail');
     }
 };
