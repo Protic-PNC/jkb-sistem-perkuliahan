@@ -10,12 +10,16 @@ class Journal extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'journals';
     protected $fillable = [
-        'has_finished',
-        'has_acc_head_departement',
         'lecturer_id',
-        'course_lecturer_id',
+        'course_id',
         'student_class_id',
+        'has_finished',
+        'has_acc_kajur',
+        'signature_kajur',
+        'date_signature_kajur',
+
     ];
 
     public function lecturer(){
@@ -28,9 +32,6 @@ class Journal extends Model
         return $this->belongsTo(StudentClass::class);
     }
 
-    public function attendenceList(){
-        return $this->belongsTo(AttendenceList::class);
-    }
     public function journalDetails(){
         return $this->hasMany(JournalDetail::class);
     }

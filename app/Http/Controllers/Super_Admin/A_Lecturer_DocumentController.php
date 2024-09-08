@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Masterdata;
+namespace App\Http\Controllers\Super_Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceList;
-use App\Models\AttendenceList;
 use App\Models\Journal;
 use App\Models\StudentClass;
 use Illuminate\Http\Request;

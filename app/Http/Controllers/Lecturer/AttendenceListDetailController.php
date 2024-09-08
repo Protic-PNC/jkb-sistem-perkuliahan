@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Masterdata;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\StudentClass;
+use App\Models\AttendanceList;
+use App\Models\AttendanceListDetail;
+use App\Models\AttendenceListDetail;
 use Illuminate\Http\Request;
 
-class A_AttendenceListController extends Controller
+class AttendenceListDetailController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $data = StudentClass::all();
-        return view('masterdata.lecturer_document.attendence_list.index', compact('data'));
+        //
     }
 
     /**
@@ -22,7 +22,7 @@ class A_AttendenceListController extends Controller
      */
     public function create()
     {
-        return view('masterdata.lecturer_document.attendence_list.create');
+        //
     }
 
     /**
@@ -36,7 +36,7 @@ class A_AttendenceListController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(AttendanceListDetail $attendenceListDetail)
     {
         //
     }
@@ -44,7 +44,7 @@ class A_AttendenceListController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(AttendanceListDetail $attendanceListDetail)
     {
         //
     }
@@ -52,7 +52,7 @@ class A_AttendenceListController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, AttendanceListDetail $attendanceListDetail)
     {
         //
     }
@@ -60,7 +60,7 @@ class A_AttendenceListController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(AttendanceListDetail $attendanceListDetail)
     {
         //
     }

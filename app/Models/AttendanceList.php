@@ -14,10 +14,12 @@ class AttendanceList extends Model
 
     protected $fillable = [
         'code_al',
-        'has_finished',
-        'has_acc_head_departement',
-        'student_class_id',
+        'lecturer_id',
         'course_id',
+        'has_finished',
+        'has_acc_kajur',
+        'signature_kajur',
+        'date_signature_kajur',
         'lecturer_id',
     ];
 

@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('journal_detail', function (Blueprint $table) {
+        Schema::create('journal_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('journal_id')->constrained()->onDelete('cascade');
             $table->integer('meeting_order'); //pertemuan ke
             $table->tinyInteger('course_status'); //1=sesuai jadwal, 2= pertukaran, 3= pengganti, 4= tambahan
             $table->string('material_course'); 
-            $table->string('learning_methods');
+            $table->string('learning_methods'); //offline/online
             $table->integer('sum_attendance_students')->nullable(); //jumlah kehadiran
             $table->boolean('has_acc_student')->default(0);
             $table->boolean('has_acc_lecturer')->default(0);
@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('signature_kajur')->nullable();
             $table->date('date_signature_kaprodi')->nullable();
             $table->date('date_signature_kajur')->nullable();
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }
@@ -36,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('journal_detail');
+        Schema::dropIfExists('journal_details');
     }
 };

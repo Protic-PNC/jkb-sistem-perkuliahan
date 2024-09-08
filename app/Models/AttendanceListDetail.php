@@ -10,29 +10,28 @@ class AttendanceListDetail extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'attendance_list_details';
     protected $fillable = [
-        'attendence_list_id',
-        'student_id',
-        'attendence_student',
+        'attendance_list_id',
+        'meeting_order',
         'course_status',
+        'start_hour',
+        'end_hour',
+        'meeting_hour',
+        'sum_attendance_students',
         'has_acc_student',
         'has_acc_lecturer',
+        'signature_student',
+        'signature_lecturer',
     ];
 
     public function attendenceList(){
         return $this->belongsTo(AttendanceList::class);
     }
 
-    public function student(){
-        return $this->belongsTo(Student::class);
-    }
+    
 
-    public function journalDetail(){
-        return $this->hasOne(JournalDetail::class);
-    }
-
-
-    //buat method jumlah hadir
+   
 
     
 }

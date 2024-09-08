@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use App\Models\AttendenceList;
+namespace App\Http\Controllers\Lecturer;
+use App\Http\Controllers\Controller;
+use App\Models\AttendanceList;
 use App\Models\Courses;
 use App\Models\Lecturer;
 use App\Models\StudentClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AttendenceListController extends Controller
+class AttendanceListController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -89,7 +89,7 @@ class AttendenceListController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(AttendenceList $attendenceList)
+    public function show(AttendanceList $attendanceList)
     {
         //
     }
@@ -97,7 +97,7 @@ class AttendenceListController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(AttendenceList $attendenceList)
+    public function edit(AttendanceList $attendanceList)
     {
         //
     }
@@ -105,7 +105,7 @@ class AttendenceListController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, AttendenceList $attendenceList)
+    public function update(Request $request, AttendanceList $attendanceList)
     {
         //
     }
@@ -113,7 +113,7 @@ class AttendenceListController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(AttendenceList $attendenceList)
+    public function destroy(AttendanceList $attendanceList)
     {
         //
     }
