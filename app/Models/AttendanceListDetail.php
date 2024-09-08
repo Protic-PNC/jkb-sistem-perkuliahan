@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AttendenceListDetail extends Model
+class AttendanceListDetail extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -20,7 +20,7 @@ class AttendenceListDetail extends Model
     ];
 
     public function attendenceList(){
-        return $this->belongsTo(AttendenceList::class);
+        return $this->belongsTo(AttendanceList::class);
     }
 
     public function student(){

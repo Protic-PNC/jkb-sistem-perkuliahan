@@ -1,4 +1,3 @@
-
 <x-app-layout>
     @section('main_folder', '/ Master Data')
     @section('descendant_folder', '/ Kelas')
@@ -24,14 +23,14 @@
                     </div>
                 @endif
                 <div class="mb-3 flex items-center justify-between">
-                    <a href="{{ route('masterdata.attendence_lists.create') }}" class="inline-block">
+                    <a href="{{ route('masterdata.lecturer_documents.create') }}" class="inline-block">
                         <button type="button"
                             class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                             Tambah Data
                         </button>
                     </a>
 
-                    <form action="{{ route('masterdata.student_classes.index') }}" method="GET" class="flex items-center">
+                    <form action="{{ route('masterdata.lecturer_documents.index') }}" method="GET" class="flex items-center">
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <svg class="w-5 h-5 text-gray-500" viewBox="0 0 24 24" fill="none">
@@ -59,7 +58,7 @@
                     </form>
                 </div>
 
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                {{-- <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
                         <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
                             <tr class="text-white mb-3">
@@ -69,7 +68,7 @@
                                 <th scope="col" class="px-6 py-3 text-center">Dokumen Perkuliahan</th>
                             </tr>
                         </thead>
-                        {{-- <tbody>
+                        <tbody>
                             @forelse ($data as $a)
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
@@ -104,24 +103,24 @@
                                     <td colspan="5" class="px-3 py-2 text-center">Belum Ada Data</td>
                                 </tr>
                             @endforelse
-                        </tbody> --}}
+                        </tbody>
                     </table>
-                    {{-- {{ $data->appends(request()->query())->onEachSide(5)->links() }} --}}
-                </div>
+                    {{ $data->appends(request()->query())->onEachSide(5)->links() }}
+                </div> --}}
             </div>
         </section>
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    var successMessage = document.getElementById('success-message');
-                    if (successMessage) {
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var successMessage = document.getElementById('success-message');
+                if (successMessage) {
+                    setTimeout(function() {
+                        successMessage.style.opacity = '0';
                         setTimeout(function() {
-                            successMessage.style.opacity = '0';
-                            setTimeout(function() {
-                                successMessage.remove();
-                            }, 500); // Time for fade-out transition
-                        }, 3000); // Time to show message before fading out
-                    }
-                });
-            </script>
+                            successMessage.remove();
+                        }, 500); // Time for fade-out transition
+                    }, 3000); // Time to show message before fading out
+                }
+            });
+        </script>
     @endsection
 </x-app-layout>

@@ -6,17 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AttendenceList extends Model
+class AttendanceList extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+
+    protected $table = 'attendance_lists';
 
     protected $fillable = [
         'code_al',
         'has_finished',
         'has_acc_head_departement',
-        'lecturer_id',
-        'course_lecturer_id', //ambil properti dari courses
         'student_class_id',
+        'course_id',
+        'lecturer_id',
     ];
 
     public function lecturer(){
@@ -29,8 +31,8 @@ class AttendenceList extends Model
         return $this->belongsTo(StudentClass::class);
     }
 
-    public function attendenceListDetails(){ //attendence list details
-        return $this->hasMany(AttendenceListDetail::class);
+    public function attendanceListDetails(){ //attendence list details
+        return $this->hasMany(AttendanceListDetail::class);
     }
 
     public function journal(){

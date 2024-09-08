@@ -11,6 +11,7 @@ use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\LecturerDocumentController;
 use App\Http\Controllers\LecturerPositionController;
 use App\Http\Controllers\Masterdata\A_AttendenceListController;
+use App\Http\Controllers\Masterdata\A_Lecturer_DocumentController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentClassController;
@@ -67,6 +68,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/assign/course/class/{student_class}', [CourseClassController::class,'create'])->name('assign.course.class');
         Route::post('/store/course/class/{student_class}', [CourseClassController::class,'store'])->name('store.course.class');
         Route::resource('course_classes', CourseClassController::class)->middleware('role:super_admin'); 
+
+        Route::resource('lecturer_documents', A_Lecturer_DocumentController::class)->middleware('role:super_admin');
+        Route::get('/get-courses-by-class/{classId}', [A_Lecturer_DocumentController::class, 'getCoursesByClass']);
+        Route::get('/get-lecturer-by-course/{courseId}', [A_Lecturer_DocumentController::class, 'getLecturerByClass']);
 
         Route::resource('attendence_lists', A_AttendenceListController::class)->middleware('role:super_admin');
     });
