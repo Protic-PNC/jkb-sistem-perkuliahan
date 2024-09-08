@@ -50,7 +50,7 @@
                         </button>
 
                         @if (request('search'))
-                            <a href="{{ route('masterdata.study_programs.index') }}"
+                            <a href="{{ route('masterdata.lecturer_documents.index') }}"
                                 class="ml-2 bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition duration-300">
                                 Reset
                             </a>
@@ -58,13 +58,14 @@
                     </form>
                 </div>
 
-                {{-- <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
                         <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
                             <tr class="text-white mb-3">
                                 <th scope="col" class="px-6 py-3">No</th>
                                 <th scope="col" class="px-6 py-3">Kelas</th>
                                 <th scope="col" class="px-6 py-3">Mata Kuliah</th>
+                                <th scope="col" class="px-6 py-3">Dosen</th>
                                 <th scope="col" class="px-6 py-3 text-center">Dokumen Perkuliahan</th>
                             </tr>
                         </thead>
@@ -73,11 +74,12 @@
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
                                     </td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $a->name }}</td>
-                                    <td class="px-3 py-2 text-slate-800">nama mata kuliah</td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $a->student_class_name }}</td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $a->course_name }}</td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $a->lecturer_name }}</td>
                                     
                                     <td class="px-3 py-2 flex space-x-2 justify-center">
-                                        <a href="{{ route('lecturer_document.attendenceList.index', ['classId' => $class->id, 'code' => $course->code]) }}"  
+                                        <a href="#"  
                                             class="inline-flex items-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                             <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                 fill="currentColor" viewBox="0 0 24 24">
@@ -87,7 +89,7 @@
                                             </svg>
                                             <span>Absensi Perkuliahan</span>
                                         </a>
-                                        <a href="{{ route('lecturer_document.journal.index', ['id' => $class->id]) }}"
+                                        <a href="#"
                                             class="inline-flex items-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                             <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                 fill="none" viewBox="0 0 24 24">
@@ -106,7 +108,7 @@
                         </tbody>
                     </table>
                     {{ $data->appends(request()->query())->onEachSide(5)->links() }}
-                </div> --}}
+                </div>
             </div>
         </section>
         <script>
