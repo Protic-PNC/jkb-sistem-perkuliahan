@@ -88,7 +88,7 @@
                                             </svg>
                                             Edit
                                         </a>
-                                        <form action="#"
+                                        <form action="{{ route('masterdata.lecturer_documents.destroy', $d->id) }}"
                                             method="POST" class="inline-block">
                                             @csrf
                                             @method('DELETE')

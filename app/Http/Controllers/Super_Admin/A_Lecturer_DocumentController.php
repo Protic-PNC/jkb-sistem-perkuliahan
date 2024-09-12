@@ -195,8 +195,19 @@ public function update(Request $request, $id)
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $al = AttendanceList::find($id);
+        $j =Journal::find($id);
+        try{
+            $al->delete();
+            $j->delete();
+            return redirect()->back()->with('succes','Course deleted sussesfully');
+        }
+        catch(\Exception $e){
+            DB::rollBack();
+
+            return redirect()->back()->with('error', 'System eror'.$e->getMessage());
+        }
     }
 }
