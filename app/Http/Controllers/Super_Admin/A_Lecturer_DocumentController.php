@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Super_Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceList;
+use App\Models\Courses;
 use App\Models\Journal;
+use App\Models\Lecturer;
 use App\Models\StudentClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,6 +20,7 @@ class A_Lecturer_DocumentController extends Controller
     public function index(Request $request)
     {
         $attendanceLists = AttendanceList::select(
+            'attendance_lists.id',
             'attendance_lists.student_class_id',
             'attendance_lists.course_id',
             'attendance_lists.lecturer_id',
@@ -45,7 +48,7 @@ class A_Lecturer_DocumentController extends Controller
         $data = $attendanceLists->paginate(5);
         
         // Return ke view dengan data yang dipaginasi
-        return view('masterdata.lecturer_document.index', compact('data'));
+        return view('masterdata.a_lecturer_document.index', compact('data'));
         
     }
 
@@ -55,7 +58,7 @@ class A_Lecturer_DocumentController extends Controller
     public function create()
     {
         $student_classes = StudentClass::get();
-        return view('masterdata.lecturer_document.create', compact('student_classes'));
+        return view('masterdata.a_lecturer_document.create', compact('student_classes'));
     }
 
     public function getCoursesByClass($classId)
@@ -117,7 +120,7 @@ class A_Lecturer_DocumentController extends Controller
             $journal->save();
 
             DB::commit();
-            return redirect()->route('masterdata.lecturer_document.index')->with('success', 'Daftar Hadir dan Jurnal berhasil disimpan');
+            return redirect()->route('masterdata.lecturer_documents.index')->with('success', 'Daftar Hadir dan Jurnal berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()
@@ -140,16 +143,54 @@ class A_Lecturer_DocumentController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $lecturer_document = AttendanceList::findOrFail($id);
+    $student_classes = StudentClass::all();
+    return view('masterdata.a_lecturer_document.edit', compact('lecturer_document', 'student_classes'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    
+
+public function update(Request $request, $id)
+{
+    // Find the AttendanceList
+    $attendanceList = AttendanceList::findOrFail($id);
+    $journal = Journal::findOrFail($id);
+
+    // Validate the request data
+    $validator = Validator::make($request->all(), [
+        'code_al' => 'required|string|unique:attendance_lists,code_al,' . $id,
+        'student_class_id' => 'required|exists:student_classes,id',
+        'course_id' => 'required|exists:courses,id',
+        'lecturer_id' => 'required|exists:lecturers,id',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->route('masterdata.lecturer_documents.edit', $id)
+            ->withErrors($validator)
+            ->withInput();
     }
+
+    // Update the AttendanceList
+    $attendanceList->update([
+        'code_al' => $request->code_al,
+        'student_class_id' => $request->student_class_id,
+        'course_id' => $request->course_id,
+        'lecturer_id' => $request->lecturer_id,
+    ]);
+    $journal->update([
+        'student_class_id' => $request->student_class_id,
+        'course_id' => $request->course_id,
+        'lecturer_id' => $request->lecturer_id,
+    ]);
+
+    // Redirect with success message
+    return redirect()->route('masterdata.lecturer_documents.index')
+        ->with('success', 'Daftar Hadir berhasil diperbarui.');
+}
+    
 
     /**
      * Remove the specified resource from storage.

@@ -30,7 +30,7 @@ class AttendanceList extends Model
         return $this->belongsTo(Courses::class);
     }
     public function student_class(){
-        return $this->belongsTo(StudentClass::class);
+        return $this->belongsTo(StudentClass::class, 'student_class_id', 'student_class_id');
     }
 
     public function attendanceListDetails(){ //attendence list details

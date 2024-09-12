@@ -7,8 +7,10 @@ use App\Http\Controllers\CourseLecturerController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JournalController;
+use App\Http\Controllers\Lecturer\AttendanceListController;
+use App\Http\Controllers\Lecturer\L_LecturerDocumentController;
+use App\Http\Controllers\Lecturer\LecturerDocumentController;
 use App\Http\Controllers\LecturerController;
-use App\Http\Controllers\LecturerDocumentController;
 use App\Http\Controllers\LecturerPositionController;
 use App\Http\Controllers\Super_Admin\A_AttendenceListController;
 use App\Http\Controllers\Super_Admin\A_Lecturer_DocumentController;
@@ -69,19 +71,26 @@ Route::middleware('auth')->group(function () {
         Route::post('/store/course/class/{student_class}', [CourseClassController::class,'store'])->name('store.course.class');
         Route::resource('course_classes', CourseClassController::class)->middleware('role:super_admin'); 
 
-        Route::resource('lecturer_documents', A_Lecturer_DocumentController::class)->middleware('role:super_admin');
+        Route::get('/lecturer_documents/index', [A_Lecturer_DocumentController::class,'index'])->name('lecturer_documents.index');
+        Route::get('/lecturer_documents/create', [A_Lecturer_DocumentController::class, 'create'])->name('lecturer_documents.create');
+        Route::get('/lecturer_documents/show/{id}', [A_Lecturer_DocumentController::class, 'show'])->name('lecturer_documents.show');
+        Route::get('/lecturer_documents/edit/{id}', [A_Lecturer_DocumentController::class,'edit'])->name('lecturer_documents.edit');
+        Route::post('/lecturer_documents/store/', [A_Lecturer_DocumentController::class, 'store'])->name('lecturer_documents.store');
+        Route::put('/lecturer_documents/update/{id}', [A_Lecturer_DocumentController::class, 'update'])->name('lecturer_documents.update');
+        Route::delete('/lecturer_documents/destroy/{id}', [A_Lecturer_DocumentController::class, 'destroy'])->name('lecturer_documents.destroy');
+
         Route::get('/get-courses-by-class/{classId}', [A_Lecturer_DocumentController::class, 'getCoursesByClass']);
         Route::get('/get-lecturer-by-course/{courseId}', [A_Lecturer_DocumentController::class, 'getLecturerByClass']);
 
-        Route::resource('attendence_lists', A_AttendenceListController::class)->middleware('role:super_admin');
+        //Route::resource('attendence_lists', A_AttendenceListController::class)->middleware('role:super_admin');
     });
 
     //dosen->daftar matkul->daftar kelas->jurnal dan absensi
-    Route::prefix('lecturer_document')->name('lecturer_document.')->group(function(){
-        Route::get('/course/{nidn}', [LecturerDocumentController::class, 'course_index'])->name('course');
-        Route::get('/student_class/{id}', [LecturerDocumentController::class, 'student_class_index'])->name('student_class');
-        Route::get('attendenceList/{classId}/{code}', [AttendenceListController::class, 'index'])->name('attendenceList.index');
-        Route::get('attendenceList/create/{id}', [AttendenceListController::class, 'create'])->name('attendenceList.create');
+    Route::prefix('dosen')->name('dosen.')->group(function(){
+        Route::get('/index/{nidn}', [L_LecturerDocumentController::class, 'index'])->name('index');
+        Route::get('/student_class/{id}', [L_LecturerDocumentController::class, 'student_class_index'])->name('student_class');
+        Route::get('attendenceList/{classId}/{code}', [AttendanceListController::class, 'index'])->name('attendenceList.index');
+        Route::get('attendenceList/create/{id}', [AttendanceListController::class, 'create'])->name('attendenceList.create');
         
         Route::get('journal/{id}', [JournalController::class, 'index'])->name('journal.index');
         
