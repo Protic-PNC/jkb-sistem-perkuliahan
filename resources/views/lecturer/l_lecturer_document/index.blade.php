@@ -44,8 +44,8 @@
                         <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
                             <tr class="text-white mb-3">
                                 <th scope="col" class="px-6 py-3">No</th>
-                                <th scope="col" class="px-6 py-3">Mata Kuliah</th>
                                 <th scope="col" class="px-6 py-3">Kelas</th>
+                                <th scope="col" class="px-6 py-3">Mata Kuliah</th>
                                 <th scope="col" class="px-6 py-3 text-center">Pilih Perkuliahan</th>
                             </tr>
                         </thead>
@@ -54,12 +54,13 @@
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
                                     </td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $d->student_class->name }}</td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $d->student_class->name }} - {{ $d->student_class->academic_year }}</td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $d->course->name }}</td>
                                     
                                     <td class="px-3 py-2 flex space-x-2 justify-center ">
-                                        <a href="{{ route('lecturer_document.student_class', ['id' => $course->id]) }}"
+                                        <a href="{{ route('lecturer.lecturer_document.details') }}"
                                             class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
-                                            Pilih Mata Kuliah
+                                            Pilih Dokumen
                                         </a>
                                     </td>
                                 </tr>

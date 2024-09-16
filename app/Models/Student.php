@@ -28,10 +28,10 @@ class Student extends Model
         return $this->belongsTo(StudentClass::class);
     }
 
-    public function attendence_list(){
-        //pivot table (many to many)
-        return $this->belongsToMany(AttendenceList::class, 'attendence_list_details','student_id', 'attendence_list_id')->wherePivotNull('deleted_at')
-        ->withPivot('id');
-    }
+    // public function attendence_list(){
+    //     //pivot table (many to many)
+    //     return $this->belongsToMany(AttendanceList::class, 'attendence_list_details','student_id', 'attendence_list_id')->wherePivotNull('deleted_at')
+    //     ->withPivot('id');
+    // }
     
 }

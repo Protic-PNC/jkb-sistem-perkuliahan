@@ -24,13 +24,13 @@ class AttendanceList extends Model
     ];
 
     public function lecturer(){
-        return $this->belongsTo(Lecturer::class);
+        return $this->belongsTo(Lecturer::class, 'lecturer_id', 'id');
     }
     public function course(){
-        return $this->belongsTo(Courses::class);
+        return $this->belongsTo(Courses::class, 'course_id', 'id');
     }
     public function student_class(){
-        return $this->belongsTo(StudentClass::class, 'student_class_id', 'student_class_id');
+        return $this->belongsTo(StudentClass::class, 'student_class_id', 'id');
     }
 
     public function attendanceListDetails(){ //attendence list details
