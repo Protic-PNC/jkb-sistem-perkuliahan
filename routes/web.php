@@ -90,6 +90,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/index/{nidn}', [L_LecturerDocumentController::class, 'index'])->name('index');
         Route::get('/lecturer_document/details', [L_LecturerDocumentController::class, 'details'])->name('lecturer_document.details');
         Route::get('/lecturer_document/create', [L_LecturerDocumentController::class, 'create'])->name('lecturer_document.create');
+        Route::post('/lecturer_document/storeStudents', [L_LecturerDocumentController::class, 'storeStudents'])->name('lecturer_document.storeStudents');
         Route::post('/lecturer_document/store', [L_LecturerDocumentController::class, 'store'])->name('lecturer_document.store');
         Route::get('/lecturer_document/edit/{id}', [L_LecturerDocumentController::class,'edit'])->name('lecturer_document.edit');
         Route::put('/lecturer_document/update/{id}', [L_LecturerDocumentController::class, 'update'])->name('lecturer_document.update');
