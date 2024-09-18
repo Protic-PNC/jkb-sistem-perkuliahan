@@ -95,6 +95,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/lecturer_document/edit/{id}', [L_LecturerDocumentController::class,'edit'])->name('lecturer_document.edit');
         Route::put('/lecturer_document/update/{id}', [L_LecturerDocumentController::class, 'update'])->name('lecturer_document.update');
 
+        Route::get('/lecturer_document/absensi/{id}', [L_LecturerDocumentController::class,'absensi'])->name('lecturer_document.absensi');
+
 
         Route::get('/student_class/{id}', [L_LecturerDocumentController::class, 'student_class_index'])->name('student_class');
         Route::get('attendenceList/{classId}/{code}', [AttendanceListController::class, 'index'])->name('attendenceList.index');

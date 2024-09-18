@@ -129,7 +129,7 @@
                                             Edit
                                         </a>
                                     
-                                        <a href="{{ route('lecturer.lecturer_document.create') }}" class="inline-block">
+                                        <a href="{{ route('lecturer.lecturer_document.absensi', $d->id) }}" class="inline-block">
                                             <button type="button"
                                                 class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center">
                                                 Lengkapi Absensi

@@ -187,7 +187,10 @@ class L_LecturerDocumentController extends Controller
         }
     }
 
-
+    public function absensi()
+    {
+        return view ('lecturer.l_lecturer_document.absensi');
+    }
     public function storeStudents(Request $request)
     {
         $validator = Validator::make($request->all(), [
