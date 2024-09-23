@@ -120,7 +120,6 @@ class L_LecturerDocumentController extends Controller
         }
     }
 
-    
     public function edit(string $id)
     {
         $ad = AttendanceListDetail::find($id);
@@ -187,16 +186,26 @@ class L_LecturerDocumentController extends Controller
         }
     }
 
-    public function absensi()
+    public function absensi(string $id)
     {
-        return view ('lecturer.l_lecturer_document.absensi');
+        $ad = AttendanceListDetail::find($id);
+
+        $al = AttendanceList::find($ad->attendance_list_id);
+
+        $student_classes = Student::where('student_class_id', $al->student_class_id)->get();
+
+        $attendances = AttendanceListStudent::get();
+
+        return view('lecturer.l_lecturer_document.absensi', compact('al', 'student_classes', 'attendances'));
     }
     public function storeStudents(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'attendance_list_detail_id' => 'required|exists:attendance_list_details,id',
-            'student_ids' => 'required|array',
-            'attendance_student' => 'required|array',
+            'attendance' => 'required|array',
+            'attendance.*.student_id' => 'required|exists:students,id',
+            'attendance.*.attendance_student' => 'required|in:1,2,3,4,5',
+            'attendance.*.minutes_late' => 'nullable|integer|min:1|required_if:attendance.*.attendance_student,2',
         ]);
 
         if ($validator->fails()) {
@@ -206,19 +215,34 @@ class L_LecturerDocumentController extends Controller
         try {
             DB::beginTransaction();
 
-            $student_ids = $request->student_ids;
-            $attendances = $request->attendance_student;
+            $attendanceListDetailId = $request->input('attendance_list_detail_id');
 
-            foreach ($student_ids as $index => $student_id) {
-                AttendanceListStudent::create([
-                    'attendance_list_detail_id' => $request->attendance_list_detail_id,
-                    'student_id' => $student_id,
-                    'attendance_status' => $attendances[$index],
-                ]);
+            $attendances = $request->input('attendance');
+
+            foreach ($attendances as $attendance) {
+                AttendanceListStudent::updateOrCreate(
+                    [
+                        'attendance_list_detail_id' => $attendanceListDetailId,
+                        'student_id' => $attendance['student_id'],
+                    ],
+                    [
+                        'attendance_student' => $attendance['attendance_student'],
+                        'minutes_late' => $attendance['minutes_late'] ?? null,
+                        'note' => $attendance['note'] ?? null,
+                    ],
+                );
             }
 
+            $sumAttendance = AttendanceListStudent::where('attendance_list_detail_id', $attendanceListDetailId)
+                ->whereIn('attendance_student', [1, 2])
+                ->count();
+
+            AttendanceListDetail::where('id', $attendanceListDetailId)->update([
+                'sum_attendance_students' => $sumAttendance,
+            ]);
+
             DB::commit();
-            return redirect()->back()->with('success', 'Student attendance has been saved successfully.');
+            return redirect()->route('lecturer.lecturer_document.details')->with('success', 'Daftar Hadir dan Jurnal Detail Berhasil Di simpan!');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()

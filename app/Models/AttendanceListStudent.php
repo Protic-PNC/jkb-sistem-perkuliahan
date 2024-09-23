@@ -14,7 +14,7 @@ class AttendanceListStudent extends Model
     protected $fillable = [
         'attendance_list_detail_id',
         'student_id',
-        'attendence_student',
+        'attendance_student',
         'minutes_late',
         'note',
     ];

@@ -18,6 +18,7 @@ class AttendanceList extends Model
         'course_id',
         'has_finished',
         'has_acc_kajur',
+        'student_class_id',
         'signature_kajur',
         'date_signature_kajur',
         'lecturer_id',
