@@ -194,9 +194,10 @@ class L_LecturerDocumentController extends Controller
 
         $student_classes = Student::where('student_class_id', $al->student_class_id)->get();
 
-        $attendances = AttendanceListStudent::get();
+        $attendances = AttendanceListStudent::where('attendance_list_detail_id', $ad->id)->get();
 
-        return view('lecturer.l_lecturer_document.absensi', compact('al', 'student_classes', 'attendances'));
+
+        return view('lecturer.l_lecturer_document.absensi', compact('al', 'ad', 'student_classes', 'attendances'));
     }
     public function storeStudents(Request $request)
     {
@@ -213,6 +214,11 @@ class L_LecturerDocumentController extends Controller
         }
 
         try {
+            $attendanceListDetailId = $request->input('attendance_list_detail_id');
+            $attendanceListDetail = AttendanceListDetail::findOrFail($attendanceListDetailId);
+            if (!$attendanceListDetail->created_at->isToday()) {
+                return redirect()->back()->with('error', 'Penyimpanan hanya dapat dilakukan pada hari yang sama dengan tanggal daftar Hadir detail');
+            }
             DB::beginTransaction();
 
             $attendanceListDetailId = $request->input('attendance_list_detail_id');
@@ -238,6 +244,9 @@ class L_LecturerDocumentController extends Controller
                 ->count();
 
             AttendanceListDetail::where('id', $attendanceListDetailId)->update([
+                'sum_attendance_students' => $sumAttendance,
+            ]);
+            JournalDetail::where('id', $attendanceListDetailId)->update([
                 'sum_attendance_students' => $sumAttendance,
             ]);
 

@@ -55,7 +55,7 @@
                                 method="POST">
                                 @csrf
                                 <input type="hidden" id="attendance_list_detail_id" name="attendance_list_detail_id"
-                                    value="{{ $al->id }}">
+                                    value="{{ $ad->id }}">
                                 @foreach ($student_classes as $student)
                                     <tr>
                                         <td>{{ $student->name }}</td>
