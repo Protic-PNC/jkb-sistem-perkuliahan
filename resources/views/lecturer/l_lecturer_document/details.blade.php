@@ -128,7 +128,6 @@
                                             </svg>
                                             Edit
                                         </a>
-                                    
                                         <a href="{{ route('lecturer.lecturer_document.absensi', $d->id) }}" class="inline-block">
                                             <button type="button"
                                                 class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center">
@@ -146,18 +145,6 @@
                             @endforelse
                         </tbody>
                     </table>
-
-
-                    <!-- Legend -->
-                    <div class="mt-4 px-6 py-2 legend">
-                        <p><strong>KETERANGAN:</strong></p>
-                        <p>a : Status pertemuan diisi dengan: &nbsp;&nbsp;&nbsp; a. Sesuai jadwal &nbsp;&nbsp;&nbsp; b.
-                            Pengganti &nbsp;&nbsp;&nbsp; c. Tambahan</p>
-                        <p>b : Batas keterlambatan mahasiswa adalah 15 menit</p>
-                        <p>c : Sakit</p>
-                        <p>i : Ijin</p>
-                        <p>* : Dosen hanya mengisi daftar hadir mahasiswa dan jurnal dosen, ketua kelas yang mengisi</p>
-                    </div>
                 </div>
             </div>
         </section>

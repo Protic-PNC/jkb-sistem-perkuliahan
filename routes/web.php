@@ -88,14 +88,17 @@ Route::middleware('auth')->group(function () {
     //dosen->daftar matkul->daftar kelas->jurnal dan absensi
     Route::prefix('lecturer')->name('lecturer.')->group(function(){
         Route::get('/index/{nidn}', [L_LecturerDocumentController::class, 'index'])->name('index');
-        Route::get('/lecturer_document/details', [L_LecturerDocumentController::class, 'details'])->name('lecturer_document.details');
-        Route::get('/lecturer_document/create', [L_LecturerDocumentController::class, 'create'])->name('lecturer_document.create');
-        Route::post('/lecturer_document/store-students', [L_LecturerDocumentController::class, 'storeStudents'])->name('lecturer_document.storeStudents');
+        
         Route::post('/lecturer_document/store', [L_LecturerDocumentController::class, 'store'])->name('lecturer_document.store');
         Route::get('/lecturer_document/edit/{id}', [L_LecturerDocumentController::class,'edit'])->name('lecturer_document.edit');
         Route::put('/lecturer_document/update/{id}', [L_LecturerDocumentController::class, 'update'])->name('lecturer_document.update');
 
+        Route::get('/lecturer_document/details', [L_LecturerDocumentController::class, 'details'])->name('lecturer_document.details');
+        Route::get('/lecturer_document/create', [L_LecturerDocumentController::class, 'create'])->name('lecturer_document.create');
+        Route::post('/lecturer_document/store-students', [L_LecturerDocumentController::class, 'storeStudents'])->name('lecturer_document.storeStudents');
         Route::get('/lecturer_document/absensi/{id}', [L_LecturerDocumentController::class,'absensi'])->name('lecturer_document.absensi');
+        Route::get('/lecturer_document/edit-student/{id}', [L_LecturerDocumentController::class,'edit_student'])->name('lecturer_document.edit_student');
+        Route::put('/lecturer_document/update_student/{id}', [L_LecturerDocumentController::class, 'update_student'])->name('lecturer_document.update_student');
 
 
         Route::get('/student_class/{id}', [L_LecturerDocumentController::class, 'student_class_index'])->name('student_class');
@@ -105,13 +108,6 @@ Route::middleware('auth')->group(function () {
         Route::get('journal/{id}', [JournalController::class, 'index'])->name('journal.index');
         
     });
-
-    
-
-
-    
-
-    //students
     
     
     
