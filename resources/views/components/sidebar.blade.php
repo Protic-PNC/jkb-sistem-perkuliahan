@@ -120,7 +120,7 @@
         @endphp
         @role('dosen')
             @if ($nidn)
-                <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
+                <a class="flex items-center px-6 py-2 mt-4 {{ setActive('lecturer.*') }}"
                     href="{{ route('lecturer.index', ['nidn' => $nidn]) }}">
                     <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">

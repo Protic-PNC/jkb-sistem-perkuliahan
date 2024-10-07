@@ -117,11 +117,48 @@
                     </table>
                     <button type="submit" id="submitAttendanceDetails"
                         class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800 m-3">
-                        Edit
+                        Simpan
                     </button>
                     </form>
                 </div>
             </div>
         </section>
+        <script>
+             document.querySelectorAll('input[type=radio][name^="attendance"]').forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    var studentId = this.name.match(/\[(.*?)\]/)[1]; // Mendapatkan student_id dari nama radio
+                    var minutesLateInput = document.querySelector('input[name="attendance[' + studentId +
+                        '][minutes_late]"]');
+
+                    if (this.value == '2') { // Jika nilai radio button adalah 2 (Telat)
+                        minutesLateInput.disabled = false;
+                        minutesLateInput.required = true; // Menambahkan atribut required
+                    } else {
+                        minutesLateInput.value = ''; // Mengosongkan nilai jika radio selain "Telat" dipilih
+                        minutesLateInput.disabled = true;
+                        minutesLateInput.required = false;
+                    }
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('input[type=radio][name^="attendance"]').forEach(function(radio) {
+                    radio.dispatchEvent(new Event(
+                        'change'));
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                var successMessage = document.getElementById('success-message');
+                if (successMessage) {
+                    setTimeout(function() {
+                        successMessage.style.opacity = '0';
+                        setTimeout(function() {
+                            successMessage.remove();
+                        }, 500);
+                    }, 3000);
+                }
+            });
+        </script>
     @endsection
 </x-app-layout>

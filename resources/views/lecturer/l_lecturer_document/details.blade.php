@@ -59,36 +59,37 @@
 
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
 
-                    <table
-                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border border-slate-800">
+                    <table class="w-full border-collapse font-sans">
                         <thead>
                             <tr class="bg-gray-900 text-white">
-                                <th colspan="3" class="px-6 py-3 text-center">DAFTAR HADIR KULIAH</th>
+                                <th colspan="4" class="p-3 text-center text-lg font-bold">DAFTAR HADIR KULIAH</th>
                             </tr>
-                            <tr class="bg-gray-100 text-gray-700">
-                                <th colspan="3" class="px-6 py-2 text-center ">JURUSAN TEKNIK INFORMATIKA - PROGRAM STUDI
-                                    D3 TEKNIK INFORMATIKA</th>
+                            <tr class="bg-gray-100">
+                                <th colspan="4" class="p-2 text-center text-sm font-medium">JURUSAN TEKNIK INFORMATIKA - PROGRAM STUDI D3 TEKNIK INFORMATIKA</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="text-sm">
                             <tr>
-                                <td class="px-6 py-2">Mata Kuliah</td>
-                                <td class="px-6 py-2">: {{ $attendanceList->course->name }}</td>
-                                <td class="px-6 py-2">SKS : {{ $attendanceList->course->sks }}</td>
+                                <td class="p-2 w-1/5">Mata Kuliah</td>
+                                <td class="p-2 w-2/5">: Vidiografi</td>
+                                <td class="p-2 w-1/5">SKS</td>
+                                <td class="p-2 w-1/5">: 3</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="p-2">Semester</td>
+                                <td class="p-2">: 3</td>
+                                <td class="p-2">Kelas</td>
+                                <td class="p-2">: TRM A</td>
                             </tr>
                             <tr>
-                                <td class="px-6 py-2">Semester</td>
-                                <td class="px-6 py-2">: {{ $semester }}</td>
-                                <td class="px-6 py-2">Kelas : {{ $attendanceList->student_class->name }}</td>
+                                <td class="p-2">Dosen</td>
+                                <td colspan="3" class="p-2">: dosen</td>
                             </tr>
-                            <tr>
-                                <td class="px-6 py-2">Dosen</td>
-                                <td colspan="2" class="px-6 py-2">: {{ $attendanceList->lecturer->name }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-2">Jam Perkuliahan</td>
-                                <td class="px-6 py-2">: {{ $attendanceList->course->hours }} Jam</td>
-                                <td class="px-6 py-2">Tahun Akademik : {{ $academicYear }}</td>
+                            <tr class="bg-gray-50">
+                                <td class="p-2">Jam Perkuliahan</td>
+                                <td class="p-2">: 2 Jam</td>
+                                <td class="p-2">Tahun Akademik</td>
+                                <td class="p-2">: 2024/2025</td>
                             </tr>
                         </tbody>
                     </table>
@@ -100,51 +101,44 @@
                             </button>
                         </a>
                     </div>
-                    <table
-                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4 border border-slate-800">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4 border  border-collapse">
                         <thead class="text-xs uppercase bg-gray-900 text-white">
                             <tr>
-                                <th scope="col" class="px-6 py-3">No</th>
-                                <th scope="col" class="px-6 py-3">Pertemuan Ke</th>
-                                <th scope="col" class="px-6 py-3">Jumlah Mahasiswa Hadir</th>
+                                <th scope="col" class="px-6 py-3 text-center">No</th>
+                                <th scope="col" class="px-6 py-3 text-center">Pertemuan Ke</th>
+                                <th scope="col" class="px-6 py-3 text-center">Jumlah Mahasiswa Hadir</th>
                                 <th scope="col" class="px-6 py-3 text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($data as $d)
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ $loop->iteration }}</td>
-                                    <td class="px-6 py-3 text-gray-800">{{ $d->meeting_order }}</td>
-                                    <td class="px-6 py-3 text-gray-800">{{ $d->sum_attendance_students }}</td>
-                                    
-                                    <td class="px-3 py-2 flex space-x-1 justify-center">
-                                        <a href="{{ route('lecturer.lecturer_document.edit', $d->id) }}" 
-                                           class="inline-flex items-center justify-center w-20 text-center font-medium bg-yellow-400 text-white px-2 py-1 rounded-md hover:bg-yellow-500 transition duration-300">
-                                            <svg class="w-4 h-4 mr-1 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
-                                            </svg>
-                                            Edit
-                                        </a>
-                                        <a href="{{ route('lecturer.lecturer_document.absensi', $d->id) }}" class="inline-block">
-                                            <button type="button"
-                                                class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center">
-                                                Lengkapi Absensi
-                                            </button>
-                                        </a>
-                                    </td>
-                                    
-                                    
-                                </tr>
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <td class="px-6 py-4 text-center align-middle">{{ $loop->iteration }}</td>
+                                <td class="px-6 py-4 text-center align-middle">{{ $d->meeting_order }}</td>
+                                <td class="px-6 py-4 text-center align-middle">{{ $d->sum_attendance_students }}</td>
+                                <td class="px-3 py-2 text-center align-middle flex space-x-1 justify-center">
+                                    <a href="{{ route('lecturer.lecturer_document.edit', $d->id) }}"
+                                        class="inline-flex items-center justify-center w-20 text-center font-medium bg-yellow-400 text-white px-2 py-1 rounded-md hover:bg-yellow-500 transition duration-300">
+                                        <svg class="w-4 h-4 mr-1 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                                        </svg>
+                                        Edit
+                                    </a>
+                                    <a href="{{ route('lecturer.lecturer_document.absensi', $d->id) }}" class="inline-block">
+                                        <button type="button" class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center">
+                                            Lengkapi Absensi
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
                             @empty
-                                <tr>
-                                    <td colspan="4" class="px-6 py-3 text-center">Belum Ada Data</td>
-                                </tr>
+                            <tr>
+                                <td colspan="4" class="px-6 py-3 text-center">Belum Ada Data</td>
+                            </tr>
                             @endforelse
                         </tbody>
                     </table>
+                    
                 </div>
             </div>
         </section>
