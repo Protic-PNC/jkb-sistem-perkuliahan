@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nim')->unique();;
             $table->string('name');
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->string('signature')->nullable();
             $table->string('number_phone');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');

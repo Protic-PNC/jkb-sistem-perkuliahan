@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('attendance_list_detail_id')->constrained()->onDelete('cascade');
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
-            $table->tinyInteger('attendance_student'); //1:hadir, 2:telat, 3:sakit, 4:izin, 5: bolos
-            $table->integer('minutes_late')->nullable(); //jika terlambat
+            $table->tinyInteger('attendance_student')->comment('1:hadir, 2:telat, 3:sakit, 4:izin, 5: bolos'); //
+            $table->integer('minutes_late')->nullable();
             $table->string('note')->nullable(); 
             $table->timestamps();
         });

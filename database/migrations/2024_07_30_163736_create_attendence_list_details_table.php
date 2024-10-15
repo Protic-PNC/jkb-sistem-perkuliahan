@@ -15,8 +15,8 @@ return new class extends Migration
         Schema::create('attendance_list_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('attendance_list_id')->constrained()->onDelete('cascade');
-            $table->integer('meeting_order'); //pertemuan ke
-            $table->tinyInteger('course_status'); //1=sesuai jadwal, 2= pertukaran, 3= pengganti, 4= tambahan
+            $table->integer('meeting_order'); 
+            $table->tinyInteger('course_status')->comment('1=sesuai jadwal, 2= pertukaran, 3= pengganti, 4= tambahan');
             $table->integer('start_hour')->nullable(); //jam pertemuan 1 
             $table->integer('end_hour')->nullable(); //jam pertemuan 2 
             $table->string('meeting_hour')->nullable(); //opsional, 1 sd 2

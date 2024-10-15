@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('attendance_lists', function (Blueprint $table) {
-            $table->id(); //id = foreach sebanyak sks x pertemuan dalam semester, jika id pertemuan <= banyak pertemuan belum selesai pending, ==  menunggu persetujuan wait, klo disetujui==finished dibagian has_finished
+            $table->id(); 
             $table->string('code_al');
             $table->foreignId('lecturer_id')->constrained()->onDelete('cascade');
             $table->foreignId('course_id')->constrained()->onDelete('cascade');

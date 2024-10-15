@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->integer('number_phone');
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->string('signature')->nullable(); //ttd
             $table->integer('nidn');
             $table->integer('nip');
