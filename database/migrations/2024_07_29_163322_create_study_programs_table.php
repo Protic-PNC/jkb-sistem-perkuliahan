@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('jenjang'); //D3/D4
             $table->string('name');
+            $table->string('brief');
             $table->timestamps();
         });
     }

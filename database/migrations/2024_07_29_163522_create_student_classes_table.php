@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('code')->unique();
+            $table->string('level')->nullable();
             $table->integer('academic_year');
             $table->boolean('status')->comment('0=tidak aktif, 1 aktif');
             $table->foreignId('study_program_id')->constrained()->onDelete('cascade');
