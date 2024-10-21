@@ -50,7 +50,7 @@
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Program Studi</label>
                             <select id="study_program_id" name="study_program_id"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option value="{{ $student_class->id }}">{{ $student_class->name }}</option>
+                                <option value="{{ $student_class->id }}">{{ $student_class->study_program->name }}</option>
                                 @foreach ($prodis as $study_program)
                                     <option value="{{ $study_program->id }}">{{ $study_program->name }}</option>
                                 @endforeach

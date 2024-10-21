@@ -20,11 +20,23 @@
                 <form action="{{ route('masterdata.student_classes.store') }}" method="POST">
                     @csrf
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                        <div class="sm:col-span-2">
+                        <div>
+                            <label for="study_program_id"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Program Studi</label>
+                            <select id="study_program_id" name="study_program_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option value="" disabled selected>Pilih Prodi</option>
+                                @foreach ($prodis as $study_program)
+                                    <option value="{{ $study_program->id }}">{{ $study_program->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
                             <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama
                                 Kelas</label>
-                                <select id="academic_year" name="academic_year"
+                                <select id="name" name="name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option value="">Pilih Nama Kelas</option>
                                 <option value="A">A</option>
                                 <option value="B">B</option>
                                 <option value="C">C</option>
@@ -43,26 +55,16 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 @php
                                     $currentYear = date('Y');
-                                    $startYear = 2018; // Start year for the dropdown
+                                    $startYear = $currentYear - 3; // Start year for the dropdown
                                     $endYear = $currentYear; // Current year as the end year
                                 @endphp
-                        
+                            <option value="">Pilih Tahun</option>
                                 @for ($year = $startYear; $year <= $endYear; $year++)
                                     <option value="{{ $year }}">{{ $year }}</option>
                                 @endfor
                             </select>
                         </div>
-                        <div>
-                            <label for="study_program_id"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Program Studi</label>
-                            <select id="study_program_id" name="study_program_id"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option value="" disabled selected>Pilih Prodi</option>
-                                @foreach ($prodis as $study_program)
-                                    <option value="{{ $study_program->id }}">{{ $study_program->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        
                     </div>
                     <button type="submit"
                         class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">

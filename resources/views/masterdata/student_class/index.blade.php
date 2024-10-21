@@ -24,13 +24,20 @@
                     </div>
                 @endif
                 <div class="mb-3 flex items-center justify-between">
+                    <div class="flex space-x-2">
                     <a href="{{ route('masterdata.student_classes.create') }}" class="inline-block">
                         <button type="button"
                             class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                             Tambah Data
                         </button>
                     </a>
-
+                    <a href="#" class="inline-block">
+                        <button type="button"
+                            class="text-white bg-teal-500 hover:bg-teal-600 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                            Export Data kelas
+                        </button>
+                    </a>
+                    </div>
                     <form action="{{ route('masterdata.student_classes.index') }}" method="GET" class="flex items-center">
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -79,7 +86,16 @@
                                     <td class="px-3 py-2 text-slate-800">{{ $a->name }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $a->academic_year }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $a->study_program->name }}</td>
-                                    <td class="px-3 py-2 text-slate-800"><a href="{{ route('masterdata.assign.course.class', $a->id) }}" class="inline-block w-20 text-center font-medium bg-teal-400 text-white px-3 py-2 rounded-md hover:bg-teal-500 transition duration-300">Lihat Mata kuliah</a></td>
+                                    <td class="px-3 py-2 text-slate-800">
+                                        <a href="{{ route('masterdata.assign.course.class', $a->id) }}" 
+                                           class="inline-block min-w-[150px] text-center font-medium bg-teal-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-teal-600 transition duration-300 hover:shadow-xl">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M5 4a2 2 0 00-2 2v8a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2H5zM4 8v6h12V8H4zm1-2h10v1H5V6z" clip-rule="evenodd" />
+                                            </svg>
+                                            Data Mata Kuliah
+                                        </a>
+                                    </td>
+                                    
 
                                     <td class="px-3 py-2 flex space-x-2 justify-center ">
                                         <a href="{{ route('masterdata.student_classes.edit', $a->id) }}"
