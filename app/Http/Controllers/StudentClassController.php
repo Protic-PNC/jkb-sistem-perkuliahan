@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\Masterdata\Student_ClassExport;
+use App\Models\Student;
 use App\Models\StudentClass;
 use App\Models\StudyProgram;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentClassController extends Controller
 {
@@ -44,15 +47,11 @@ class StudentClassController extends Controller
     public function store(Request $request)
     {
         
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'name' => 'required|string|max:255',
             'academic_year' => 'required|integer',
             'study_program_id' => 'required|integer',
         ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
 
         DB::beginTransaction();
         try {
@@ -64,8 +63,6 @@ class StudentClassController extends Controller
             $sc->study_program_id = $request->input('study_program_id');
             $sc->status = 1;
             $sc->code = $prodi->brief . $request->input('name') . $request->input('academic_year');
-
-            // Simpan data kelas
             $sc->save();
 
             DB::commit();
@@ -141,5 +138,10 @@ class StudentClassController extends Controller
                 ->back()
                 ->with('error', 'System eror' . $e->getMessage());
         }
+    }
+
+    public function export() 
+    {
+        return Excel::download(new Student_ClassExport, 'Daftar Kelas.xlsx');
     }
 }

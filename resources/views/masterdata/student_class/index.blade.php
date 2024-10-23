@@ -1,4 +1,3 @@
-
 <x-app-layout>
     @section('main_folder', '/ Master Data')
     @section('descendant_folder', '/ Kelas')
@@ -25,18 +24,19 @@
                 @endif
                 <div class="mb-3 flex items-center justify-between">
                     <div class="flex space-x-2">
-                    <a href="{{ route('masterdata.student_classes.create') }}" class="inline-block">
-                        <button type="button"
-                            class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                            Tambah Data
-                        </button>
-                    </a>
-                    <a href="#" class="inline-block">
-                        <button type="button"
+                        <a href="{{ route('masterdata.student_classes.create') }}" class="inline-block">
+                            <button type="button"
+                                class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                Tambah Data
+                            </button>
+                        </a>
+                        <a href="{{ route('masterdata.student_classes.export') }}" class="inline-block">
+                        <button type="button" 
                             class="text-white bg-teal-500 hover:bg-teal-600 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                            Export Data kelas
+                            Download Data kelas
                         </button>
-                    </a>
+                        </a>
+
                     </div>
                     <form action="{{ route('masterdata.student_classes.index') }}" method="GET" class="flex items-center">
                         <div class="relative">
@@ -72,6 +72,7 @@
                             <tr class="text-white mb-3">
                                 <th scope="col" class="px-6 py-3">No</th>
                                 <th scope="col" class="px-6 py-3">Nama</th>
+                                <th scope="col" class="px-6 py-3">Kode</th>
                                 <th scope="col" class="px-6 py-3">Tahun Akademik</th>
                                 <th scope="col" class="px-6 py-3">Program Studi</th>
                                 <th scope="col" class="px-6 py-3">Daftar Mata Kuliah</th>
@@ -84,24 +85,29 @@
                                     <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
                                     </td>
                                     <td class="px-3 py-2 text-slate-800">{{ $a->name }}</td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $a->code }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $a->academic_year }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $a->study_program->name }}</td>
                                     <td class="px-3 py-2 text-slate-800">
-                                        <a href="{{ route('masterdata.assign.course.class', $a->id) }}" 
-                                           class="inline-block min-w-[150px] text-center font-medium bg-teal-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-teal-600 transition duration-300 hover:shadow-xl">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M5 4a2 2 0 00-2 2v8a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2H5zM4 8v6h12V8H4zm1-2h10v1H5V6z" clip-rule="evenodd" />
+                                        <a href="{{ route('masterdata.assign.course.class', $a->id) }}"
+                                            class="inline-block min-w-[150px] text-center font-medium bg-teal-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-teal-600 transition duration-300 hover:shadow-xl">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2"
+                                                viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M5 4a2 2 0 00-2 2v8a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2H5zM4 8v6h12V8H4zm1-2h10v1H5V6z"
+                                                    clip-rule="evenodd" />
                                             </svg>
                                             Data Mata Kuliah
                                         </a>
                                     </td>
-                                    
+
 
                                     <td class="px-3 py-2 flex space-x-2 justify-center ">
                                         <a href="{{ route('masterdata.student_classes.edit', $a->id) }}"
                                             class="inline-flex items-center justify-center w-20 text-center font-medium bg-yellow-400 text-white px-3 py-2 rounded-md hover:bg-yellow-500 transition duration-300">
-                                            <svg class="w-5 h-5 mr-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <svg class="w-5 h-5 mr-2 text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
                                             </svg>
@@ -129,18 +135,32 @@
                 </div>
             </div>
         </section>
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    var successMessage = document.getElementById('success-message');
-                    if (successMessage) {
-                        setTimeout(function() {
-                            successMessage.style.opacity = '0';
-                            setTimeout(function() {
-                                successMessage.remove();
-                            }, 500); // Time for fade-out transition
-                        }, 3000); // Time to show message before fading out
-                    }
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+        <script>
+            $(document).ready(function() {
+                $('#downloadData').on('click', function() {
+                    var url = $(this).data('url');
+                    window.open(url, '_blank');
                 });
-            </script>
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var successMessage = document.getElementById('success-message');
+                if (successMessage) {
+                    setTimeout(function() {
+                        successMessage.style.opacity = '0';
+                        setTimeout(function() {
+                            successMessage.remove();
+                        }, 500); // Time for fade-out transition
+                    }, 3000); // Time to show message before fading out
+                }
+            });
+        </script>
+
+
     @endsection
 </x-app-layout>

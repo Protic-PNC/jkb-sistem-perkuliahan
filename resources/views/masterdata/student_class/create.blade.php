@@ -16,6 +16,15 @@
                         </ul>
                     </div>
                 @endif
+                @if ($errors->has('error'))
+                <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+                    role="alert">
+                    <span class="font-medium">Whoops!</span> There was a problem with your input.
+                    <ul class="mt-2 list-disc pl-5">
+                        <li>{{ $errors->first('error') }}</li>
+                    </ul>
+                </div>
+            @endif
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambah Kelas</h2>
                 <form action="{{ route('masterdata.student_classes.store') }}" method="POST">
                     @csrf

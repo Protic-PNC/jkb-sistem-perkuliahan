@@ -39,7 +39,9 @@ Route::middleware('auth')->group(function () {
     Route::prefix('masterdata')->name('masterdata.')->group(function(){
         Route::resource('users', UserController::class)->middleware('role:super_admin');
         Route::resource('study_programs', StudyProgramController::class)->middleware('role:super_admin');
+        
         Route::resource('student_classes', StudentClassController::class)->middleware('role:super_admin');
+        Route::get('/student_classes/export', [StudentClassController::class, 'export'])->name('student_classes.export');
         Route::resource('positions', PositionController::class)->middleware('role:super_admin');   
         Route::resource('courses', CoursesController::class)->middleware('role:super_admin'); 
 
@@ -48,6 +50,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/students/show/{userId}', [StudentController::class, 'show'])->name('students.show');
         Route::get('/students/edit/{id}', [StudentController::class,'edit'])->name('students.edit');
         Route::post('/students/store/{userId}', [StudentController::class, 'store'])->name('students.store');
+        Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
         Route::put('/students/update/{id}', [StudentController::class, 'update'])->name('students.update');
         Route::delete('/students/destroy/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
 

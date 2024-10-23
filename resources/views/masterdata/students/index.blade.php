@@ -1,4 +1,3 @@
-
 <x-app-layout>
     @section('main_folder', '/ Master Data')
     @section('descendant_folder', '/ Mahasiswa')
@@ -36,8 +35,17 @@
                         <span class="font-medium">Success!</span> {{ session('success') }}
                     </div>
                 @endif
-                <div class="mb-3 flex items-center justify-end">
-                    
+                <div class="mb-3 flex items-center justify-between">
+                    <div class="flex space-x-2">
+                        <a href="javascript:void(0)" class="inline-block">
+                            <button type="button" id="openImportModal"
+                                class="text-white bg-teal-500 hover:bg-teal-600 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center flex items-center">
+                                <i class="fas fa-file-import mr-2"></i>
+                                Import Data Kelas
+                            </button>
+                        </a>
+
+                    </div>
                     <form action="{{ route('masterdata.students.index') }}" method="GET" class="flex items-center">
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -66,6 +74,7 @@
                     </form>
                 </div>
 
+
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
                         <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
@@ -90,16 +99,17 @@
                                     <td class="px-3 py-2 flex space-x-2 justify-center ">
                                         <a href="{{ route('masterdata.students.edit', $student->id) }}"
                                             class="inline-flex items-center justify-center w-20 text-center font-medium bg-yellow-400 text-white px-3 py-2 rounded-md hover:bg-yellow-500 transition duration-300">
-                                            <svg class="w-5 h-5 mr-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <svg class="w-5 h-5 mr-2 text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
                                             </svg>
                                             Edit
                                         </a>
-                                        
+
                                     </td>
-                                    
+
                                 </tr>
                             @empty
                                 <tr>
@@ -110,10 +120,117 @@
                     </table>
                     {{ $students->appends(request()->query())->onEachSide(5)->links() }}
                 </div>
+                <!-- Modal -->
+                <!-- Modal -->
+                <div id="importModalOverlay"
+                    class="fixed inset-0 z-40 hidden bg-black bg-opacity-50 backdrop-blur-sm transition-opacity duration-300 ease-in-out">
+                </div>
+
+                <!-- Modal -->
+                <div id="importModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+                    <div class="flex items-center justify-center min-h-screen">
+                        <div class="relative bg-white rounded-lg shadow-xl w-full max-w-lg">
+                            <!-- Modal Header -->
+                            <div class="flex justify-between items-center p-4 border-b">
+                                <h3 class="text-lg font-semibold">Import Data Kelas</h3>
+                                <button type="button" id="closeModal" class="text-gray-500 hover:text-gray-700">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <!-- Modal Body -->
+                            <div class="p-6">
+                                <form id="form-import-data-mahasiswa" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="file">Pilih File (.xls, .xlsx):</label>
+                                        <input type="file" name="file" id="file" class="form-control"
+                                            accept=".xls,.xlsx">
+                                        <div class="invalid-feedback" id="error-file" style="display:none;"></div>
+                                    </div>
+
+                                    <div class="flex justify-end space-x-3 mt-4">
+                                        <button type="submit" class="btn btn-primary waves-effect"
+                                            id="btn-simpan-import">
+                                            <i class="fa fa-save"></i> Simpan
+                                        </button>
+                                        <button type="button" id="cancelImport" class="btn btn-danger waves-effect">
+                                            <i class="fa fa-close"></i> Batal
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
 
         @push('after-script')
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+            <script>
+                $(document).ready(function() {
+                    // Open modal with animation
+                    $('#openImportModal').on('click', function() {
+                        $('#importModalOverlay').removeClass('hidden');
+                        $('#importModal').removeClass('hidden');
+                    });
+
+                    // Close modal with animation
+                    $('#closeModal, #cancelImport').on('click', function() {
+                        $('#importModalOverlay').addClass('hidden');
+                        $('#importModal').addClass('hidden');
+
+                        setTimeout(function() {
+                            $('#importModalOverlay').addClass('hidden');
+                            $('#importModal').addClass('hidden');
+                        }, 300); // Delay to allow animation to complete
+                    });
+
+                    // Handle form submission (you can add AJAX or other logic here)
+                    $('#form-import-data-mahasiswa').on('submit', function(event) {
+                        event.preventDefault();
+                        const formData = new FormData(this);
+                        $('.invalid-feedback').text('').hide();
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{ route('masterdata.students.import') }}",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            beforeSend: function() {
+                                $('#btn-simpan-import').attr('disabled', 'disabled');
+                                $('#btn-simpan-import').html(
+                                    '<i class="fa fa-spinner fa-spin mr-1"></i> Simpan');
+                            },
+                            complete: function() {
+                                $('#btn-simpan-import').removeAttr('disabled');
+                                $('#btn-simpan-import').html('<i class="fa fa-save"></i> Simpan');
+                            },
+                            success: function(response) {
+                                alert('File imported successfully!');
+                                $('#importModal').removeClass('md-show');
+
+                                form.reset();
+                            },
+                            error: function(xhr) {
+                                const errors = xhr.responseJSON.errors;
+                                $.each(errors, function(key, value) {
+                                    $('#error-' + key).text(value[0]).show();
+                                });
+                            }
+                        });
+                    });
+                });
+            </script>
+
+
             <script>
                 function confirmDelete() {
                     return confirm('Are you sure you want to delete this user?');

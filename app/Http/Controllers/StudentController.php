@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\Masterdata\StudentImport;
 use App\Models\Student;
 use App\Models\StudentClass;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
 {
@@ -20,13 +23,16 @@ class StudentController extends Controller
 
         if ($request->has('search')) {
             $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'LIKE', "%{$search}%")->orWhere('nim', 'LIKE', "%{$search}%");
-            })->orWhere(function ($q) use ($search) {
-                $q->where('number_phone', 'LIKE', "%{$search}%");
-            })->orWhere(function ($q) use ($search) {
-                $q->where('address', 'LIKE', "%{$search}%");
-            });
+            $query
+                ->where(function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%")->orWhere('nim', 'LIKE', "%{$search}%");
+                })
+                ->orWhere(function ($q) use ($search) {
+                    $q->where('number_phone', 'LIKE', "%{$search}%");
+                })
+                ->orWhere(function ($q) use ($search) {
+                    $q->where('address', 'LIKE', "%{$search}%");
+                });
         }
 
         $students = $query->paginate(5);
@@ -118,7 +124,13 @@ class StudentController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string',
-            'nim' => ['required', 'string', Rule::unique('students', 'nim')->ignore($student->id)->whereNull('deleted_at')],
+            'nim' => [
+                'required',
+                'string',
+                Rule::unique('students', 'nim')
+                    ->ignore($student->id)
+                    ->whereNull('deleted_at'),
+            ],
             'address' => 'required|string',
             'number_phone' => 'required|string',
             'student_class_id' => 'required|exists:student_classes,id',
@@ -150,5 +162,26 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         //
+    }
+    public function import(Request $request)
+    {
+     
+        $request->validate([
+            'file' => 'required|file|max:2048|mimes:xls,xlsx',
+        ]);
+
+        $file = $request->file('file');
+       
+        $signaturePath = $file->store('import_students', 'public');
+        
+       
+        Excel::import(new StudentImport(), $file);
+
+        // Cek apakah file berhasil disimpan di S3 dan kirim respon
+        if ($signaturePath) {
+            return response()->json(['success' => true, 'message' => 'File imported successfully'], 200);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Import Failed!'], 500);
+        }
     }
 }
