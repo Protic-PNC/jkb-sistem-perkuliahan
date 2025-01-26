@@ -337,4 +337,24 @@ class L_LecturerDocumentController extends Controller
                 ->with('error', 'An error occurred while saving student attendance: ' . $e->getMessage());
         }
     }
+
+    public function index2(Request $request, string $nidn)
+    {
+        $user = Auth::user();
+        $attendanceLists = AttendanceList::select('attendance_lists.id', 'attendance_lists.student_class_id', 'attendance_lists.course_id', 'attendance_lists.lecturer_id');
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+
+            $attendanceLists->where(function ($q) use ($search) {
+                $q->where('student_classes.name', 'LIKE', "%{$search}%")
+                    ->orWhere('courses.name', 'LIKE', "%{$search}%")
+                    ->orWhere('lecturers.name', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $data = $attendanceLists->paginate(5);
+
+        return view('lecturer.l_lecturer_document.index_daftar', compact('user', 'data'));
+    }
 }

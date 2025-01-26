@@ -45,12 +45,12 @@
                             
                             <div>
                                 <label for="position_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Mata Kuliah
+                                    Jabatan
                                 </label>
                                 <div class="flex">
                                     <select id="position_id" name="position_id"
                                         class="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                        <option value="">Pilih mata kuliah untuk di ampu</option>
+                                        <option value="">Pilih Jabatan</option>
                                         @foreach ($positions as $position)
                                             <option value="{{ $position->id }}">{{ $position->name }}</option>
                                         @endforeach
@@ -117,21 +117,10 @@
                                     <td class="px-3 py-2 text-slate-800">{{ $lecturer_position->name }}</td>
                                     
                                     <td class="px-3 py-2 flex space-x-2 justify-center ">
-                                        <form action="{{ route('masterdata.lecturer_positions.destroy', $lecturer_position->pivot->id) }}"
-                                            method="POST" class="inline-block">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300 flex items-center">
-                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                    </path>
-                                                </svg>
-                                                Delete
-                                            </button>
-                                        </form>
+                                        
+                                        <button type="button" id="btn-hapus{{ $lecturer_position->pivot->id }}" class="font-medium bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline" onclick="openModal('{{ $lecturer_position->pivot->id }}', '{{ route('masterdata.lecturer_positions.destroy', $lecturer_position->pivot->id) }}')">
+                                            <i class="fa fa-trash"></i> Hapus
+                                        </button>
 
                                     </td>
 

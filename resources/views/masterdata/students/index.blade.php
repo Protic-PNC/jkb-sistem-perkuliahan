@@ -193,8 +193,9 @@
                     // Handle form submission (you can add AJAX or other logic here)
                     $('#form-import-data-mahasiswa').on('submit', function(event) {
                         event.preventDefault();
-                        const formData = new FormData(this);
+                        const formData = new FormData(this); // 'this' mengacu pada form
                         $('.invalid-feedback').text('').hide();
+
                         $.ajax({
                             type: 'POST',
                             url: "{{ route('masterdata.students.import') }}",
@@ -214,19 +215,22 @@
                                 $('#btn-simpan-import').html('<i class="fa fa-save"></i> Simpan');
                             },
                             success: function(response) {
-                                alert('File imported successfully!');
+                                console.log("Response dari server:", response);
                                 $('#importModal').removeClass('md-show');
 
-                                form.reset();
+                                // Reset form di sini
+                                $('#form-import-data-mahasiswa')[0].reset();
                             },
                             error: function(xhr) {
-                                const errors = xhr.responseJSON.errors;
-                                $.each(errors, function(key, value) {
-                                    $('#error-' + key).text(value[0]).show();
-                                });
+                                // const errors = xhr.responseJSON.errors;
+                                // $.each(errors, function(key, value) {
+                                //     $('#error-' + key).text(value[0]).show();
+                                // });
+                                console.error("Ada masalah:", response.message);
                             }
                         });
                     });
+
                 });
             </script>
 

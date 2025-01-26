@@ -14,7 +14,7 @@
 
             <div class="py-4 px-2 mx-auto lg:m-8 sm:m-4">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Daftar Jabatan
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Daftar Mata Kuliah
                     </h3>
                     <hr class="border-t-4 my-2 mb-6 rounded-sm bg-gray-300">
                 </div>
@@ -41,7 +41,7 @@
                         dd($student_class);
                         enctype="multipart/form-data">
                         @csrf
-                        <h3 class="mb-5 font-semibold text-xl">{{ $student_class->name }}</h3>
+                        <h3 class="mb-5 font-semibold text-xl"> {{ $student_class->study_program->name }}  {{ $student_class->level }}  {{ $student_class->name }}</h3>
                         <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 mb-5">
                             
                             <div>
@@ -51,7 +51,7 @@
                                 <div class="flex">
                                     <select id="course_id" name="course_id"
                                         class="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                        <option value="">Pilih mata kuliah untuk di ampu</option>
+                                        <option value="">Pilih mata kuliah untuk kelas</option>
                                         @foreach ($courses as $course)
                                             <option value="{{ $course->id }}">{{ $course->name }}</option>
                                         @endforeach
@@ -118,21 +118,10 @@
                                     <td class="px-3 py-2 text-slate-800">{{ $course_class->name }}</td>
                                     
                                     <td class="px-3 py-2 flex space-x-2 justify-center ">
-                                        <form action="{{ route('masterdata.course_classes.destroy', $course_class->pivot->id) }}"
-                                            method="POST" class="inline-block">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300 flex items-center">
-                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                    </path>
-                                                </svg>
-                                                Delete
-                                            </button>
-                                        </form>
+                                        
+                                        <button type="button" id="btn-hapus{{ $course_class->pivot->id }}" class="font-medium bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline" onclick="openModal('{{ $course_class->pivot->id }}', '{{ route('masterdata.course_classes.destroy', $course_class->pivot->id) }}')">
+                                            <i class="fa fa-trash"></i> Hapus
+                                        </button>
 
                                     </td>
 
@@ -167,6 +156,42 @@
                         }, 3000); // Time to show message before fading out
                     }
                 });
+            </script>
+            <script>
+                let deleteId = null;
+                let deleteUrl = '';
+            
+                function openModal(id, url) {
+                    deleteId = id;
+                    deleteUrl = url;
+                    document.getElementById('delete-modal').classList.remove('hidden');
+                }
+            
+                function closeModal() {
+                    document.getElementById('delete-modal').classList.add('hidden');
+                }
+            
+                function confirmDelete() {
+                    closeModal(); // Menutup modal
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = deleteUrl;
+            
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_token';
+                    csrfInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'DELETE';
+            
+                    form.appendChild(csrfInput);
+                    form.appendChild(methodInput);
+                    document.body.appendChild(form);
+                    form.submit(); // Mengirimkan form
+                }
             </script>
         @endpush
 

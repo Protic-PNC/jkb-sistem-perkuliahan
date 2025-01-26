@@ -30,8 +30,8 @@
                                 Tambah Data
                             </button>
                         </a>
-                        <a href="{{ route('masterdata.student_classes.export') }}" class="inline-block">
-                        <button type="button" 
+                        <a href="#" class="inline-block">
+                        <button type="button" id="downloadData"
                             class="text-white bg-teal-500 hover:bg-teal-600 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                             Download Data kelas
                         </button>
@@ -74,20 +74,19 @@
                                 <th scope="col" class="px-6 py-3">Nama</th>
                                 <th scope="col" class="px-6 py-3">Kode</th>
                                 <th scope="col" class="px-6 py-3">Tahun Akademik</th>
-                                <th scope="col" class="px-6 py-3">Program Studi</th>
                                 <th scope="col" class="px-6 py-3">Daftar Mata Kuliah</th>
                                 <th scope="col" class="px-6 py-3 text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
+                            
                             @forelse ($data as $a)
+                            
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
                                     </td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $a->name }}</td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $a->code }}</td>
+                                    <td class="px-3 py-2 text-slate-800">  {{ $a->study_program->name }}  {{ $a->level }}  {{ $a->name }} </td>
                                     <td class="px-3 py-2 text-slate-800">{{ $a->academic_year }}</td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $a->study_program->name }}</td>
                                     <td class="px-3 py-2 text-slate-800">
                                         <a href="{{ route('masterdata.assign.course.class', $a->id) }}"
                                             class="inline-block min-w-[150px] text-center font-medium bg-teal-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-teal-600 transition duration-300 hover:shadow-xl">
@@ -113,15 +112,10 @@
                                             </svg>
                                             Edit
                                         </a>
-                                        <form action="{{ route('masterdata.student_classes.destroy', $a->id) }}"
-                                            method="POST" class="inline-block">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="font-medium  bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline">
-                                                Hapus
-                                            </button>
-                                        </form>
+                                        <button type="button" id="btn-hapus{{ $a->id }}" class="font-medium bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline" onclick="openModal('{{ $a->id }}', '{{ route('masterdata.student_classes.destroy', $a->id) }}')">
+                                            <i class="fa fa-trash"></i> Hapus
+                                        </button>
+                                        
                                     </td>
                                 </tr>
                             @empty
@@ -129,10 +123,12 @@
                                     <td colspan="5" class="px-3 py-2 text-center">Belum Ada Data</td>
                                 </tr>
                             @endforelse
+
                         </tbody>
                     </table>
                     {{ $data->appends(request()->query())->onEachSide(5)->links() }}
                 </div>
+                
             </div>
         </section>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -142,24 +138,50 @@
         <script>
             $(document).ready(function() {
                 $('#downloadData').on('click', function() {
-                    var url = $(this).data('url');
-                    window.open(url, '_blank');
+                var url = '{{ route('masterdata.student_classes.export') }}';
+                window.open(url, '_blank');
                 });
             });
+            
         </script>
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var successMessage = document.getElementById('success-message');
-                if (successMessage) {
-                    setTimeout(function() {
-                        successMessage.style.opacity = '0';
-                        setTimeout(function() {
-                            successMessage.remove();
-                        }, 500); // Time for fade-out transition
-                    }, 3000); // Time to show message before fading out
-                }
-            });
+            let deleteId = null;
+            let deleteUrl = '';
+        
+            function openModal(id, url) {
+                deleteId = id;
+                deleteUrl = url;
+                document.getElementById('delete-modal').classList.remove('hidden');
+            }
+        
+            function closeModal() {
+                document.getElementById('delete-modal').classList.add('hidden');
+            }
+        
+            function confirmDelete() {
+                closeModal(); // Menutup modal
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = deleteUrl;
+        
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = '_token';
+                csrfInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+                const methodInput = document.createElement('input');
+                methodInput.type = 'hidden';
+                methodInput.name = '_method';
+                methodInput.value = 'DELETE';
+        
+                form.appendChild(csrfInput);
+                form.appendChild(methodInput);
+                document.body.appendChild(form);
+                form.submit(); // Mengirimkan form
+            }
         </script>
+        
+        
 
 
     @endsection

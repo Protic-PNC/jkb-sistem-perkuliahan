@@ -94,15 +94,10 @@
                                             </svg>
                                             Edit
                                         </a>
-                                        <form action="{{ route('masterdata.courses.destroy', $a->id) }}"
-                                            method="POST" class="inline-block">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="font-medium  bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline">
-                                                Hapus
-                                            </button>
-                                        </form>
+                                        
+                                        <button type="button" id="btn-hapus{{ $a->id }}" class="font-medium bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline" onclick="openModal('{{ $a->id }}', '{{ route('masterdata.courses.destroy', $a->id) }}')">
+                                            <i class="fa fa-trash"></i> Hapus
+                                        </button>
                                     </td>
                                 </tr>
                             @empty
@@ -128,6 +123,42 @@
                         }, 3000); // Time to show message before fading out
                     }
                 });
+            </script>
+            <script>
+                let deleteId = null;
+                let deleteUrl = '';
+            
+                function openModal(id, url) {
+                    deleteId = id;
+                    deleteUrl = url;
+                    document.getElementById('delete-modal').classList.remove('hidden');
+                }
+            
+                function closeModal() {
+                    document.getElementById('delete-modal').classList.add('hidden');
+                }
+            
+                function confirmDelete() {
+                    closeModal(); // Menutup modal
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = deleteUrl;
+            
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_token';
+                    csrfInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'DELETE';
+            
+                    form.appendChild(csrfInput);
+                    form.appendChild(methodInput);
+                    document.body.appendChild(form);
+                    form.submit(); // Mengirimkan form
+                }
             </script>
     @endsection
 </x-app-layout>

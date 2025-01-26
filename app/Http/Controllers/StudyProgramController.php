@@ -32,6 +32,7 @@ class StudyProgramController extends Controller
      */
     public function create()
     {
+        
         return view('masterdata.study_programs.create');
     }
 
@@ -139,7 +140,7 @@ class StudyProgramController extends Controller
     {
         try {
             $study_program->delete();
-            return redirect()->back()->with('success', 'Projects deleted sussesfully');
+            return redirect()->back()->with('success', 'Program Studi Berhasil Dihapus');
         } catch (\Exception $e) {
             DB::rollBack();
 

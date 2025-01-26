@@ -21,39 +21,44 @@
                     @csrf
                     @method('PUT')
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                        <div class="sm:col-span-2">
-                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama
-                                Kelas</label>
-                            <input type="text" name="name" id="name" value="{{ $student_class->name }}"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Masukan Nama Kelas!" required="">
-                        </div>
-                        
-                        <div>
-                            <label for="academic_year"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tahun Masuk</label>
-                            <select id="academic_year" name="academic_year" value="{{ $student_class->academic_year }}"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                @php
-                                    $currentYear = date('Y');
-                                    $startYear = 2018; // Start year for the dropdown
-                                    $endYear = $currentYear; // Current year as the end year
-                                @endphp
-                        
-                                @for ($year = $startYear; $year <= $endYear; $year++)
-                                    <option value="{{ $year }}">{{ $year }}</option>
-                                @endfor
-                            </select>
-                        </div>
                         <div>
                             <label for="study_program_id"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Program Studi</label>
                             <select id="study_program_id" name="study_program_id"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option value="{{ $student_class->id }}">{{ $student_class->study_program->name }}</option>
+                                <option value="{{ $student_class->study_program->id }}">{{ $student_class->study_program->name }}</option>
                                 @foreach ($prodis as $study_program)
                                     <option value="{{ $study_program->id }}">{{ $study_program->name }}</option>
                                 @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama
+                                Kelas</label>
+                                <select id="name" name="name"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option value="{{ $student_class->name }}">{{ $student_class->name }}</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="academic_year"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tahun Masuk</label>
+                            <select id="academic_year" name="academic_year"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                @php
+                                    $currentYear = date('Y');
+                                    $startYear = $currentYear - 3; // Start year for the dropdown
+                                    $endYear = $currentYear; // Current year as the end year
+                                @endphp
+                            <option value="{{ $student_class->academic_year }}">{{ $student_class->academic_year }}</option>
+                                @for ($year = $startYear; $year <= $endYear; $year++)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endfor
                             </select>
                         </div>
                     </div>
@@ -69,12 +74,12 @@
     @endsection
 
     @push('after-script')
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    var inputField = document.getElementById('academic_year');
-                    var currentYear = new Date().getFullYear();
-                    inputField.setAttribute('max', currentYear);
-                });
-            </script>
-        @endpush
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var inputField = document.getElementById('academic_year');
+            var currentYear = new Date().getFullYear();
+            inputField.setAttribute('max', currentYear);
+        });
+    </script>
+    @endpush
 </x-app-layout>

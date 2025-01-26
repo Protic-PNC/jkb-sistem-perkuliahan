@@ -108,7 +108,7 @@
                             <button @click="dropdownOpen = ! dropdownOpen"
                                 class="relative block w-8 h-8 overflow-hidden rounded-full shadow focus:outline-none">
                                 <img class="object-cover w-full h-full"
-                                    src="{{ Auth::user()->avatar }}"
+                                    src="{{ Storage::url(Auth::user()->avatar) }}"
                                     alt="Your avatar">
                             </button>
 
@@ -161,15 +161,75 @@
 
 
                         @yield('content')
+                        <div id="delete-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-50">
+                            <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
+                                <h2 class="text-lg font-semibold mb-4">Konfirmasi Penghapusan</h2>
+                                <p class="mb-4">Apakah Anda yakin ingin menghapus data ini?</p>
+                                <div class="flex justify-end">
+                                    <button id="cancel-button" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2" onclick="closeModal()">Batal</button>
+                                    <button id="confirm-button" class="bg-red-600 text-white px-4 py-2 rounded-md" onclick="confirmDelete()">Hapus</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </main>
             </div>
         </div>
     </div>
     @stack('after-script')
+    @include('layouts.js')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var successMessage = document.getElementById('success-message');
+            if (successMessage) {
+                setTimeout(function() {
+                    successMessage.style.opacity = '0';
+                    setTimeout(function() {
+                        successMessage.remove();
+                    }, 500); // Time for fade-out transition
+                }, 3000); // Time to show message before fading out
+            }
+        });
+    </script>
+    <script>
+        let deleteId = null;
+        let deleteUrl = '';
+    
+        function openModal(id, url) {
+            deleteId = id;
+            deleteUrl = url;
+            document.getElementById('delete-modal').classList.remove('hidden');
+        }
+    
+        function closeModal() {
+            document.getElementById('delete-modal').classList.add('hidden');
+        }
+    
+        function confirmDelete() {
+            closeModal(); // Menutup modal
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = deleteUrl;
+    
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = '_token';
+            csrfInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+            const methodInput = document.createElement('input');
+            methodInput.type = 'hidden';
+            methodInput.name = '_method';
+            methodInput.value = 'DELETE';
+    
+            form.appendChild(csrfInput);
+            form.appendChild(methodInput);
+            document.body.appendChild(form);
+            form.submit(); // Mengirimkan form
         }
     </script>
 </body>

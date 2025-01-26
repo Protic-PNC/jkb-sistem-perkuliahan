@@ -9,6 +9,7 @@ use App\Models\StudyProgram;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -27,8 +28,41 @@ class StudentClassController extends Controller
                 $q->where('name', 'LIKE', "%{$search}%")->orWhere('academic_year', 'LIKE', "%{$search}%");
             });
         }
-        $data = $query->with('study_program')->orderBy('academic_year', 'asc')->paginate(5);
+        $data = $query->with('study_program')->orderBy('academic_year', 'asc')->paginate(5);  
+       
+        $currentDate = Carbon::now();    
+        $currentYear = $currentDate->year;    
+        $currentMonth = $currentDate->month;    
+        
+        foreach ($data as $item) {    
+            $classNumber = '';    
+            $academicYear = $item->academic_year;    
+        
+            Log::info("Current Year: $currentYear, Academic Year: $academicYear");    
+        
+            if ($currentYear == $academicYear) {  
+                 
+                if ($currentMonth <= 8) {  
+                    $classNumber = $currentYear - $academicYear; 
+                } else {  
+                    $classNumber = $currentYear - $academicYear + 1;  
+                }  
+            } elseif ($currentYear !== $academicYear ) {  
+                if ($currentMonth <= 8) {  
+                    $classNumber = $currentYear - $academicYear;  
+                } else {  
+                    $classNumber = $currentYear - $academicYear + 1;  
+                }  
+            } else {  
+                $classNumber = ''; 
+            }  
 
+            $item->level = $classNumber;
+            $item->save();
+          
+        }    
+
+  
         return view('masterdata.student_class.index', compact('data'));
     }
 
@@ -39,7 +73,7 @@ class StudentClassController extends Controller
     {
         $prodis = StudyProgram::all();
         return view('masterdata.student_class.create', compact('prodis'));
-    }
+    } 
 
     /**
      * Store a newly created resource in storage.
@@ -50,7 +84,7 @@ class StudentClassController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'academic_year' => 'required|integer',
-            'study_program_id' => 'required|integer',
+           'study_program_id' => 'required|exists:study_programs,id',
         ]);
 
         DB::beginTransaction();
@@ -97,26 +131,27 @@ class StudentClassController extends Controller
      */
     public function update(Request $request, StudentClass $student_class)
     {
+        
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+           'name' => 'required|string|max:255',
             'academic_year' => 'required|integer',
-            'study_program_id' => 'required|integer',
+           'study_program_id' => 'required|exists:study_programs,id',
         ]);
 
-        $existing = StudentClass::where('academic_year', $validated['academic_year'])
-            ->where('study_program_id', $validated['study_program_id'])
-            ->first();
-
-        if ($existing) {
-            return redirect()->back()->with('error', 'Data with the same academic year and study program already exists.');
-        }
+        DB::beginTransaction();
         try {
-            $student_class->update($validated);
+            $prodi = StudyProgram::where('id', $request->study_program_id)->first();
+            $student_class->name = $request->input('name');
+            $student_class->academic_year = $request->input('academic_year');
+            $student_class->study_program_id = $request->input('study_program_id');
+            $student_class->status = 1;
+            $student_class->code = $prodi->brief . $request->input('name') . $request->input('academic_year');
+            $student_class->save();
             DB::commit();
-            return redirect()->route('masterdata.student_class.index')->with('success', 'Kelas Berhasil Diedit');
+            return redirect()->route('masterdata.student_classes.index')->with('success', 'Kelas Berhasil Diedit');
         } catch (\Exception $e) {
             DB::rollBack();
-
+            Log::error($e->getMessage());
             return redirect()
                 ->back()
                 ->with('error', 'System eror' . $e->getMessage());

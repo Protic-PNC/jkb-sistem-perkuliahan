@@ -11,10 +11,16 @@ class Position extends Model
     use HasFactory;
 
     protected $fillable= [
-        'name'
+        'name',
+        'prodi_id'
     ];
 
     public function lecturer(){
         return $this->belongsTo(Lecturer::class);
+    }
+
+    public function prodis()
+    {
+        return $this->belongsTo(StudyProgram::class, 'prodi_id', 'id');
     }
 }

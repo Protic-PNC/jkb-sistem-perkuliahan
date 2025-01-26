@@ -22,12 +22,39 @@
                 <form action="{{ route('masterdata.positions.store') }}" method="POST">
                     @csrf
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                        <div class="sm:col-span-2">
-                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Jabatan</label>
-                            <input type="text" name="name" id="name"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Masukan Jabatan" required="">
-                        </div>
+                        
+                        <div>  
+                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">  
+                                Jabatan  
+                            </label>  
+                            <select id="name" name="name"   
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg   
+                                           focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5   
+                                           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400   
+                                           dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">  
+                                <option value="" disabled selected>Pilih Jabatan</option>  
+                                <option value="Kepala Jurusan">Kepala Jurusan Komputer dan Bisnis</option>  
+                                <option value="Sekretaris Jurusan">Sekretaris Jurusan Komputer dan Bisnis</option>  
+                                <option value="Koordinator Program Studi">Koordinator Program Studi</option>  
+                            </select>  
+                        </div>  
+                          
+                        <div id="prodi-container" style="display: none;">  
+                            <label for="prodi_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">  
+                                Program Studi  
+                            </label>  
+                            <select id="prodi_id" name="prodi_id"   
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg   
+                                           focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5   
+                                           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400   
+                                           dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">  
+                                <option value="" disabled selected>Pilih Program Studi</option>  
+                                @foreach ($prodis as $prodi)  
+                                    <option value="{{ $prodi->id }}">{{ $prodi->name }}</option>  
+                                @endforeach  
+                            </select>  
+                        </div>  
+                        
                         
                         
                     </div>
@@ -37,6 +64,20 @@
                     </button>
                 </form>
             </div>
+            <script>  
+                document.addEventListener('DOMContentLoaded', function() {  
+                    const jabatanSelect = document.getElementById('name');  
+                    const prodiContainer = document.getElementById('prodi-container');  
+              
+                    jabatanSelect.addEventListener('change', function() {  
+                        if (jabatanSelect.value === 'Koordinator Program Studi') {  
+                            prodiContainer.style.display = 'block'; // Show the prodi_id dropdown  
+                        } else {  
+                            prodiContainer.style.display = 'none'; // Hide the prodi_id dropdown  
+                        }  
+                    });  
+                });  
+            </script>  
         </section>
     @endsection
 </x-app-layout>

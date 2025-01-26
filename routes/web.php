@@ -90,7 +90,8 @@ Route::middleware('auth')->group(function () {
 
     //dosen->daftar matkul->daftar kelas->jurnal dan absensi
     Route::prefix('lecturer')->name('lecturer.')->group(function(){
-        Route::get('/index/{nidn}', [L_LecturerDocumentController::class, 'index'])->name('index');
+        Route::get('/dokumen-perkuliahan/{nidn}', [L_LecturerDocumentController::class, 'index'])->name('dokumen_perkuliahan');
+        Route::get('/daftar-dokumen-perkuliahan/{nidn}', [L_LecturerDocumentController::class, 'index2'])->name('daftar_dokumen_perkuliahan');
         
         Route::post('/lecturer_document/store', [L_LecturerDocumentController::class, 'store'])->name('lecturer_document.store');
         Route::get('/lecturer_document/edit/{id}', [L_LecturerDocumentController::class,'edit'])->name('lecturer_document.edit');

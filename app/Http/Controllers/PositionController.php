@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Position;
+use App\Models\StudyProgram;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -21,7 +22,7 @@ class PositionController extends Controller
             });
         }
 
-        $data = $query->paginate(5);
+        $data = $query->with('prodis')->paginate(5);  
         return view('masterdata.positions.index', compact('data'));
     }
 
@@ -30,7 +31,8 @@ class PositionController extends Controller
      */
     public function create()
     {
-        return view('masterdata.positions.create');
+        $prodis = StudyProgram::all();
+        return view('masterdata.positions.create', compact('prodis'));
     }
 
     /**
@@ -38,13 +40,17 @@ class PositionController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'name'=>'required|string|max:255',
-            
+            'prodi_id'=>'nullable|exists:study_programs,id'
         ]);
         DB::beginTransaction();
         try{
-            $newJabatan= Position::create($validated);
+            $p = new Position();
+            $p->name = $request->name;
+            $p->prodi_id = $request->prodi_id;
+            $p->save();
             DB::commit();
             return redirect()->route('masterdata.positions.index')->with('success', 'Position Berhasil Disimpan');
         }catch(\Exception $e){
@@ -99,7 +105,7 @@ class PositionController extends Controller
     {
         try{
             $position->delete();
-            return redirect()->back()->with('success','Position deleted sussesfully');
+            return redirect()->back()->with('success','Jabatan Berhasil Dihapus');
         }
         catch(\Exception $e){
             DB::rollBack();

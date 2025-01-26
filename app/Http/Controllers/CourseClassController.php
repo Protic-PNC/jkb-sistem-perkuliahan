@@ -79,10 +79,10 @@ class CourseClassController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CourseClass $student_class)
+    public function destroy(CourseClass $course_class)
     {
         try{
-            $student_class->delete();
+            $course_class->delete();
             return redirect()->back()->with('success','Course Class deleted sussesfully');
         }
         catch(\Exception $e){
