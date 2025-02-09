@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Super_Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceList;
+use App\Models\AttendanceListDetail;
 use App\Models\Courses;
 use App\Models\Journal;
 use App\Models\Lecturer;
 use App\Models\StudentClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class A_Lecturer_DocumentController extends Controller
@@ -19,18 +21,7 @@ class A_Lecturer_DocumentController extends Controller
      */
     public function index(Request $request)
     {
-        $attendanceLists = AttendanceList::select(
-            'attendance_lists.id',
-            'attendance_lists.student_class_id',
-            'attendance_lists.course_id',
-            'attendance_lists.lecturer_id',
-            'student_classes.name as student_class_name',
-            'courses.name as course_name',
-            'lecturers.name as lecturer_name'
-        )
-        ->join('student_classes', 'attendance_lists.student_class_id', '=', 'student_classes.id')
-        ->join('courses', 'attendance_lists.course_id', '=', 'courses.id')
-        ->join('lecturers', 'attendance_lists.lecturer_id', '=', 'lecturers.id');
+        $attendanceLists = AttendanceList::with('student_class', 'course', 'lecturer');
         
         // Jika ada parameter pencarian
         if ($request->has('search')) {
@@ -75,7 +66,6 @@ class A_Lecturer_DocumentController extends Controller
     }
     public function store(Request $request)
     {
-        // Validasi input
         $validator = Validator::make($request->all(), [
             'code_al' => 'required|string|unique:attendance_lists,code_al',
             'student_class_id' => 'required|exists:student_classes,id',
@@ -85,19 +75,22 @@ class A_Lecturer_DocumentController extends Controller
 
         // Jika validasi gagal
         if ($validator->fails()) {
+            Log::error('Validation failed: ' . json_encode($validator->errors()->all()));
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
+            Log::info('Database transaction started.');
 
             // Cek apakah kombinasi course_id dan lecturer_id sudah ada
             $existingAttendance = AttendanceList::where('course_id', $request->course_id)
                 ->where('lecturer_id', $request->lecturer_id)
+                ->where('student_class_id', $request->student_class_id)
                 ->first();
 
             if ($existingAttendance) {
-                // Jika kombinasi course_id dan lecturer_id sudah ada, kembalikan pesan error
+                Log::warning('Duplicate attendance entry detected: course_id = ' . $request->course_id . ', lecturer_id = ' . $request->lecturer_id);
                 return redirect()
                     ->back()
                     ->withInput()
@@ -111,24 +104,24 @@ class A_Lecturer_DocumentController extends Controller
             $al->course_id = $request->course_id;
             $al->lecturer_id = $request->lecturer_id;
             $al->save();
+            Log::info('AttendanceList saved successfully.');
 
             // Simpan data Journal
             $journal = new Journal();
-            $journal->student_class_id = $request->student_class_id;
-            $journal->course_id = $request->course_id;
-            $journal->lecturer_id = $request->lecturer_id;
+            $journal->attendance_list_id = $al->id;
             $journal->save();
+            Log::info('Journal saved successfully.');
 
             DB::commit();
+            Log::info('Database transaction committed.');
             return redirect()->route('masterdata.lecturer_documents.index')->with('success', 'Daftar Hadir dan Jurnal berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', 'System error: ' . $e->getMessage());
+            Log::error('Database transaction rolled back due to exception: ' . $e->getMessage());
+            return redirect()->back()->with('errors', 'System error: ' . $e->getMessage());
         }
-    }
+    
+}
 
     /**
      * Display the specified resource.
@@ -157,7 +150,6 @@ public function update(Request $request, $id)
 {
     // Find the AttendanceList
     $attendanceList = AttendanceList::findOrFail($id);
-    $journal = Journal::findOrFail($id);
 
     // Validate the request data
     $validator = Validator::make($request->all(), [
@@ -180,16 +172,11 @@ public function update(Request $request, $id)
         'course_id' => $request->course_id,
         'lecturer_id' => $request->lecturer_id,
     ]);
-    $journal->update([
-        'student_class_id' => $request->student_class_id,
-        'course_id' => $request->course_id,
-        'lecturer_id' => $request->lecturer_id,
-    ]);
 
     // Redirect with success message
-    return redirect()->route('masterdata.lecturer_documents.index')
-        ->with('success', 'Daftar Hadir berhasil diperbarui.');
-}
+        return redirect()->route('masterdata.lecturer_documents.index')
+            ->with('success', 'Daftar Hadir berhasil diperbarui.');
+    }
     
 
     /**
@@ -198,16 +185,35 @@ public function update(Request $request, $id)
     public function destroy($id)
     {
         $al = AttendanceList::find($id);
-        $j =Journal::find($id);
         try{
             $al->delete();
-            $j->delete();
-            return redirect()->back()->with('succes','Course deleted sussesfully');
+            return redirect()->back()->with('success','Course deleted sussesfully');
         }
         catch(\Exception $e){
             DB::rollBack();
 
-            return redirect()->back()->with('error', 'System eror'.$e->getMessage());
+            return redirect()->back()->with('errors', 'System eror'.$e->getMessage());
         }
+    }
+
+    public function absensi_perkuliahan($id)
+    {
+        $data = AttendanceList::findOrFail($id);
+        
+        $student_class = StudentClass::with(['students', 'course'])
+            ->where('id', $data->student_class_id)
+            ->firstOrFail();
+            $semester = $data->student_class->calculateSemester();
+            $academicYear = $student_class->calculateAcademicYear($semester);
+
+            $students = $student_class->students;
+
+            $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)->get();
+
+        return view('masterdata.a_lecturer_document.absensi_index', compact('data', 'semester', 'academicYear', 'students','attendencedetail'));
+    }
+    public function jurnal_perkuliahan()
+    {
+
     }
 }

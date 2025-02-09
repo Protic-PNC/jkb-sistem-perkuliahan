@@ -54,7 +54,7 @@
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
                                     </td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $d->student_class->name }} - {{ $d->student_class->academic_year }}</td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $d->student_class->study_program->name }} - {{ $d->student_class->level }} {{ $d->student_class->name }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $d->course->name }}</td>
                                     
                                     <td class="px-3 py-2 justify-center">

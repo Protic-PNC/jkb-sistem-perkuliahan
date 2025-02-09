@@ -16,13 +16,16 @@ class AttendanceList extends Model
         'code_al',
         'lecturer_id',
         'course_id',
-        'has_finished',
-        'has_acc_kajur',
         'student_class_id',
-        'signature_kajur',
-        'date_signature_kajur',
-        'lecturer_id',
+        'has_finished',
+        'date_finished',
+        'has_acc_kajur',
+        'date_acc_kajur',
+        'student_id',
+        'lecturer_kajur_id',
     ];
+
+    //has finished, jika 0 = aktif, 1 = dokumen selesai, 2 acc kajur
 
     public function lecturer(){
         return $this->belongsTo(Lecturer::class, 'lecturer_id', 'id');
@@ -35,10 +38,10 @@ class AttendanceList extends Model
     }
 
     public function attendanceListDetails(){ //attendence list details
-        return $this->hasMany(AttendanceListDetail::class);
+        return $this->belongsTo(AttendanceListDetail::class);
     }
 
     public function journal(){
-        return $this->hasOne(Journal::class);
+        return $this->belongsTo(Journal::class, 'attendance_list_id', 'id' );
     } //1 daftar hadir punay 1 jurnal
 }

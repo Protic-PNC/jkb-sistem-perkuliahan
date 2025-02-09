@@ -58,7 +58,7 @@
                                     <td class="px-3 py-2 text-slate-800">{{ $d->course->name }}</td>
                                     
                                     <td class="px-3 py-2 flex space-x-2 justify-center ">
-                                        <a href="{{ route('lecturer.lecturer_document.details', $d->id) }}"
+                                        <a href="{{ route('student.lecturer_document.details', $d->id) }}"
                                             class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                             Pilih Dokumen
                                         </a>

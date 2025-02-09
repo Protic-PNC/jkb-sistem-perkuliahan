@@ -96,14 +96,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="m-3 flex items-center justify-between">
-                        <a href="{{ route('lecturer.lecturer_document.create', $data->id) }}" class="inline-block">
-                            <button type="button"
-                                class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-5 text-center">
-                                Tambah Detail Pertemuan
-                            </button>
-                        </a>
-                    </div>
+                    
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4 border-collapse">
                         <thead class="text-xs uppercase bg-gray-900 text-white">
                             <tr>
@@ -128,19 +121,12 @@
                                     @endif
                                 </td>
                                 <td class="px-3 py-2 text-center align-middle flex space-x-1 justify-center">
+                                    @if (($d->has_acc_student == 0) && !empty($d->sum_attendance_students))
+                                    <button type="button" id="btn-verifikasi{{ $d->id }}" class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center" onclick="openModalVerifikasi('{{ $d->id }}', '{{ route('student.lecturer_document.verifikasi', $d->id) }}')">
+                                        <i class="fa fa-check"></i> Verifikasi </button>
+                                    @endif
                                     
-                                    <a href="{{ route('lecturer.lecturer_document.edit', $d->id) }}"
-                                        class="inline-flex items-center justify-center  text-center font-medium bg-yellow-400 text-white px-2 py-1 rounded-md hover:bg-yellow-500 transition duration-300">
-                                        <svg class="w-4 h-4 mr-1 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
-                                        </svg>
-                                        Edit Detail
-                                    </a>
-                                    <a href="{{ route('lecturer.lecturer_document.absensi', $d->id) }}" class="inline-block">
-                                        <button type="button" class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center">
-                                            Isi Absensi
-                                        </button>
-                                    </a>
+                                    
                                 </td>
                             </tr>
                             @empty
@@ -152,40 +138,35 @@
                     </table>
                     
                 </div>
-               
-                <div class="m-3">
-                    <button type="button" id="btn-verifikasi" class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center" onclick="openModalSelesai('{{ route('lecturer.lecturer_document.selesai', $data->id) }}')">
-                        <i class="fa fa-check"></i> Perkuliahan Selesai </button>         
-
-                </div>
-                                    
             </div>
-            <div id="Selesai-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-50">
+            <div id="verifikasi-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-50">
                 <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
-                    <h2 class="text-lg font-semibold mb-4">Konfirmasi Selesai</h2>
-                    <p class="mb-4">Apakah Daftar Hadir dan Jurnal Perkuliahan Telah Selesai?</p>
+                    <h2 class="text-lg font-semibold mb-4">Konfirmasi Verifikasi</h2>
+                    <p class="mb-4">Apakah Anda yakin ingin Verifikasi data ini?</p>
                     <div class="flex justify-end">
-                        <button id="cancel-button" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2" onclick="closeModalSelesai()">Batal</button>
-                        <button id="confirm-button" class="bg-green-600 text-white px-4 py-2 rounded-md" onclick="confirmSelesai()">Selesai</button>
+                        <button id="cancel-button" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2" onclick="closeModalVerifikasi()">Batal</button>
+                        <button id="confirm-button" class="bg-green-600 text-white px-4 py-2 rounded-md" onclick="confirmVerifikasi()">Verifikasi</button>
                     </div>
                 </div>
             </div>
-        </section>
-        <script>
-            let SelesaiId = null;
-        let SelesaiUrl = '';
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+        let verifikasiId = null;
+        let verifikasiUrl = '';
     
-        function openModalSelesai(id, url) {
-            SelesaiId = id;
-            SelesaiUrl = url;
-            document.getElementById('Selesai-modal').classList.remove('hidden');
+        function openModalVerifikasi(id, url) {
+            verifikasiId = id;
+            verifikasiUrl = url;
+            document.getElementById('verifikasi-modal').classList.remove('hidden');
         }
-        function closeModalSelesai() {
-            document.getElementById('Selesai-modal').classList.add('hidden');
+        function closeModalVerifikasi() {
+            document.getElementById('verifikasi-modal').classList.add('hidden');
         }
     
-        function confirmSelesai() {
-            closeModalSelesai(); // Menutup modal
+        function confirmVerifikasi() {
+            closeModalVerifikasi(); // Menutup modal
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = verifikasiUrl;
@@ -205,7 +186,9 @@
             document.body.appendChild(form);
             form.submit(); // Mengirimkan form
         }
-        </script>
+        
+    </script>
+
 
         @push('after-script')
             <script>

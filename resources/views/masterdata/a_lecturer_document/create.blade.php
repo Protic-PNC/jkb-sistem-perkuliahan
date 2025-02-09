@@ -7,8 +7,7 @@
         <section class="bg-white dark:bg-gray-900">
             <div class="py-4 px-2 mx-auto lg:m-8 sm:m-4">
                 @if ($errors->any())
-                    <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
-                        role="alert">
+                    <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
                         <span class="font-medium">Whoops!</span> There were some problems with your input.
                         <ul class="mt-2 list-disc pl-5">
                             @foreach ($errors->all() as $error)
@@ -17,15 +16,7 @@
                         </ul>
                     </div>
                 @endif
-                @if ($errors->has('error'))
-                    <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
-                        role="alert">
-                        <span class="font-medium">Whoops!</span> There was a problem with your input.
-                        <ul class="mt-2 list-disc pl-5">
-                            <li>{{ $errors->first('error') }}</li>
-                        </ul>
-                    </div>
-                @endif
+                
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambah Daftar Hadir</h2>
                 <form action="{{ route('masterdata.lecturer_documents.store') }}" method="POST"
                     enctype="multipart/form-data">

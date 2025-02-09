@@ -18,7 +18,6 @@ class Lecturer extends Model
         'nip',
         'signature',
         'user_id',
-        'course_id',
         'position_id',
     ];
 

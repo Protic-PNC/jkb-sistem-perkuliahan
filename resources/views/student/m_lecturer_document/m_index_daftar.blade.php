@@ -54,13 +54,28 @@
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
                                     </td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $d->student_class->study_program->name }} {{ $d->student_class->level }} {{ $d->student_class->name }} </td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $d->student_class->name }} - {{ $d->student_class->academic_year }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $d->course->name }}</td>
                                     
-                                    <td class="px-3 py-2 flex space-x-2 justify-center ">
-                                        <a href="{{ route('lecturer.lecturer_document.details', $d->id) }}"
-                                            class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
-                                            Pilih Dokumen
+                                    <td class="px-3 py-2 justify-center">
+                                        <a href="#"  
+                                            class="inline-flex items-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
+                                            <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                fill="currentColor" viewBox="0 0 24 24">
+                                                <path fill-rule="evenodd"
+                                                    d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            <span>Absensi Perkuliahan</span>
+                                        </a>
+                                        <a href="#"
+                                            class="inline-flex items-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
+                                            <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
+                                                    d="M10 3v4a1 1 0 0 1-1 1H5m14-4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" />
+                                            </svg>
+                                            <span>Jurnal Perkuliahan</span>
                                         </a>
                                     </td>
                                 </tr>

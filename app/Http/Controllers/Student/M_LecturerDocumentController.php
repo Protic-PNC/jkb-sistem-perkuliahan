@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Lecturer;
+namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceList;
@@ -12,19 +12,20 @@ use App\Models\JournalDetail;
 use App\Models\Lecturer;
 use App\Models\Student;
 use App\Models\StudentClass;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class L_LecturerDocumentController extends Controller
+class M_LecturerDocumentController extends Controller
 {
-    public function index(Request $request, string $nidn)
+    public function index(Request $request, string $id)
     {
         $user = Auth::user();
-        $attendanceLists = AttendanceList::select('attendance_lists.id', 'attendance_lists.student_class_id', 'attendance_lists.course_id', 'attendance_lists.lecturer_id');
+
+        $attendanceLists = AttendanceList::select('attendance_lists.id', 'attendance_lists.student_class_id', 'attendance_lists.course_id')->where('student_class_id', $user->student->student_class_id);
 
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -38,7 +39,7 @@ class L_LecturerDocumentController extends Controller
 
         $data = $attendanceLists->paginate(5);
 
-        return view('lecturer.l_lecturer_document.index', compact('user', 'data'));
+        return view('student.m_lecturer_document.m_index', compact('user', 'data'));
     }
 
     public function details($id)
@@ -58,7 +59,7 @@ class L_LecturerDocumentController extends Controller
 
         $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)->first();
 
-        return view('lecturer.l_lecturer_document.details', compact( 'data', 'details','semester', 'academicYear', 'students'));
+        return view('student.m_lecturer_document.m_details', compact( 'data', 'details','semester', 'academicYear', 'students'));
     }
 
     public function create($id)
@@ -70,7 +71,7 @@ class L_LecturerDocumentController extends Controller
         $selectedMeetings = AttendanceListDetail::where('attendance_list_id', $al->id)
             ->pluck('meeting_order')
             ->toArray();
-        return view('lecturer.l_lecturer_document.create', compact('al', 'selectedMeetings', 'students'));
+        return view('student.m_lecturer_document.m_create', compact('al', 'selectedMeetings', 'students'));
     }
 
     public function store(Request $request)
@@ -107,13 +108,14 @@ class L_LecturerDocumentController extends Controller
             // Simpan data Journal
             $jo = new JournalDetail();
             $jo->journal_id = $journal->id;
-            $jo->attendance_list_detail_id = $al->id;
+            $jo->meeting_order = $request->meeting_order;
+            $jo->course_status = $request->course_status;
             $jo->material_course = $request->material_course;
             $jo->learning_methods = $request->learning_methods;
             $jo->save();
 
             DB::commit();
-            return redirect()->route('lecturer.lecturer_document.details',  $atendance->id)->with('success', 'Daftar Hadir dan Jurnal berhasil disimpan');
+            return redirect()->route('student.lecturer_document.m_details',  $atendance->id)->with('success', 'Daftar Hadir dan Jurnal berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()
@@ -128,7 +130,8 @@ class L_LecturerDocumentController extends Controller
     public function edit(string $id)
     {
         $ad = AttendanceListDetail::find($id);
-        $al = AttendanceList::where('id', $ad->attendance_list_id )->first();
+        $journal = JournalDetail::find($id);
+        $al = AttendanceList::first();
 
         $students = Student::where('student_class_id', $al->student_class_id);
 
@@ -136,7 +139,7 @@ class L_LecturerDocumentController extends Controller
             ->pluck('meeting_order')
             ->toArray();
 
-        return view('lecturer.l_lecturer_document.edit', compact('ad', 'al', 'selectedMeetings', 'students'));
+        return view('student.m_lecturer_document.m_edit', compact('ad', 'al', 'selectedMeetings', 'students', 'journal'));
     }
 
     public function update(string $id, Request $request)
@@ -172,12 +175,15 @@ class L_LecturerDocumentController extends Controller
 
             // Simpan data Journal
             $jo = JournalDetail::find($id);
+            $jo->journal_id = $journal->id;
+            $jo->meeting_order = $request->meeting_order;
+            $jo->course_status = $request->course_status;
             $jo->material_course = $request->material_course;
             $jo->learning_methods = $request->learning_methods;
             $jo->save();
 
             DB::commit();
-            return redirect()->route('lecturer.lecturer_document.details',  $atendance->id)->with('success', 'Daftar Hadir dan Jurnal berhasil diubah');
+            return redirect()->route('student.lecturer_document.details',  $atendance->id)->with('success', 'Daftar Hadir dan Jurnal berhasil diubah');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()
@@ -199,7 +205,7 @@ class L_LecturerDocumentController extends Controller
         $attendances = AttendanceListStudent::where('attendance_list_detail_id', $ad->id)->get();
 
 
-        return view('lecturer.l_lecturer_document.absensi', compact('al', 'ad', 'student_classes', 'attendance', 'attendances'));
+        return view('student.m_lecturer_document.m_absensi', compact('al', 'ad', 'student_classes', 'attendance', 'attendances'));
     }
     public function storeStudents(Request $request)
     {
@@ -254,12 +260,13 @@ class L_LecturerDocumentController extends Controller
                 'has_acc_lecturer' => 1,
             ]);
             JournalDetail::where('id', $attendanceListDetailId)->update([
-                
+                'sum_attendance_students' => $sumAttendance,
+                'sum_late_students' => $sumLateAttendance,
                 'has_acc_lecturer' => 1,
             ]);
 
             DB::commit();
-            return redirect()->route('lecturer.lecturer_document.details', $dh->id)->with('success', 'Daftar Hadir dan Jurnal Detail Berhasil Di simpan!');
+            return redirect()->route('student.lecturer_document.m_details', $dh->id)->with('success', 'Daftar Hadir dan Jurnal Detail Berhasil Di simpan!');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()
@@ -286,7 +293,7 @@ class L_LecturerDocumentController extends Controller
     
             return $student;
         });
-        return view('lecturer.l_lecturer_document.edit_student', compact('al', 'ad', 'student_classes', 'attendances'));
+        return view('student.m_lecturer_document.m_edit_student', compact('al', 'ad', 'student_classes', 'attendances'));
     }
 
     public function update_student(Request $request)
@@ -342,11 +349,13 @@ class L_LecturerDocumentController extends Controller
             ]);
 
             JournalDetail::where('id', $attendanceListDetailId)->update([
+                'sum_attendance_students' => $sumAttendance,
+                'sum_late_students' => $sumLateAttendance,
                 'has_acc_lecturer' => 1,
             ]);
 
             DB::commit();
-            return redirect()->route('lecturer.lecturer_document.details',  $dh->id)->with('success', 'Daftar Hadir dan Jurnal Detail Berhasil Di simpan!');
+            return redirect()->route('student.lecturer_document.m_details',  $dh->id)->with('success', 'Daftar Hadir dan Jurnal Detail Berhasil Di simpan!');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()
@@ -372,45 +381,19 @@ class L_LecturerDocumentController extends Controller
 
         $data = $attendanceLists->paginate(5);
 
-        return view('lecturer.l_lecturer_document.index_daftar', compact('user', 'data'));
+        return view('student.m_lecturer_document.m_index_daftar', compact('user', 'data'));
     }
 
-    // public function selesai($id)
-    // {
-    //     $al_detail = AttendanceListDetail::find($id);
-    //     DB::beginTransaction();
-    //     try{
-            
-    //         $user = Auth::user();
-    //         $al_detail->has_acc_student = 1;
-    //         $al_detail->student_id = $user->student->id;
-    //         $al_detail->save();
-    //         DB::commit();
-    //         return redirect()
-    //             ->back()
-    //             ->with('success', 'Data Berhasil Di Verifikasi!');
-    //     }catch (\Exception $e) {
-    //         DB::rollBack();
-    //         return redirect()
-    //             ->back()
-    //             ->with('error', 'Error Saat Verifikasi: ' . $e->getMessage());
-    //     }
-    // }
-
-    public function selesai_document($id)
+    public function verifikasi($id)
     {
-        $al = AttendanceList::findOrFail($id);
-        Log::info('$al');
-        $journal = Journal::where('attendance_list_id', $al->id)->first();
-
+        $al_detail = AttendanceListDetail::find($id);
         DB::beginTransaction();
         try{
             
             $user = Auth::user();
-            $al->has_finished = 1;
-            $al->save();
-            $journal->has_finished= 1;
-            $journal->save();
+            $al_detail->has_acc_student = 1;
+            $al_detail->student_id = $user->student->id;
+            $al_detail->save();
             DB::commit();
             return redirect()
                 ->back()
@@ -421,6 +404,5 @@ class L_LecturerDocumentController extends Controller
                 ->back()
                 ->with('error', 'Error Saat Verifikasi: ' . $e->getMessage());
         }
-    
     }
 }

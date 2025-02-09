@@ -21,12 +21,15 @@ return new class extends Migration
             $table->integer('end_hour')->nullable(); //jam pertemuan 2 
             $table->string('meeting_hour')->nullable(); //opsional, 1 sd 2
             $table->integer('sum_attendance_students')->nullable(); //jumlah kehadiran
-            $table->boolean('has_acc_student')->default(0);
-            $table->boolean('has_acc_lecturer')->default(0);
-            $table->string('signature_student')->nullable();
-            $table->string('signature_lecturer')->nullable();
+            $table->integer('sum_late_students')->nullable();
+            $table->boolean('has_acc_student')->default(1);
+            $table->boolean('has_acc_lecturer')->default(1);
+            $table->foreignId('student_id')->nullable()->constrained('students')->onDelete('cascade');
+            $table->dateTime('date_acc_student')->nullable();
+            $table->dateTime('date_acc_lecturer')->nullable();
             $table->timestamps();
         });
+        //lecturer_id ada di attendance_list
     }
 
     /**

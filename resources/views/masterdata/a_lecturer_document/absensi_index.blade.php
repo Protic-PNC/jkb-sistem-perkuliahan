@@ -36,60 +36,56 @@
                 <!-- Error and success messages remain unchanged -->
 
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border border-slate-800">
+                    
+                    <table class="w-full border-collapse font-sans border border-slate-800">
                         <thead>
                             <tr class="bg-gray-900 text-white">
-                                <th colspan="3" class="px-6 py-3 text-center">DAFTAR HADIR KULIAH</th>
+                                <th colspan="4" class="p-3 text-center text-lg font-bold">DAFTAR HADIR KULIAH</th>
                             </tr>
                             <tr class="bg-gray-100 text-gray-700">
-                                <th colspan="3" class="px-6 py-2 text-center ">JURUSAN TEKNIK INFORMATIKA - PROGRAM STUDI
-                                    D3 TEKNIK INFORMATIKA</th>
+                                <th colspan="4" class="p-2 text-center text-sm font-medium uppercase">JURUSAN TEKNIK INFORMATIKA - PROGRAM STUDI {{  $data->student_class->study_program->jenjang }} -
+                                    {{ $data->student_class->study_program->name }}</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="text-sm">
                             <tr>
-                                <td class="px-6 py-2">Mata Kuliah</td>
-                                <td class="px-6 py-2">: {{ $course->name }}</td>
-                                <td class="px-6 py-2">SKS : {{ $course->sks }}</td>
+                                <td class="p-2 w-1/5">Mata Kuliah</td>
+                                <td class="p-2 w-2/5">: {{ $data->course->name }}</td>
+                                <td class="p-2 w-1/5">SKS</td>
+                                <td class="p-2 w-1/5">: {{ $data->course->sks }}</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="p-2">Semester</td>
+                                <td class="p-2">: {{ $semester }}</td>
+                                <td class="p-2">Kelas</td>
+                                <td class="p-2">: {{ $data->student_class->study_program->name }} {{ $data->student_class->level }} {{ $data->student_class->name }}</td>
                             </tr>
                             <tr>
-                                <td class="px-6 py-2">Semester</td>
-                                <td class="px-6 py-2">: {{ $semester }}</td>
-                                <td class="px-6 py-2">Kelas : {{ $student_class->name }}</td>
+                                <td class="p-2">Dosen</td>
+                                <td class="p-2">: {{ $data->lecturer->name }}</td>
+                                <td class="p-2">Tahun Akademik</td>
+                                <td class="p-2">: {{ $academicYear }}</td>
                             </tr>
-                            <tr>
-                                <td class="px-6 py-2">Dosen</td>
-                                <td colspan="2" class="px-6 py-2">: {{ $lecturer->name }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-2">Jam Perkuliahan</td>
-                                <td class="px-6 py-2">: {{ $course->hours }} Jam</td>
-                                <td class="px-6 py-2">Tahun Akademik : {{ $academicYear }}</td>
+                            <tr class="bg-gray-50">
+                                <td class="p-2">Jam Perkuliahan</td>
+                                <td class="p-2">: {{ $data->course->hours }} Jam</td>
+                                <td class="p-2"></td>
+                                <td class="p-2"></td>
                             </tr>
                         </tbody>
                     </table>
-                    <div class="mb-3 flex items-center justify-between">
-                        <a href="#" class="inline-block">
-                            <button type="button"
-                                class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-5 text-center">
-                                Tambah Data
-                            </button>
-                        </a>
-
-
-                    </div>
-
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4 border border-slate-800">
+                    
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border border-slate-800">
                         <thead class="text-xs uppercase bg-gray-900 text-white">
                             <tr>
                                 <th rowspan="2" class="px-6 py-3 text-center border border-slate-800">NO</th>
                                 <th rowspan="2" class="px-6 py-3 text-center border border-slate-800">NPM</th>
                                 <th rowspan="2" class="px-6 py-3 text-center border border-slate-800">NAMA</th>
-                                <th colspan="16" class="px-6 py-3 text-center border border-slate-800">PERTEMUAN KE-</th>
+                                <th colspan="{{ $data->course->meeting }}" class="px-6 py-3 text-center border border-slate-800">PERTEMUAN KE-</th>
                                 <th rowspan="2" class="px-6 py-3 text-center border border-slate-800">Catatan</th>
                             </tr>
                             <tr>
-                                @for ($i = 1; $i <= $course->meeting; $i++)
+                                @for ($i = 1; $i <= $data->course->meeting; $i++)
                                     <th class="px-1 py-1 border border-slate-800">
                                         <div class="attendance-header">{{ $i }}</div>
                                         <div class="attendance-header">A | T</div>
@@ -104,14 +100,24 @@
                                     <td class="px-2 py-2 text-center border border-slate-800">{{ $loop->iteration }}</td>
                                     <td class="px-2 py-2 border border-slate-800">{{ $student->nim }}</td>
                                     <td class="px-2 py-2 border border-slate-800">{{ $student->name }}</td>
-                                    @for ($i = 1; $i <= $course->meeting; $i++)
-                                        <td class="px-1 py-1 border border-slate-800">
-                                            <div class="attendance-cell flex flex-row items-center justify-center">
-                                                <div class="text-xs font-bold border border-slate-800 p-1">A</div>
-                                                <div class="text-xs font-bold border border-slate-800 p-1">T</div>
-                                            </div>
-                                        </td>
-                                    @endfor
+                                    @for ($i = 1; $i <= $data->course->meeting; $i++)  
+                                    <td class="px-1 py-1 border border-slate-800">  
+                                        <div class="attendance-cell flex flex-row items-center justify-center">  
+                                            @php  
+                                                // Fetch the attendance record for the specific meeting  
+                                                $attendanceRecord = $student->attendence_list_student->where('attendance_list_detail_id', $i)->first();  
+                                            @endphp  
+                                            
+                                            @if ($attendanceRecord)  
+                                                <div class="text-xs font-bold border border-slate-800 p-1">{{ $attendanceRecord->attendance_student }}</div>  
+                                            @else  
+                                                <div class="text-xs font-bold border border-slate-800 p-1">-</div>  
+                                            @endif  
+                                            
+                                            <div class="text-xs font-bold border border-slate-800 p-1">T</div>  
+                                        </div>  
+                                    </td>  
+                                @endfor  
                                     <td class="px-6 py-2 border border-slate-800"></td>
                                 </tr>
                                 <!-- Add more student rows as needed -->
@@ -121,15 +127,16 @@
                             <!-- Additional rows to maintain alignment -->
                             <tr>
                                 <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800 ">Jumlah mahasiswa</td>
-                                @for ($i = 1; $i <= $course->meeting; $i++)
-                                    <td class="px-1 py-1 text-center border border-slate-800">20</td>
-                                @endfor
-                                <td></td>
+                                
+                                @foreach ($attendencedetail as $ad)
+                                <td class="px-1 py-1 text-center border border-slate-800">{{ $ad->sum_attendance_students ?? ' ' }} | </td>
+                                @endforeach
+                                    
                             </tr>
                             <tr>
                                 <td colspan="3" class="px-6 py-2 text-lef font-semibold border border-slate-800">Tanda tangan ketua
                                     kelas/mahasiswa</td>
-                                @for ($i = 1; $i <= $course->meeting; $i++)
+                                @for ($i = 1; $i <= $data->course->meeting; $i++)
                                     <td class="px-1 py-1 border border-slate-800">
                                         <div class="signature-line"></div>
                                     </td>
@@ -139,7 +146,7 @@
                             <tr>
                                 <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800">Tanda tangan dosen pengampu
                                 </td>
-                                @for ($i = 1; $i <= $course->meeting; $i++)
+                                @for ($i = 1; $i <= $data->course->meeting; $i++)
                                     <td class="px-1 py-1 border border-slate-800">
                                         <div class="signature-line"></div>
                                     </td>
@@ -148,21 +155,21 @@
                             </tr>
                             <tr>
                                 <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800">Tanggal pertemuan</td>
-                                @for ($i = 1; $i <= $course->meeting; $i++)
+                                @for ($i = 1; $i <= $data->course->meeting; $i++)
                                     <td class="px-1 py-1 text-center border border-slate-800">__/__/__</td>
                                 @endfor
                                 <td></td>
                             </tr>
                             <tr>
                                 <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800">Jam Perkuliahan</td>
-                                @for ($i = 1; $i <= $course->meeting; $i++)
+                                @for ($i = 1; $i <= $data->course->meeting; $i++)
                                     <td class="px-1 py-1 text-center border border-slate-800">_ s/d _</td>
                                 @endfor
                                 <td></td>
                             </tr>
                             <tr>
                                 <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800">Status pertemuan</td>
-                                @for ($i = 1; $i <= $course->meeting; $i++)
+                                @for ($i = 1; $i <= $data->course->meeting; $i++)
                                     <td class="px-1 py-1 text-center border border-slate-800">_</td>
                                 @endfor
                                 <td> </td>

@@ -63,9 +63,9 @@
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kelas</label>
                             <select id="student_class_id" name="student_class_id" 
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-primary-500 darkw:focus:border-primary-500">
-                                <option value="{{ $student->student_class_id }}" selected>{{ $student->student_class->name }} </option>
+                                <option value="{{ $student->student_class_id }}" selected> {{ $student->student_class->study_program->name }} {{ $student->student_class->level }} {{ $student->student_class->name }} </option>
                                 @foreach ($student_class as $sclass)
-                                    <option value="{{ $sclass->id }}">{{ $sclass->name }}</option>
+                                    <option value="{{ $sclass->id }}"> {{ $sclass->study_program->name }} {{ $sclass->level }} {{ $sclass->name }}</option>
                                 @endforeach
                             </select>
                         </div>

@@ -12,13 +12,12 @@ class Journal extends Model
 
     protected $table = 'journals';
     protected $fillable = [
-        'lecturer_id',
-        'course_id',
-        'student_class_id',
+        'attendance_list_id',
         'has_finished',
         'has_acc_kajur',
-        'signature_kajur',
-        'date_signature_kajur',
+        'lecturer_kajur_id',
+        'date_finished',
+        'date_acc_kajur',
 
     ];
 
@@ -31,6 +30,8 @@ class Journal extends Model
     public function student_class(){
         return $this->belongsTo(StudentClass::class);
     }
+
+   
 
     public function journalDetails(){
         return $this->hasMany(JournalDetail::class);

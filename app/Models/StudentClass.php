@@ -11,7 +11,7 @@ class StudentClass extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'code', 'academic_year', 'study_program_id', 'status'];
+    protected $fillable = ['name', 'code','level', 'academic_year', 'study_program_id', 'status'];
 
     public function study_program()
     {

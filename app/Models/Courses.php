@@ -17,7 +17,6 @@ class Courses extends Model
         'sks',
         'hours',
         'meeting',
-        'student_class_id',
     ];
 
     public function lecturer(){

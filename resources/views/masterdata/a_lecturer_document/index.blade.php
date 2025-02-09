@@ -22,6 +22,7 @@
                         <span class="font-medium">Success!</span> {{ session('success') }}
                     </div>
                 @endif
+               
                 <div class="mb-3 flex items-center justify-between">
                     <a href="{{ route('masterdata.lecturer_documents.create') }}" class="inline-block">
                         <button type="button"
@@ -75,10 +76,10 @@
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
                                     </td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $d->student_class_name }}</td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $d->course_name }}</td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $d->lecturer_name }}</td>
-                                    <td class="px-3 py-2 justify-center ">
+                                    <td class="px-3 py-2 text-slate-800">{{ $d->student_class->study_program->name }} {{ $d->student_class->level }}  {{ $d->student_class->name }}</td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $d->course->name }}</td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $d->lecturer->name }}</td>
+                                    <td class="px-3 py-2 flex space-x-2 justify-center ">
                                         <a href="{{ route('masterdata.lecturer_documents.edit', $d->id) }}"
                                             class="inline-flex items-center justify-center w-20 text-center font-medium bg-yellow-400 text-white px-3 py-2 rounded-md hover:bg-yellow-500 transition duration-300">
                                             <svg class="w-5 h-5 mr-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -88,19 +89,14 @@
                                             </svg>
                                             Edit
                                         </a>
-                                        <form action="{{ route('masterdata.lecturer_documents.destroy', $d->id) }}"
-                                            method="POST" class="inline-block">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="font-medium  bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline">
-                                                Hapus
-                                            </button>
-                                        </form>
+                                        
+                                        <button type="button" id="btn-hapus{{ $d->id }}" class="font-medium bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline" onclick="openModal('{{ $d->id }}', '{{ route('masterdata.lecturer_documents.destroy', $d->id) }}')">
+                                            <i class="fa fa-trash"></i> Hapus
+                                        </button>
                                     </td>
                                     
                                     <td class="px-3 py-2 justify-center">
-                                        <a href="#"  
+                                        <a href="{{ route('masterdata.lecturer_documents.absensi-perkuliahan', $d->id) }}"  
                                             class="inline-flex items-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                             <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                 fill="currentColor" viewBox="0 0 24 24">
@@ -144,6 +140,42 @@
                     }, 3000); // Time to show message before fading out
                 }
             });
+        </script>
+        <script>
+            let deleteId = null;
+            let deleteUrl = '';
+        
+            function openModal(id, url) {
+                deleteId = id;
+                deleteUrl = url;
+                document.getElementById('delete-modal').classList.remove('hidden');
+            }
+        
+            function closeModal() {
+                document.getElementById('delete-modal').classList.add('hidden');
+            }
+        
+            function confirmDelete() {
+                closeModal(); // Menutup modal
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = deleteUrl;
+        
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = '_token';
+                csrfInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+                const methodInput = document.createElement('input');
+                methodInput.type = 'hidden';
+                methodInput.name = '_method';
+                methodInput.value = 'DELETE';
+        
+                form.appendChild(csrfInput);
+                form.appendChild(methodInput);
+                document.body.appendChild(form);
+                form.submit(); // Mengirimkan form
+            }
         </script>
     @endsection
 </x-app-layout>

@@ -19,14 +19,21 @@ class AttendanceListDetail extends Model
         'end_hour',
         'meeting_hour',
         'sum_attendance_students',
+        'sum_late_students',
         'has_acc_student',
         'has_acc_lecturer',
-        'signature_student',
-        'signature_lecturer',
+        'student_id',
+        'date_acc_student',
+        'date_acc_lecturer',
     ];
 
     public function attendenceList(){
-        return $this->belongsTo(AttendanceList::class);
+        return $this->belongsTo(AttendanceList::class, 'attendance_list_id', 'id');
+    }
+
+    public function journal_detail()
+    {
+        return $this->belongsTo(JournalDetail::class  ,'id', 'attendance_list_detail_id');
     }
 
     

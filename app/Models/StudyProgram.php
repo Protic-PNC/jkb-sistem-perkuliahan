@@ -12,6 +12,7 @@ class StudyProgram extends Model
     protected $fillable = [
         'name',
         'jenjang',
+        'brief',
     ];
 
     public function student_class(){

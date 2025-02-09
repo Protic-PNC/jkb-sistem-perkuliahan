@@ -48,7 +48,7 @@
                             <select id="meeting_order" name="meeting_order"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 <option value="{{ $ad->meeting_order }}">Pertemuan ke {{ $ad->meeting_order }}</option>
-                                @for ($i = 1; $i <= $ad->attendenceList->course->meeting; $i++)
+                                @for ($i = 1; $i <= $al->course->meeting; $i++)
                                     @if (!in_array($i, $selectedMeetings))
                                         <option value="{{ $i }}">Pertemuan ke {{ $i }}</option>
                                     @endif
@@ -124,7 +124,7 @@
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pokok Bahasan</label>
                             <input type="text" name="material_course" id="material_course"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600  dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Isi Materi Pada Pertemuan Ini" value="{{ $ad->journal_detail->material_course }}" required="">
+                                placeholder="Isi Materi Pada Pertemuan Ini" value="{{ $journal->material_course }}" required="">
                         </div>
                         <div class="w-full">
                             <label for="learning_methods"
@@ -132,7 +132,7 @@
                                 Pertemuan</label>
                             <select id="learning_methods" name="learning_methods"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option value="{{ $ad->journal_detail->learning_methods }}">{{ $ad->journal_detail->learning_methods }}</option>
+                                <option value="{{ $journal->learning_methods }}">{{ $journal->learning_methods }}</option>
                                 <option value="Offline">Offline</option>
                                 <option value="Online">Online</option>
                             </select>

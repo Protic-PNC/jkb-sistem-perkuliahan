@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('journals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('lecturer_id')->constrained()->onDelete('cascade');
-            $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->foreignId('student_class_id')->constrained()->onDelete('cascade');
-            $table->boolean('has_finished')->default(0); //jika perulangan id selesai has_finished=1 
-            $table->boolean('has_acc_kajur')->default(0);
-            $table->string('signature_kajur')->nullable();
-            $table->date('date_signature_kajur')->nullable();
+            $table->foreignId('attendance_list_id')->constrained('attendance_lists')->onDelete('cascade');
+            $table->tinyInteger('has_finished')->default(1); //jika perulangan id selesai has_finished=3 
+            $table->tinyInteger('has_acc_kajur')->default(1);
+            $table->foreignId('lecturer_kajur_id')->nullable()->constrained('lecturers')->onDelete('cascade');
+            $table->dateTime('date_finished')->nullable();
+            $table->dateTime('date_acc_kajur')->nullable();
             $table->timestamps();
         });
     }
