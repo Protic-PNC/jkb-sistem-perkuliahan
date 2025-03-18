@@ -61,6 +61,22 @@ class M_LecturerDocumentController extends Controller
 
         return view('student.m_lecturer_document.m_details', compact( 'data', 'details','semester', 'academicYear', 'students'));
     }
+    public function detail_verifikasi($id)
+    {
+        $details= AttendanceListDetail::findOrFail($id);
+        $data = AttendanceList::where('id', $details->attendance_list_id)->first();
+
+        
+        $student_class = StudentClass::with(['students', 'course'])
+            ->where('id', $data->student_class_id)
+            ->firstOrFail();
+        $semester = $data->student_class->calculateSemester();
+        $academicYear = $student_class->calculateAcademicYear($semester);
+
+        $students = $student_class->students;
+
+        return view('student.m_lecturer_document.m_detail_verifikasi', compact( 'data', 'details','semester', 'academicYear', 'students'));
+    }
 
     public function create($id)
     {
@@ -387,13 +403,19 @@ class M_LecturerDocumentController extends Controller
     public function verifikasi($id)
     {
         $al_detail = AttendanceListDetail::find($id);
+        $journaldetail = JournalDetail::where('attendance_list_detail_id', $al_detail->id)->first();
         DB::beginTransaction();
         try{
             
             $user = Auth::user();
-            $al_detail->has_acc_student = 1;
+            $al_detail->has_acc_student = 2;
+            $al_detail->date_acc_student = now();
             $al_detail->student_id = $user->student->id;
             $al_detail->save();
+            $journaldetail->has_acc_student = 2;
+            $journaldetail->date_acc_student = now();
+            $journaldetail->student_id = $user->student->id;
+            $journaldetail->save();
             DB::commit();
             return redirect()
                 ->back()

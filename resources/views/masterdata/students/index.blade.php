@@ -37,12 +37,18 @@
                 @endif
                 <div class="mb-3 flex items-center justify-between">
                     <div class="flex space-x-2">
-                        <a href="javascript:void(0)" class="inline-block">
+                        <a href="{{ route('masterdata.students.create') }}" class="inline-block">
+                            <button type="button"
+                                class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                Tambah Data
+                            </button>
+                        </a>
+                        {{-- <a href="javascript:void(0)" class="inline-block">
                             <button type="button" id="openImportModal"
                                 class="text-white bg-teal-500 hover:bg-teal-600 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center flex items-center">
                                 <i class="fas fa-file-import mr-2"></i>
                                 Import Data Kelas
-                            </button>
+                            </button> --}}
                         </a>
 
                     </div>
@@ -107,6 +113,9 @@
                                             </svg>
                                             Edit
                                         </a>
+                                        <button type="button" id="btn-hapus{{ $student->id }}" class="font-medium bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline" onclick="openModal('{{ $student->id }}', '{{ route('masterdata.students.destroy', $student->id) }}')">
+                                            <i class="fa fa-trash"></i> Hapus
+                                        </button>
 
                                     </td>
 

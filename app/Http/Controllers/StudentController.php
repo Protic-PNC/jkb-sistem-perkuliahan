@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
-
+use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
@@ -46,17 +46,13 @@ class StudentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create($userId)
+    public function create()
     {
         $student_class = StudentClass::all();
-        $user = User::find($userId);
+        // $user = User::find($userId);
 
-        $existingStudent = Student::where('user_id', $userId)->first();
-        if ($existingStudent) {
-            return redirect()->route('masterdata.students.show', $existingStudent->id);
-        } else {
-            return view('masterdata.students.create', compact('student_class', 'user'));
-        }
+        // $existingStudent = Student::where('user_id', $userId)->first();
+        return view('masterdata.students.create', compact('student_class'));
     }
 
     /**
@@ -64,39 +60,30 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'nim' => 'required|string|unique:students,nim',
-            'address' => 'required|string',
-            'number_phone' => 'required|string',
-            'student_class_id' => 'required|exists:student_classes,id',
-            'user_id' => 'required|exists:users,id',
-            'signature' => 'nullable|image|mimes:png,jpg,jpeg',
-        ]);
-
         try {
-            DB::beginTransaction();
+            $validated = $request->validate([
+                'name' => 'required|string',
+                'nim' => 'required|string|unique:students,nim',
+                'address' => 'required|string',
+                'number_phone' => 'required|string',
+                'student_class_id' => 'required|exists:student_classes,id',
+                'signature' => 'nullable|image|mimes:png,jpg,jpeg',
+            ]);
 
-            // Menyimpan signature jika ada
-            if ($request->hasFile('signature')) {
-                $signaturePath = $request->file('signature')->store('signatures', 'public');
-                $validated['signature'] = $signaturePath;
-            }
-
-            // Membuat student dengan data yang sudah divalidasi
-            $student = Student::create($validated);
-
-            DB::commit();
-            return redirect()->route('masterdata.students.show')->with('success', 'User Mahasiswa berhasil disimpan');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', 'System error: ' . $e->getMessage());
+            
+            $user = User::create([
+                'name' => $request->name,
+                'avatar' => null,
+                'email' => $request->nim . '@pnc.ac.id',
+                'password' => Hash::make($request->nim),
+            ]);
+            $validated['user_id'] = $user->id;
+            Student::create($validated);
+            return redirect()->route('masterdata.students.index')->with('success', 'Data berhasil disimpan.');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'System error: ' . $e->getMessage()]);
         }
     }
-
     /**
      * Display the specified resource.
      */
@@ -125,37 +112,71 @@ class StudentController extends Controller
     {
         $student = Student::findOrFail($id);
 
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'nim' => [
-                'required',
-                'string',
-                Rule::unique('students', 'nim')
-                    ->ignore($student->id)
-                    ->whereNull('deleted_at'),
-            ],
-            'address' => 'required|string',
-            'number_phone' => 'required|string',
-            'student_class_id' => 'required|exists:student_classes,id',
-            'user_id' => ['required', Rule::exists('users', 'id')],
-            'signature' => 'nullable|image|mimes:png,jpg,jpeg',
-        ]);
-        if ($request->hasFile('signature')) {
-            $signaturePath = $request->file('signature')->store('signatures', 'public');
-            $validated['signature'] = $signaturePath;
-        }
-        DB::beginTransaction();
-        try {
-            $student->update($validated);
+        // $validated = $request->validate([
+        //     'name' => 'required|string',
+        //     'nim' => [
+        //         'required',
+        //         'string',
+        //         Rule::unique('students', 'nim')
+        //             ->ignore($student->id)
+        //             ->whereNull('deleted_at'),
+        //     ],
+        //     'address' => 'required|string',
+        //     'number_phone' => 'required|string',
+        //     'student_class_id' => 'required|exists:student_classes,id',
+        //     'user_id' => ['required', Rule::exists('users', 'id')],
+        //     'signature' => 'nullable|image|mimes:png,jpg,jpeg',
+        // ]);
+        // if ($request->hasFile('signature')) {
+        //     $signaturePath = $request->file('signature')->store('signatures', 'public');
+        //     $validated['signature'] = $signaturePath;
+        // }
+        // DB::beginTransaction();
+        // try {
+        //     $student->update($validated);
 
-            DB::commit();
-            return redirect()->route('masterdata.students.index')->with('success', 'User Mahasiswa berhasil Diedit');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', 'System error: ' . $e->getMessage());
+        //     DB::commit();
+        //     return redirect()->route('masterdata.students.index')->with('success', 'User Mahasiswa berhasil Diedit');
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return redirect()
+        //         ->back()
+        //         ->withInput()
+        //         ->with('error', 'System error: ' . $e->getMessage());
+        // }
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string',
+                'nim' => [
+                            'required',
+                            'string',
+                            Rule::unique('students', 'nim')
+                                ->ignore($student->id)
+                                ->whereNull('deleted_at'),
+                        ],
+                'address' => 'required|string',
+                'number_phone' => 'required|string',
+                'student_class_id' => 'required|exists:student_classes,id',
+            ]);
+            $student = Student::updateOrCreate(
+                ['id' => $student->id], 
+                $validated 
+            );
+            $data = [
+                'name' => $validated['name'],
+                'email' => $validated['nim']. '@pnc.ac.id',
+                'password' => Hash::make($request->nim),
+            ];
+            $userall = User::select('email')->get();
+            // dd($userall);
+            $user = User::where('id', $student->user_id)->first();
+            $user->update($data);
+        
+            
+            return redirect()->route('masterdata.students.index')->with('success', 'Data berhasil disimpan.');
+        } catch (Exception $e) {
+            Log::error('System error: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' =>  $e->getMessage()]);
         }
     }
 
@@ -164,7 +185,15 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        //
+        try{
+            $student->delete();
+            return redirect()->back()->with('success','Mahasiswa deleted sussesfully');
+        }
+        catch(Exception $e){
+            DB::rollBack();
+
+            return redirect()->back()->with('error', 'System eror'.$e->getMessage());
+        }
     }
     public function import(Request $request)
     {

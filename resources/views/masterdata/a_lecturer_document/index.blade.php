@@ -106,7 +106,7 @@
                                             </svg>
                                             <span>Absensi Perkuliahan</span>
                                         </a>
-                                        <a href="#"
+                                        <a href="{{ route('masterdata.lecturer_documents.jurnal_perkuliahan', $d->id) }}"
                                             class="inline-flex items-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                             <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                 fill="none" viewBox="0 0 24 24">

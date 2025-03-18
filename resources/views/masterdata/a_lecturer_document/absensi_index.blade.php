@@ -188,7 +188,10 @@
                         <p>* : Dosen hanya mengisi daftar hadir mahasiswa dan jurnal dosen, ketua kelas yang mengisi</p>
                     </div>
                 </div>
+                <button type="button" id="btn-verifikasi" class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-medium rounded-lg text-sm m-4 px-4 py-1 text-center">
+                    <i class="fa fa-check"></i> Cetak </button>
             </div>
+            
         </section>
 
         @push('after-script')

@@ -21,7 +21,6 @@ return new class extends Migration
             $table->dateTime('date_finished')->nullable();
             $table->tinyInteger('has_acc_kajur')->default(1);
             $table->dateTime('date_acc_kajur')->nullable();
-            $table->foreignId('student_id')->nullable()->constrained('students')->onDelete('cascade');
             $table->foreignId('lecturer_kajur_id')->nullable()->constrained('lecturers')->onDelete('cascade');
             $table->timestamps();
         });

@@ -20,7 +20,7 @@
                     </div>
                 @endif
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambah Dosen</h2>
-                <form action="{{ route('masterdata.lecturers.store', $user->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('masterdata.lecturers.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                         <div class="w-full">
@@ -36,12 +36,7 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600  dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 required="">
                         </div>
-                        <div>
-                            <label for="signature" class="block mb-2 text-sm font-medium text-gray-700">Upload
-                                Tanda Tangan</label>
-                            <input type="file" id="signature" name="signature"
-                                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
-                        </div>
+                        
                         <div class="w-full">
                             <label for="address"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat</label>
@@ -63,10 +58,36 @@
                                  required="">
                         </div>
                         <div>
-                            <label for="user_id" class="hidden">User</label>
-                            <input type="text" id="user_id" name="user_id" value="{{ $user->id }}"
-                                class="hidden">
+                            <label for="position_id"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kelas</label>
+                            <select id="position_id" name="position_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option value="">Pilih Jabatan</option>
+                                
+                                @foreach ($jabatan as $d)
+                                    <option value="{{ $d->id }}"> {{ $d->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
+                        <div class="relative">
+                            <label for="course_id" class="block mb-2 text-sm font-medium text-gray-900">
+                                Pilih Mata Kuliah:
+                            </label>
+                            <button id="dropdownButton" data-dropdown-toggle="dropdown"
+                                class="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg text-left focus:ring-blue-500 focus:border-blue-500">
+                                Pilih Mata Kuliah
+                            </button>
+                            <div id="dropdown" class="hidden bg-white shadow-md rounded-lg absolute w-full mt-2">
+                                <ul class="py-2 text-gray-900">
+                                    @foreach ($course as $c)
+                                        <li>
+                                            <input type="checkbox" name="course_id[]" value="{{ $c->id }}"> {{ $c->name }}
+                                        </li>
+                                    @endforeach
+                                </ul>                                
+                            </div>
+                        </div>
+                        
 
                     </div>
                     <button type="submit"

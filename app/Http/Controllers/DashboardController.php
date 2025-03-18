@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lecturer;
+use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,8 +15,11 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        
-        return view('masterdata.dashboard');
+        $auth = Auth::user();
+        $user = User::count();
+        $lecturer = Lecturer::count();
+        $student = Student::count();
+        return view('masterdata.dashboard', compact('auth', 'user', 'lecturer', 'student'));
     }
 
     /**

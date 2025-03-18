@@ -18,6 +18,7 @@
                     <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Dosen</h3>
                     <hr class="border-t-4 my-2 mb-6 rounded-sm bg-gray-300">
                 </div>
+                
                 @if ($errors->any())
                     <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
                         role="alert">
@@ -36,8 +37,16 @@
                         <span class="font-medium">Success!</span> {{ session('success') }}
                     </div>
                 @endif
-                <div class="mb-3 flex items-center justify-end">
-                    
+               
+                <div class="mb-3 flex items-center justify-between">
+                    <div class="flex space-x-2">
+                        <a href="{{ route('masterdata.lecturers.create') }}" class="inline-block">
+                            <button type="button"
+                                class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                Tambah Data
+                            </button>
+                        </a>
+                    </div>
                     <form action="{{ route('masterdata.lecturers.index') }}" method="GET" class="flex items-center">
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3">

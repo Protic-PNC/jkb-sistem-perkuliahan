@@ -103,7 +103,9 @@
                                 <th scope="col" class="px-6 py-3 text-center">No</th>
                                 <th scope="col" class="px-6 py-3 text-center">Pertemuan Ke</th>
                                 <th scope="col" class="px-6 py-3 text-center">Jumlah Mahasiswa Hadir</th>
-                                <th scope="col" class="px-6 py-3 text-center">Status Konfirmasi Mahasiswa</th>
+                                <th scope="col" class="px-6 py-3 text-center">Status Pertemuan</th>
+                                <th scope="col" class="px-6 py-3 text-center">Metode Pembelajaran</th>
+                                <th scope="col" class="px-6 py-3 text-center">Materi Perkuliahan</th>
                                 <th scope="col" class="px-6 py-3 text-center">Action</th>
                             </tr>
                         </thead>
@@ -114,16 +116,26 @@
                                 <td class="px-6 py-4 text-center align-middle">{{ $d->meeting_order }}</td>
                                 <td class="px-6 py-4 text-center align-middle">{{ $d->sum_attendance_students }}</td>
                                 <td class="px-6 py-4 text-center align-middle">
-                                    @if($d->has_acc_student == 1)
-                                    Sudah
-                                    @else
-                                    Belum
+                                    @if ($d->course_status == 1)
+                                    Sesuai Jadwal
+                                    @elseif ($d->course_status == 2)
+                                    Pertukaran
+                                    @elseif ($d->course_status == 3)
+                                    Pengganti
+                                    @elseif ($d->course_status == 4)
+                                    Tambahan
                                     @endif
                                 </td>
+                                <td class="px-6 py-4 text-center align-middle">{{ $d->journal_detail->learning_methods}}</td>
+                                <td class="px-6 py-4 text-center align-middle">{{ $d->journal_detail->material_course}}</td>
+                                
                                 <td class="px-3 py-2 text-center align-middle flex space-x-1 justify-center">
-                                    @if (($d->has_acc_student == 0) && !empty($d->sum_attendance_students))
+                                    @if (($d->has_acc_student == 1) && !empty($d->sum_attendance_students))
                                     <button type="button" id="btn-verifikasi{{ $d->id }}" class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center" onclick="openModalVerifikasi('{{ $d->id }}', '{{ route('student.lecturer_document.verifikasi', $d->id) }}')">
                                         <i class="fa fa-check"></i> Verifikasi </button>
+                                    @else
+                                    <a href="{{ route('student.lecturer_document.detail_verifikasi', ['id' => $d->id]) }}"  class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center">
+                                        <i class="fa fa-info"></i> Detail </a>
                                     @endif
                                     
                                     

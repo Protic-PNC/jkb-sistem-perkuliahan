@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Siperkuliahan') }}</title>
     <link href="https://cdn.tailwindcss.com" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -107,9 +107,9 @@
                         <div x-data="{ dropdownOpen: false }" class="relative">
                             <button @click="dropdownOpen = ! dropdownOpen"
                                 class="relative block w-8 h-8 overflow-hidden rounded-full shadow focus:outline-none">
-                                <img class="object-cover w-full h-full"
-                                    src="{{ Storage::url(Auth::user()->avatar) }}"
-                                    alt="Your avatar">
+                                <img class="object-cover w-full h-full" src="{{ Auth::user()->avatar ? Storage::url(Auth::user()->avatar) : asset('/image/profile.png') }}" 
+                                alt="Your avatar">
+                           
                             </button>
 
                             <div x-show="dropdownOpen" @click="dropdownOpen = false"

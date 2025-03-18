@@ -212,8 +212,20 @@ public function update(Request $request, $id)
 
         return view('masterdata.a_lecturer_document.absensi_index', compact('data', 'semester', 'academicYear', 'students','attendencedetail'));
     }
-    public function jurnal_perkuliahan()
+    public function jurnal_perkuliahan($id)
     {
+        $data = AttendanceList::findOrFail($id);
+        
+        $student_class = StudentClass::with(['students', 'course'])
+            ->where('id', $data->student_class_id)
+            ->firstOrFail();
+            $semester = $data->student_class->calculateSemester();
+            $academicYear = $student_class->calculateAcademicYear($semester);
 
+            $students = $student_class->students;
+
+            $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)->get();
+
+        return view('masterdata.a_lecturer_document.jurnal_index', compact('data', 'semester', 'academicYear', 'students','attendencedetail'));
     }
 }

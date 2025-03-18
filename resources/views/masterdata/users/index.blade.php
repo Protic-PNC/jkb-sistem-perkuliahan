@@ -98,7 +98,7 @@
                                         @endforeach
                                     </td>
                                     <td class="px-3 py-2 flex space-x-2 justify-end ">
-                                        @if ($user->hasRole('dosen'))
+                                        {{-- @if ($user->hasRole('dosen'))
                                             <a href="{{ route('masterdata.lecturers.create', $user->id) }}"
                                                 class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                                 Lengkapi Identitas
@@ -108,7 +108,7 @@
                                                 class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                                 Lengkapi Identitas
                                             </a>
-                                        @endif
+                                        @endif --}}
                                         <a href="{{ route('masterdata.users.edit', $user->id) }}"
                                             class="inline-flex items-center justify-center w-20 text-center font-medium bg-yellow-400 text-white px-3 py-2 rounded-md hover:bg-yellow-500 transition duration-300">
                                             <svg class="w-5 h-5 mr-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"

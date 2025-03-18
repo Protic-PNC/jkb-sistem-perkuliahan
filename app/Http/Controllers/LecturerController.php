@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Courses;
 use App\Models\Lecturer;
+use App\Models\Position;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,16 +40,11 @@ class LecturerController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create($userId)
+    public function create()
     {
-        $user = User::find($userId);
-
-        $existingLecturer = Lecturer::where('user_id', $userId)->first();
-        if ($existingLecturer) {
-            return redirect()->route('masterdata.lecturers.show', $existingLecturer->id);
-        } else {
-            return view('masterdata.lecturers.create', compact('user'));
-        }
+        $jabatan = Position::all();
+        $course = Courses::all();   
+        return view('masterdata.lecturers.create', compact('jabatan', 'course'));
     }
 
     /**

@@ -251,11 +251,81 @@ class L_LecturerDocumentController extends Controller
             AttendanceListDetail::where('id', $attendanceListDetailId)->update([
                 'sum_attendance_students' => $sumAttendance,
                 'sum_late_students' => $sumLateAttendance,
-                'has_acc_lecturer' => 1,
+                'has_acc_lecturer' => 2,
+                'date_acc_lecturer' => now(),
             ]);
             JournalDetail::where('id', $attendanceListDetailId)->update([
                 
-                'has_acc_lecturer' => 1,
+                'has_acc_lecturer' => 2,
+                'date_acc_lecturer' => now(),
+            ]);
+
+            DB::commit();
+            return redirect()->route('lecturer.lecturer_document.details', $dh->id)->with('success', 'Daftar Hadir dan Jurnal Detail Berhasil Di simpan!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()
+                ->back()
+                ->with('error', 'An error occurred while saving student attendance: ' . $e->getMessage());
+        }
+    }
+    public function update_student(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'attendance_list_detail_id' => 'required|exists:attendance_list_details,id',
+            'attendance' => 'required|array',
+            'attendance.*.student_id' => 'required|exists:students,id',
+            'attendance.*.attendance_student' => 'required|in:1,2,3,4,5',
+            'attendance.*.minutes_late' => 'nullable|integer|min:1|required_if:attendance.*.attendance_student,2',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        try {
+            
+            DB::beginTransaction();
+
+            $attendanceListDetailId = $request->input('attendance_list_detail_id');
+
+            $dhDetail = AttendanceListDetail::where('id', $attendanceListDetailId )->first();
+
+            $dh = AttendanceList::where('id', $dhDetail->attendance_list_id)->first();
+
+            $attendances = $request->input('attendance');
+
+            foreach ($attendances as $attendance) {
+                AttendanceListStudent::updateOrCreate(
+                    [
+                        'attendance_list_detail_id' => $attendanceListDetailId,
+                        'student_id' => $attendance['student_id'],
+                    ],
+                    [
+                        'attendance_student' => $attendance['attendance_student'],
+                        'minutes_late' => $attendance['minutes_late'] ?? null,
+                        'note' => $attendance['note'] ?? null,
+                    ],
+                );
+            }
+
+            $sumAttendance = AttendanceListStudent::where('attendance_list_detail_id', $attendanceListDetailId)
+                ->whereIn('attendance_student', [1, 2])
+                ->count();
+            $sumLateAttendance = AttendanceListStudent::where('attendance_list_detail_id', $attendanceListDetailId)
+                ->whereIn('attendance_student', [2])
+                ->count();
+
+            AttendanceListDetail::where('id', $attendanceListDetailId)->update([
+                'sum_attendance_students' => $sumAttendance,
+                'sum_late_students' => $sumLateAttendance,
+                'has_acc_lecturer' => 2,
+                'date_acc_lecturer' => now(),
+            ]);
+            JournalDetail::where('id', $attendanceListDetailId)->update([
+                
+                'has_acc_lecturer' => 2,
+                'date_acc_lecturer' => now(),
             ]);
 
             DB::commit();
@@ -289,71 +359,7 @@ class L_LecturerDocumentController extends Controller
         return view('lecturer.l_lecturer_document.edit_student', compact('al', 'ad', 'student_classes', 'attendances'));
     }
 
-    public function update_student(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'attendance_list_detail_id' => 'required|exists:attendance_list_details,id',
-            'attendance' => 'required|array',
-            'attendance.*.student_id' => 'required|exists:students,id',
-            'attendance.*.attendance_student' => 'required|in:1,2,3,4,5',
-            'attendance.*.minutes_late' => 'nullable|integer|min:1|required_if:attendance.*.attendance_student,2',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        try {
-            
-            DB::beginTransaction();
-
-            $attendanceListDetailId = $request->input('attendance_list_detail_id');
-            $dhDetail = AttendanceListDetail::where('id', $attendanceListDetailId )->first();
-
-            $dh = AttendanceList::where('id', $dhDetail->attendance_list_id)->first();
-
-            $attendances = $request->input('attendance');
-
-            foreach ($attendances as $attendance) {
-                AttendanceListStudent::updateOrCreate(
-                    [
-                        'attendance_list_detail_id' => $attendanceListDetailId,
-                        'student_id' => $attendance['student_id'],
-                    ],
-                    [
-                        'attendance_student' => $attendance['attendance_student'],
-                        'minutes_late' => $attendance['minutes_late'] ?? null,
-                        'note' => $attendance['note'] ?? null,
-                    ],
-                );
-            }
-
-            $sumAttendance = AttendanceListStudent::where('attendance_list_detail_id', $attendanceListDetailId)
-                ->whereIn('attendance_student', [1, 2])
-                ->count();
-                $sumLateAttendance = AttendanceListStudent::where('attendance_list_detail_id', $attendanceListDetailId)
-                ->whereIn('attendance_student', [2])
-                ->count();
-
-            AttendanceListDetail::where('id', $attendanceListDetailId)->update([
-                'sum_attendance_students' => $sumAttendance,
-                'sum_late_students' => $sumLateAttendance,
-                'has_acc_lecturer' => 1,
-            ]);
-
-            JournalDetail::where('id', $attendanceListDetailId)->update([
-                'has_acc_lecturer' => 1,
-            ]);
-
-            DB::commit();
-            return redirect()->route('lecturer.lecturer_document.details',  $dh->id)->with('success', 'Daftar Hadir dan Jurnal Detail Berhasil Di simpan!');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()
-                ->back()
-                ->with('error', 'An error occurred while saving student attendance: ' . $e->getMessage());
-        }
-    }
+    
 
     public function index2(Request $request, string $nidn)
     {
@@ -399,6 +405,7 @@ class L_LecturerDocumentController extends Controller
 
     public function selesai_document($id)
     {
+        Log::info('p');
         $al = AttendanceList::findOrFail($id);
         Log::info('$al');
         $journal = Journal::where('attendance_list_id', $al->id)->first();
@@ -407,9 +414,11 @@ class L_LecturerDocumentController extends Controller
         try{
             
             $user = Auth::user();
-            $al->has_finished = 1;
+            $al->has_finished = 2;
+            $al->date_finished = now();
             $al->save();
-            $journal->has_finished= 1;
+            $journal->has_finished= 2;
+            $journal->date_finished = now();
             $journal->save();
             DB::commit();
             return redirect()

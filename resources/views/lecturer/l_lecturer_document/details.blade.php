@@ -110,6 +110,9 @@
                                 <th scope="col" class="px-6 py-3 text-center">No</th>
                                 <th scope="col" class="px-6 py-3 text-center">Pertemuan Ke</th>
                                 <th scope="col" class="px-6 py-3 text-center">Jumlah Mahasiswa Hadir</th>
+                                <th scope="col" class="px-6 py-3 text-center">Status Pertemuan</th>
+                                <th scope="col" class="px-6 py-3 text-center">Metode Pembelajaran</th>
+                                <th scope="col" class="px-6 py-3 text-center">Materi Perkuliahan</th>
                                 <th scope="col" class="px-6 py-3 text-center">Status Konfirmasi Mahasiswa</th>
                                 <th scope="col" class="px-6 py-3 text-center">Action</th>
                             </tr>
@@ -121,7 +124,20 @@
                                 <td class="px-6 py-4 text-center align-middle">{{ $d->meeting_order }}</td>
                                 <td class="px-6 py-4 text-center align-middle">{{ $d->sum_attendance_students }}</td>
                                 <td class="px-6 py-4 text-center align-middle">
-                                    @if($d->has_acc_student == 1)
+                                    @if ($d->course_status == 1)
+                                    Sesuai Jadwal
+                                    @elseif ($d->course_status == 2)
+                                    Pertukaran
+                                    @elseif ($d->course_status == 3)
+                                    Pengganti
+                                    @elseif ($d->course_status == 4)
+                                    Tambahan
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 text-center align-middle">{{ $d->journal_detail->learning_methods}}</td>
+                                <td class="px-6 py-4 text-center align-middle">{{ $d->journal_detail->material_course}}</td>
+                                <td class="px-6 py-4 text-center align-middle">
+                                    @if($d->has_acc_student == 2)
                                     Sudah
                                     @else
                                     Belum
@@ -153,10 +169,9 @@
                     
                 </div>
                
-                <div class="m-3">
-                    <button type="button" id="btn-verifikasi" class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center" onclick="openModalSelesai('{{ route('lecturer.lecturer_document.selesai', $data->id) }}')">
-                        <i class="fa fa-check"></i> Perkuliahan Selesai </button>         
-
+                <div class="m-3">      
+                        <button type="button" id="btn-verifikasi{{ $data->id }}" class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center" onclick="openModalSelesai('{{ $data->id }}', '{{ route('lecturer.lecturer_document.selesai', $data->id) }}')">
+                            <i class="fa fa-check"></i> Perkuliahan Selesai  </button>
                 </div>
                                     
             </div>
@@ -188,7 +203,7 @@
             closeModalSelesai(); // Menutup modal
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = verifikasiUrl;
+            form.action = SelesaiUrl;
     
             const csrfInput = document.createElement('input');
             csrfInput.type = 'hidden';
