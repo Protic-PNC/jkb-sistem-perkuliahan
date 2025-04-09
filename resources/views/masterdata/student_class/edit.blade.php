@@ -61,10 +61,46 @@
                                 @endfor
                             </select>
                         </div>
+                        <div class="w-full">
+                            <label for="course_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                Mata Kuliah:
+                            </label>
+                            
+                            <div class="relative">
+                                <button id="dropdownButton" type="button"
+                                    class="w-full px-4 py-2 text-gray-900 bg-white border border-gray-300 rounded-lg text-left focus:ring-blue-500 focus:border-blue-500 flex justify-between items-center">
+                                    <span id="selectedCourses">Pilih Mata Kuliah</span>
+                                    <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                            
+                                <!-- Dropdown Content -->
+                                <div id="dropdown" class="hidden absolute z-10 w-full mt-2 bg-white shadow-md rounded-lg">
+                                    <input type="text" id="searchCourse" placeholder="Cari Mata Kuliah..."
+                                        class="w-full px-3 py-2 text-sm border-b border-gray-300 focus:outline-none">
+                                    
+                                    <ul id="courseList" class="max-h-48 overflow-y-auto py-2 text-gray-900">
+                                        @foreach ($course as $c)
+                                            @php
+                                                $checked = $student_class->course->contains($c->id) ? 'checked' : ''; // Cek apakah mata kuliah sudah dipilih
+                                            @endphp
+                                            <li class="px-4 py-2 hover:bg-gray-100">
+                                                <label class="flex items-center">
+                                                    <input type="checkbox" name="course_id[]" value="{{ $c->id }}" class="mr-2 course-checkbox" {{ $checked }}>
+                                                    {{ $c->name }}
+                                                </label>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                        </div>
                     </div>
                     <button type="submit"
-                        class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                        Tambah
+                        class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm mt-5 px-5 py-2.5 text-center">
+                        Simpan
                     </button>
                 </form>
             </div>
@@ -81,5 +117,54 @@
             inputField.setAttribute('max', currentYear);
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const dropdownButton = document.getElementById("dropdownButton");
+            const dropdown = document.getElementById("dropdown");
+            const searchInput = document.getElementById("searchCourse");
+            const checkboxes = document.querySelectorAll(".course-checkbox");
+            const selectedCourses = document.getElementById("selectedCourses");
+        
+            // Toggle dropdown visibility
+            dropdownButton.addEventListener("click", function () {
+                dropdown.classList.toggle("hidden");
+            });
+        
+            // Close dropdown when clicking outside
+            document.addEventListener("click", function (event) {
+                if (!dropdownButton.contains(event.target) && !dropdown.contains(event.target)) {
+                    dropdown.classList.add("hidden");
+                }
+            });
+        
+            // Search filter for courses
+            searchInput.addEventListener("input", function () {
+                const filter = searchInput.value.toLowerCase();
+                document.querySelectorAll("#courseList li").forEach(function (item) {
+                    const text = item.textContent.toLowerCase();
+                    item.style.display = text.includes(filter) ? "" : "none";
+                });
+            });
+        
+            // Update selected courses text
+            function updateSelectedCourses() {
+                let selected = [];
+                checkboxes.forEach((checkbox) => {
+                    if (checkbox.checked) {
+                        selected.push(checkbox.parentElement.textContent.trim());
+                    }
+                });
+                selectedCourses.textContent = selected.length ? selected.join(", ") : "Pilih Mata Kuliah";
+            }
+        
+            // Jalankan fungsi saat halaman dimuat untuk menampilkan mata kuliah yang sudah dipilih
+            updateSelectedCourses();
+        
+            // Event listener untuk checkbox
+            checkboxes.forEach((checkbox) => {
+                checkbox.addEventListener("change", updateSelectedCourses);
+            });
+        });
+        </script>
     @endpush
 </x-app-layout>

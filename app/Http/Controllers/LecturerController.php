@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CourseLecturer;
 use App\Models\Courses;
 use App\Models\Lecturer;
 use App\Models\Position;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
 
 class LecturerController extends Controller
 {
@@ -42,7 +46,7 @@ class LecturerController extends Controller
      */
     public function create()
     {
-        $jabatan = Position::all();
+        $jabatan = Position::with('prodis')->get();
         $course = Courses::all();   
         return view('masterdata.lecturers.create', compact('jabatan', 'course'));
     }
@@ -52,30 +56,50 @@ class LecturerController extends Controller
      */
     public function store(Request $request)
     {
+        
         $validated = $request->validate([
             'name' => 'required|string',
             'number_phone' => 'required|string',
             'address' => 'required|string',
-            'signature' => 'nullable|image|mimes:png,jpg,jpeg',
+            // 'signature' => 'nullable|image|mimes:png,jpg,jpeg',
             'nidn' => 'required|string|unique:lecturers,nidn',
             'nip' => 'required|string|unique:lecturers,nip',
-            'user_id' => 'required|exists:users,id',
+            'position_id' => 'nullable|exists:positions,id', 
+            'course_id' => 'nullable|array', 
+            'course_id.*' => 'exists:courses,id', 
         ]);
-
+        
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
-
-            // Menyimpan signature jika ada
-            if ($request->hasFile('signature')) {
-                $signaturePath = $request->file('signature')->store('signatures', 'public');
-                $validated['signature'] = $signaturePath;
-            }
-
-            // Membuat lecturer dengan data yang sudah divalidasi
+            
+            // if ($request->hasFile('signature')) {
+            //     $signaturePath = $request->file('signature')->store('signatures', 'public');
+            //     $validated['signature'] = $signaturePath;
+            // }
+            $user = User::create([
+                'name' => $request->nidn,
+                'avatar' => null,
+                'email' => $request->nidn . '@pnc.ac.id',
+                'password' => Hash::make($request->nidn),
+            ]);
+            // dd($user);
+            $validated['user_id'] = $user->id;
+            
             $lecturer = Lecturer::create($validated);
+            // dd($lecturer);
+            if (!empty($request->course_id)) {
+                foreach ($request->course_id as $courseId) {
+                    $cl =  CourseLecturer::create([
+                        'course_id' => $courseId,
+                        'lecturer_id' => $lecturer->id,
+                    ]);
+                }
+            }
+            
+            $user->assignRole('dosen');
 
             DB::commit();
-            return redirect()->route('masterdata.lecturers.show')->with('success', 'User Dosen berhasil disimpan');
+            return redirect()->route('masterdata.lecturers.index')->with('success', 'Dosen berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()
@@ -99,9 +123,10 @@ class LecturerController extends Controller
      */
     public function edit(Lecturer $lecturer, $id)
     {
-        $lecturer = lecturer::find($id);
-
-        return view('masterdata.lecturers.edit', compact('lecturer'));
+        $lecturer = lecturer::with('course')->find($id);
+        $jabatan = Position::with('prodis')->get();
+        $course = Courses::all();  
+        return view('masterdata.lecturers.edit', compact('lecturer', 'jabatan', 'course'));
     }
 
     /**
@@ -110,7 +135,7 @@ class LecturerController extends Controller
     public function update(Request $request, $id)
     {
         $lecturer = lecturer::findOrFail($id);
-
+        // dd($request->all());
         $validated = $request->validate([
             'name' => 'required|string',
             'nidn' => [
@@ -129,17 +154,35 @@ class LecturerController extends Controller
             ],
             'address' => 'required|string',
             'number_phone' => 'required|string',
-            'user_id' => ['required', Rule::exists('users', 'id')],
-            'signature' => 'nullable|image|mimes:png,jpg,jpeg',
+            'position_id' => 'nullable|exists:positions,id', 
+            'course_id' => 'nullable|array', 
+            'course_id.*' => 'exists:courses,id', 
         ]);
-        if ($request->hasFile('signature')) {
-            $signaturePath = $request->file('signature')->store('signatures', 'public');
-            $validated['signature'] = $signaturePath;
-        }
         DB::beginTransaction();
         try {
-            $lecturer->update($validated);
-
+            $lecturerupdate = Lecturer::updateOrCreate(
+                ['id' => $lecturer->id], 
+                $validated 
+            );
+            // dd($lecturerupdate);
+            $data = [
+                'name' => $validated['nidn'],
+                'email' => $validated['nidn']. '@pnc.ac.id',
+                'password' => Hash::make($request->nidn),
+            ];
+            // dd($data);
+            $user = User::where('id', $lecturer->user_id)->first();
+            $user->update($data);
+            CourseLecturer::where('lecturer_id', $lecturer->id)->delete();
+            if (!empty($request->course_id)) {
+                foreach ($request->course_id as $courseId) {
+                    $cl =  CourseLecturer::create([
+                        'course_id' => $courseId,
+                        'lecturer_id' => $lecturer->id,
+                    ]);
+                    
+                }
+            }
             DB::commit();
             return redirect()->route('masterdata.lecturers.index')->with('success', 'User Dosen berhasil Diedit');
         } catch (\Exception $e) {
@@ -154,8 +197,17 @@ class LecturerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Lecturer $lecturer)
+    public function destroy($id)
     {
-        //
+        $lecturer = Lecturer::findOrFail($id);
+        try{
+            $lecturer->delete();
+            return redirect()->back()->with('success','Mahasiswa deleted sussesfully');
+        }
+        catch(Exception $e){
+            DB::rollBack();
+
+            return redirect()->back()->with('error', 'System eror'.$e->getMessage());
+        }
     }
 }

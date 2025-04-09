@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use Spatie\Permission\Models\Role;
 
 class StudentController extends Controller
 {
@@ -72,11 +73,12 @@ class StudentController extends Controller
 
             
             $user = User::create([
-                'name' => $request->name,
+                'name' => $request->nim,
                 'avatar' => null,
                 'email' => $request->nim . '@pnc.ac.id',
                 'password' => Hash::make($request->nim),
             ]);
+            $user->assignRole('mahasiswa');
             $validated['user_id'] = $user->id;
             Student::create($validated);
             return redirect()->route('masterdata.students.index')->with('success', 'Data berhasil disimpan.');
@@ -111,71 +113,40 @@ class StudentController extends Controller
     public function update(Request $request, $id)
     {
         $student = Student::findOrFail($id);
-
-        // $validated = $request->validate([
-        //     'name' => 'required|string',
-        //     'nim' => [
-        //         'required',
-        //         'string',
-        //         Rule::unique('students', 'nim')
-        //             ->ignore($student->id)
-        //             ->whereNull('deleted_at'),
-        //     ],
-        //     'address' => 'required|string',
-        //     'number_phone' => 'required|string',
-        //     'student_class_id' => 'required|exists:student_classes,id',
-        //     'user_id' => ['required', Rule::exists('users', 'id')],
-        //     'signature' => 'nullable|image|mimes:png,jpg,jpeg',
-        // ]);
-        // if ($request->hasFile('signature')) {
-        //     $signaturePath = $request->file('signature')->store('signatures', 'public');
-        //     $validated['signature'] = $signaturePath;
-        // }
-        // DB::beginTransaction();
-        // try {
-        //     $student->update($validated);
-
-        //     DB::commit();
-        //     return redirect()->route('masterdata.students.index')->with('success', 'User Mahasiswa berhasil Diedit');
-        // } catch (\Exception $e) {
-        //     DB::rollBack();
-        //     return redirect()
-        //         ->back()
-        //         ->withInput()
-        //         ->with('error', 'System error: ' . $e->getMessage());
-        // }
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'nim' => [
+                        'required',
+                        'string',
+                        Rule::unique('students', 'nim')
+                            ->ignore($student->id)
+                            ->whereNull('deleted_at'),
+                    ],
+            'address' => 'required|string',
+            'number_phone' => 'required|string',
+            'student_class_id' => 'required|exists:student_classes,id',
+        ]);
+        DB::beginTransaction();
+       
         try {
-            $validated = $request->validate([
-                'name' => 'required|string',
-                'nim' => [
-                            'required',
-                            'string',
-                            Rule::unique('students', 'nim')
-                                ->ignore($student->id)
-                                ->whereNull('deleted_at'),
-                        ],
-                'address' => 'required|string',
-                'number_phone' => 'required|string',
-                'student_class_id' => 'required|exists:student_classes,id',
-            ]);
+            
             $student = Student::updateOrCreate(
                 ['id' => $student->id], 
                 $validated 
             );
             $data = [
-                'name' => $validated['name'],
+                'name' => $validated['nim'],
                 'email' => $validated['nim']. '@pnc.ac.id',
                 'password' => Hash::make($request->nim),
             ];
-            $userall = User::select('email')->get();
             // dd($userall);
             $user = User::where('id', $student->user_id)->first();
             $user->update($data);
-        
-            
+            DB::commit();
             return redirect()->route('masterdata.students.index')->with('success', 'Data berhasil disimpan.');
         } catch (Exception $e) {
             Log::error('System error: ' . $e->getMessage());
+            DB::rollBack();
             return redirect()->back()->withErrors(['error' =>  $e->getMessage()]);
         }
     }

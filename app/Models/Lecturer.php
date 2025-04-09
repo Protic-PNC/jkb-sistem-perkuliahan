@@ -31,9 +31,9 @@ class Lecturer extends Model
         return $this->belongsToMany(Courses::class, 'course_lecturers','lecturer_id', 'course_id')->wherePivotNull('deleted_at')
         ->withPivot('id');
     }
-    public function position(){
-        //pivot table (many to many)
-        return $this->belongsToMany(Position::class, 'lecturer_positions','lecturer_id', 'position_id')->wherePivotNull('deleted_at')
-        ->withPivot('id');
+    
+    public function position()
+    {
+        return $this ->belongsTo(Position::class, 'position_id', 'id');
     }
 }

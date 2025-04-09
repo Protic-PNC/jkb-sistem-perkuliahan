@@ -37,13 +37,7 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                  required="">
                         </div>
-                        <div>
-                            <label for="signature" class="block mb-2 text-sm font-medium text-gray-700">Upload
-                                Tanda Tangan</label>
-                            <input type="file" id="signature" name="signature"
-                                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
-                                <img class="h-10 w-10" src="{{ Storage::url($lecturer->signature) }}" alt="">
-                        </div>
+
                         <div class="w-full">
                             <label for="address"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">address</label>
@@ -64,11 +58,57 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                  required="">
                         </div>
+                        
                         <div>
-                            <label for="user_id" class="hidden">User</label>
-                            <input type="text" id="user_id" name="user_id" value="{{ $lecturer->user->id }}"
-                                class="hidden">
+                            <label for="position_id"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jabatan</label>
+                            <select id="position_id" name="position_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option value="{{ $lecturer->position?->id }}">{{ $lecturer->position?->name ? $lecturer->position?->name . $lecturer->prodis?->name : 'Pilih Jabatan'  }}</option>
+                                
+                                @foreach ($jabatan as $d)
+                                    <option value="{{ $d->id }}"> {{ $d->name }} {{ $d->prodis?->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
+                        <div class="w-full">
+                            <label for="course_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                Pilih Mata Kuliah:
+                            </label>
+                            
+                            <div class="relative">
+                                <button id="dropdownButton" type="button"
+                                    class="w-full px-4 py-2 text-gray-900 bg-white border border-gray-300 rounded-lg text-left focus:ring-blue-500 focus:border-blue-500 flex justify-between items-center">
+                                    <span id="selectedCourses">Pilih Mata Kuliah</span>
+                                    <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                            
+                                <!-- Dropdown Content -->
+                                <div id="dropdown" class="hidden absolute z-10 w-full mt-2 bg-white shadow-md rounded-lg">
+                                    <input type="text" id="searchCourse" placeholder="Cari Mata Kuliah..."
+                                        class="w-full px-3 py-2 text-sm border-b border-gray-300 focus:outline-none">
+                                    
+                                    <ul id="courseList" class="max-h-48 overflow-y-auto py-2 text-gray-900">
+                                        @foreach ($course as $c)
+                                            @php
+                                                $checked = $lecturer->course->contains($c->id) ? 'checked' : ''; // Cek apakah mata kuliah sudah dipilih
+                                            @endphp
+                                            <li class="px-4 py-2 hover:bg-gray-100">
+                                                <label class="flex items-center">
+                                                    <input type="checkbox" name="course_id[]" value="{{ $c->id }}" class="mr-2 course-checkbox" {{ $checked }}>
+                                                    {{ $c->name }}
+                                                </label>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
 
                     </div>
                     <button type="submit"
@@ -78,5 +118,55 @@
                 </form>
             </div>
         </section>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const dropdownButton = document.getElementById("dropdownButton");
+                const dropdown = document.getElementById("dropdown");
+                const searchInput = document.getElementById("searchCourse");
+                const checkboxes = document.querySelectorAll(".course-checkbox");
+                const selectedCourses = document.getElementById("selectedCourses");
+            
+                // Toggle dropdown visibility
+                dropdownButton.addEventListener("click", function () {
+                    dropdown.classList.toggle("hidden");
+                });
+            
+                // Close dropdown when clicking outside
+                document.addEventListener("click", function (event) {
+                    if (!dropdownButton.contains(event.target) && !dropdown.contains(event.target)) {
+                        dropdown.classList.add("hidden");
+                    }
+                });
+            
+                // Search filter for courses
+                searchInput.addEventListener("input", function () {
+                    const filter = searchInput.value.toLowerCase();
+                    document.querySelectorAll("#courseList li").forEach(function (item) {
+                        const text = item.textContent.toLowerCase();
+                        item.style.display = text.includes(filter) ? "" : "none";
+                    });
+                });
+            
+                // Update selected courses text
+                function updateSelectedCourses() {
+                    let selected = [];
+                    checkboxes.forEach((checkbox) => {
+                        if (checkbox.checked) {
+                            selected.push(checkbox.parentElement.textContent.trim());
+                        }
+                    });
+                    selectedCourses.textContent = selected.length ? selected.join(", ") : "Pilih Mata Kuliah";
+                }
+            
+                // Jalankan fungsi saat halaman dimuat untuk menampilkan mata kuliah yang sudah dipilih
+                updateSelectedCourses();
+            
+                // Event listener untuk checkbox
+                checkboxes.forEach((checkbox) => {
+                    checkbox.addEventListener("change", updateSelectedCourses);
+                });
+            });
+            </script>
+            
     @endsection
 </x-app-layout>

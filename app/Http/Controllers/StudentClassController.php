@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exports\Masterdata\Student_ClassExport;
+use App\Models\CourseClass;
+use App\Models\Courses;
 use App\Models\Student;
 use App\Models\StudentClass;
 use App\Models\StudyProgram;
@@ -61,8 +63,6 @@ class StudentClassController extends Controller
             $item->save();
           
         }    
-
-  
         return view('masterdata.student_class.index', compact('data'));
     }
 
@@ -72,19 +72,19 @@ class StudentClassController extends Controller
     public function create()
     {
         $prodis = StudyProgram::all();
-        return view('masterdata.student_class.create', compact('prodis'));
+        $course = Courses::all();
+        return view('masterdata.student_class.create', compact('prodis', 'course'));
     } 
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    
     public function store(Request $request)
     {
-        
         $request->validate([
             'name' => 'required|string|max:255',
             'academic_year' => 'required|integer',
-           'study_program_id' => 'required|exists:study_programs,id',
+            'study_program_id' => 'required|exists:study_programs,id',
+            'course_id' => 'nullable|array', 
+            'course_id.*' => 'exists:courses,id', 
         ]);
 
         DB::beginTransaction();
@@ -98,6 +98,15 @@ class StudentClassController extends Controller
             $sc->status = 1;
             $sc->code = $prodi->brief . $request->input('name') . $request->input('academic_year');
             $sc->save();
+
+            if (!empty($request->course_id)) {
+                foreach ($request->course_id as $courseId) {
+                    $cl =  CourseClass::create([
+                        'course_id' => $courseId,
+                        'student_class_id' => $sc->id,
+                    ]);
+                }
+            }
 
             DB::commit();
             return redirect()->route('masterdata.student_classes.index')->with('success', 'Kelas Berhasil Disimpan');
@@ -123,7 +132,8 @@ class StudentClassController extends Controller
     public function edit(StudentClass $student_class)
     {
         $prodis = StudyProgram::all();
-        return view('masterdata.student_class.edit', compact('student_class', 'prodis'));
+        $course = Courses::all();
+        return view('masterdata.student_class.edit', compact('student_class', 'prodis', 'course'));
     }
 
     /**
@@ -136,6 +146,8 @@ class StudentClassController extends Controller
            'name' => 'required|string|max:255',
             'academic_year' => 'required|integer',
            'study_program_id' => 'required|exists:study_programs,id',
+           'course_id' => 'nullable|array', 
+            'course_id.*' => 'exists:courses,id', 
         ]);
 
         DB::beginTransaction();
@@ -147,6 +159,16 @@ class StudentClassController extends Controller
             $student_class->status = 1;
             $student_class->code = $prodi->brief . $request->input('name') . $request->input('academic_year');
             $student_class->save();
+            CourseClass::where('student_class_id', $student_class->id)->delete();
+            if (!empty($request->course_id)) {
+                foreach ($request->course_id as $courseId) {
+                    $cl =  CourseClass::create([
+                        'course_id' => $courseId,
+                        'student_class_id' => $student_class->id,
+                    ]);
+                    
+                }
+            }
             DB::commit();
             return redirect()->route('masterdata.student_classes.index')->with('success', 'Kelas Berhasil Diedit');
         } catch (\Exception $e) {

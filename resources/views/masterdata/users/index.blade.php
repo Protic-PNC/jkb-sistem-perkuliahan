@@ -36,12 +36,7 @@
                     </div>
                 @endif
                 <div class="mb-3 flex items-center justify-between">
-                    <a href="{{ route('masterdata.users.create') }}" class="inline-block">
-                        <button type="button"
-                            class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                            Tambah Data
-                        </button>
-                    </a>
+                    
 
                     <form action="{{ route('masterdata.users.index') }}" method="GET" class="flex items-center">
                         <div class="relative">
@@ -98,17 +93,17 @@
                                         @endforeach
                                     </td>
                                     <td class="px-3 py-2 flex space-x-2 justify-end ">
-                                        {{-- @if ($user->hasRole('dosen'))
-                                            <a href="{{ route('masterdata.lecturers.create', $user->id) }}"
+                                        @if ($user->hasRole('dosen'))
+                                            {{-- <a href="{{ route('masterdata.lecturers.create', $user->id) }}"
                                                 class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                                 Lengkapi Identitas
-                                            </a>
-                                        @elseif($user->hasRole('mahasiswa'))
-                                            <a href="{{ route('masterdata.students.create', $user->id) }}"
+                                            </a> --}}
+                                        {{-- @elseif($user->hasRole('mahasiswa'))
+                                            <a href="{{ route('masterdata.students.create') }}"
                                                 class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                                 Lengkapi Identitas
-                                            </a>
-                                        @endif --}}
+                                            </a> --}}
+                                        @endif
                                         <a href="{{ route('masterdata.users.edit', $user->id) }}"
                                             class="inline-flex items-center justify-center w-20 text-center font-medium bg-yellow-400 text-white px-3 py-2 rounded-md hover:bg-yellow-500 transition duration-300">
                                             <svg class="w-5 h-5 mr-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"

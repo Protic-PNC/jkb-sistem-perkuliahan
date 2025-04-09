@@ -64,6 +64,7 @@
                         <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
                             <tr class="text-white mb-3">
                                 <th scope="col" class="px-6 py-3">No</th>
+                                <th scope="col" class="px-6 py-3">Periode</th>
                                 <th scope="col" class="px-6 py-3">Kelas</th>
                                 <th scope="col" class="px-6 py-3">Mata Kuliah</th>
                                 <th scope="col" class="px-6 py-3">Dosen</th>
@@ -76,6 +77,7 @@
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
                                     </td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $d->periode->tahun }} - {{ $d->periode->semester }} </td>
                                     <td class="px-3 py-2 text-slate-800">{{ $d->student_class->study_program->name }} {{ $d->student_class->level }}  {{ $d->student_class->name }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $d->course->name }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $d->lecturer->name }}</td>

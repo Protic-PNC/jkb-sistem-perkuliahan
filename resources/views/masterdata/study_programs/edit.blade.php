@@ -22,7 +22,7 @@
                     @csrf
                     @method('PUT')
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                        <div class="sm:col-span-2">
+                        <div >
                             <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama
                                 Program Studi</label>
                             <input type="text" name="name" id="name" value="{{ $study_program->name }}"
@@ -44,7 +44,7 @@
 
                     </div>
                     <button type="submit"
-                        class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm mt-5 px-5 py-2.5 text-center">
                         Edit
                     </button>
                 </form>

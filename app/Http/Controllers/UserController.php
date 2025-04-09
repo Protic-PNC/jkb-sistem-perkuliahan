@@ -30,7 +30,7 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->with('roles')->paginate(5);
+        $users = $query->with('roles')->paginate(10);
         
         return view('masterdata.users.index', compact('users'));
     }

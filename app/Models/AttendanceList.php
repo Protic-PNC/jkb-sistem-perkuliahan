@@ -23,12 +23,16 @@ class AttendanceList extends Model
         'date_acc_kajur',
         'student_id',
         'lecturer_kajur_id',
+        'periode_id',
     ];
 
     //has finished, jika 0 = aktif, 1 = dokumen selesai, 2 acc kajur
 
     public function lecturer(){
         return $this->belongsTo(Lecturer::class, 'lecturer_id', 'id');
+    }
+    public function periode(){
+        return $this->belongsTo(Periode::class, 'periode_id', 'id');
     }
     public function course(){
         return $this->belongsTo(Courses::class, 'course_id', 'id');

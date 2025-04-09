@@ -14,4 +14,9 @@ class CourseLecturer extends Model
         'course_id',
         'lecturer_id',
     ];
+
+    public function course()
+    {
+
+    }
 }

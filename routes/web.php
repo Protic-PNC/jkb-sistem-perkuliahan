@@ -12,6 +12,7 @@ use App\Http\Controllers\Lecturer\L_LecturerDocumentController;
 use App\Http\Controllers\Lecturer\LecturerDocumentController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\LecturerPositionController;
+use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\Student\M_LecturerDocumentController;
 use App\Http\Controllers\Super_Admin\A_AttendenceListController;
 use App\Http\Controllers\Super_Admin\A_Lecturer_DocumentController;
@@ -26,23 +27,26 @@ use App\Models\StudyProgram;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
+// Route::get('/dashboard', [DashboardController::class, 'index'])->name('login');
 
-Route::resource('dashboard', DashboardController::class)->middleware(['auth', 'verified']);
+
 
 Route::middleware('auth')->group(function () {
+    Route::resource('dashboard', DashboardController::class);
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::prefix('masterdata')->name('masterdata.')->middleware(['role:super_admin'])->group(function(){
         Route::resource('users', UserController::class);
+        Route::resource('periode', PeriodeController::class);
         Route::resource('study_programs', StudyProgramController::class);
         
         Route::resource('student_classes', StudentClassController::class);
-        Route::get('/student_classes/export', [StudentClassController::class, 'export'])->name('student_classes.export');
         Route::resource('positions', PositionController::class);   
         Route::resource('courses', CoursesController::class); 
 

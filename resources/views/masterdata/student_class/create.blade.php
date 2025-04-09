@@ -33,8 +33,8 @@
                             <label for="study_program_id"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Program Studi</label>
                             <select id="study_program_id" name="study_program_id"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option value="" disabled selected>Pilih Prodi</option>
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
+                                <option value="">Pilih Prodi</option>
                                 @foreach ($prodis as $study_program)
                                     <option value="{{ $study_program->id }}">{{ $study_program->name }}</option>
                                 @endforeach
@@ -69,6 +69,34 @@
                                 @endfor
                             </select>
                         </div>
+                        <div class="relative">
+                            <label for="course"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mata Kuliah</label>
+                            <button id="dropdownButton" type="button"
+                                class="w-full px-4 py-2 text-gray-900 bg-white border border-gray-300 rounded-lg text-left focus:ring-blue-500 focus:border-blue-500 flex justify-between items-center">
+                                <span id="selectedCourses">Pilih Mata Kuliah</span>
+                                <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                    
+                            <!-- Dropdown Content -->
+                            <div id="dropdown" class="hidden absolute z-10 w-full mt-2 bg-white shadow-md rounded-lg">
+                                <input type="text" id="searchCourse" placeholder="Cari Mata Kuliah..."
+                                    class="w-full px-3 py-2 text-sm border-b border-gray-300 focus:outline-none">
+                                
+                                <ul id="courseList" class="max-h-48 overflow-y-auto py-2 text-gray-900">
+                                    @foreach ($course as $c)
+                                        <li class="px-4 py-2 hover:bg-gray-100">
+                                            <label class="flex items-center">
+                                                <input type="checkbox" name="course_id[]" value="{{ $c->id }}" class="mr-2 course-checkbox">
+                                                {{ $c->name }}
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
                         
                     </div>
                     <button type="submit"
@@ -90,5 +118,50 @@
                     inputField.setAttribute('max', currentYear);
                 });
             </script>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const dropdownButton = document.getElementById("dropdownButton");
+                    const dropdown = document.getElementById("dropdown");
+                    const searchInput = document.getElementById("searchCourse");
+                    const checkboxes = document.querySelectorAll(".course-checkbox");
+                    const selectedCourses = document.getElementById("selectedCourses");
+                
+                    // Toggle dropdown visibility
+                    dropdownButton.addEventListener("click", function () {
+                        dropdown.classList.toggle("hidden");
+                    });
+                
+                    // Close dropdown when clicking outside
+                    document.addEventListener("click", function (event) {
+                        if (!dropdownButton.contains(event.target) && !dropdown.contains(event.target)) {
+                            dropdown.classList.add("hidden");
+                        }
+                    });
+                
+                    // Search filter for courses
+                    searchInput.addEventListener("input", function () {
+                        const filter = searchInput.value.toLowerCase();
+                        document.querySelectorAll("#courseList li").forEach(function (item) {
+                            const text = item.textContent.toLowerCase();
+                            item.style.display = text.includes(filter) ? "" : "none";
+                        });
+                    });
+                
+                    // Update selected courses text
+                    checkboxes.forEach((checkbox) => {
+                        checkbox.addEventListener("change", updateSelectedCourses);
+                    });
+                
+                    function updateSelectedCourses() {
+                        let selected = [];
+                        checkboxes.forEach((checkbox) => {
+                            if (checkbox.checked) {
+                                selected.push(checkbox.parentElement.textContent.trim());
+                            }
+                        });
+                        selectedCourses.textContent = selected.length ? selected.join(", ") : "Pilih Mata Kuliah";
+                    }
+                });
+                </script>
         @endpush
 </x-app-layout>

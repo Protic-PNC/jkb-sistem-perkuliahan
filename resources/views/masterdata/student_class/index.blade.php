@@ -30,12 +30,12 @@
                                 Tambah Data
                             </button>
                         </a>
-                        <a href="#" class="inline-block">
+                        {{-- <a href="#" class="inline-block">
                         <button type="button" id="downloadData"
                             class="text-white bg-teal-500 hover:bg-teal-600 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                             Download Data kelas
                         </button>
-                        </a>
+                        </a> --}}
 
                     </div>
                     <form action="{{ route('masterdata.student_classes.index') }}" method="GET" class="flex items-center">
@@ -86,18 +86,12 @@
                                     <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
                                     </td>
                                     <td class="px-3 py-2 text-slate-800">  {{ $a->study_program->name }}  {{ $a->level }}  {{ $a->name }} </td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $a->code }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $a->academic_year }}</td>
                                     <td class="px-3 py-2 text-slate-800">
-                                        <a href="{{ route('masterdata.assign.course.class', $a->id) }}"
-                                            class="inline-block min-w-[150px] text-center font-medium bg-teal-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-teal-600 transition duration-300 hover:shadow-xl">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2"
-                                                viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                    d="M5 4a2 2 0 00-2 2v8a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2H5zM4 8v6h12V8H4zm1-2h10v1H5V6z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                            Data Mata Kuliah
-                                        </a>
+                                        @foreach ($a->course as $sc)
+                                        <li>{{ $sc->name }}</li>
+                                        @endforeach
                                     </td>
 
 
@@ -131,18 +125,19 @@
                 
             </div>
         </section>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
+        
         <script>
-            $(document).ready(function() {
-                $('#downloadData').on('click', function() {
-                var url = '{{ route('masterdata.student_classes.export') }}';
-                window.open(url, '_blank');
-                });
+            document.addEventListener('DOMContentLoaded', function() {
+                var successMessage = document.getElementById('success-message');
+                if (successMessage) {
+                    setTimeout(function() {
+                        successMessage.style.opacity = '0';
+                        setTimeout(function() {
+                            successMessage.remove();
+                        }, 500); // Time for fade-out transition
+                    }, 3000); // Time to show message before fading out
+                }
             });
-            
         </script>
         <script>
             let deleteId = null;

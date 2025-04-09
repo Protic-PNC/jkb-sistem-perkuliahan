@@ -8,6 +8,7 @@ use App\Models\AttendanceListDetail;
 use App\Models\Courses;
 use App\Models\Journal;
 use App\Models\Lecturer;
+use App\Models\Periode;
 use App\Models\StudentClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -49,7 +50,8 @@ class A_Lecturer_DocumentController extends Controller
     public function create()
     {
         $student_classes = StudentClass::get();
-        return view('masterdata.a_lecturer_document.create', compact('student_classes'));
+        $periode = Periode::get();
+        return view('masterdata.a_lecturer_document.create', compact('student_classes', 'periode'));
     }
 
     public function getCoursesByClass($classId)
@@ -71,6 +73,7 @@ class A_Lecturer_DocumentController extends Controller
             'student_class_id' => 'required|exists:student_classes,id',
             'course_id' => 'required|exists:courses,id',
             'lecturer_id' => 'required|exists:lecturers,id',
+            'periode_id' => 'required|exists:periodes,id',
         ]);
 
         // Jika validasi gagal
@@ -103,6 +106,7 @@ class A_Lecturer_DocumentController extends Controller
             $al->student_class_id = $request->student_class_id;
             $al->course_id = $request->course_id;
             $al->lecturer_id = $request->lecturer_id;
+            $al->periode_id = $request->periode_id;
             $al->save();
             Log::info('AttendanceList saved successfully.');
 
@@ -137,8 +141,9 @@ class A_Lecturer_DocumentController extends Controller
     public function edit(string $id)
     {
         $lecturer_document = AttendanceList::findOrFail($id);
-    $student_classes = StudentClass::all();
-    return view('masterdata.a_lecturer_document.edit', compact('lecturer_document', 'student_classes'));
+        $periode = Periode::get();
+        $student_classes = StudentClass::all();
+        return view('masterdata.a_lecturer_document.edit', compact('lecturer_document', 'student_classes', 'periode'));
     }
 
     /**
@@ -157,6 +162,7 @@ public function update(Request $request, $id)
         'student_class_id' => 'required|exists:student_classes,id',
         'course_id' => 'required|exists:courses,id',
         'lecturer_id' => 'required|exists:lecturers,id',
+        'periode_id' => 'required|exists:periodes,id',
     ]);
 
     if ($validator->fails()) {
@@ -171,6 +177,7 @@ public function update(Request $request, $id)
         'student_class_id' => $request->student_class_id,
         'course_id' => $request->course_id,
         'lecturer_id' => $request->lecturer_id,
+        'periode_id' => $request->periode_id,
     ]);
 
     // Redirect with success message
@@ -199,17 +206,27 @@ public function update(Request $request, $id)
     public function absensi_perkuliahan($id)
     {
         $data = AttendanceList::findOrFail($id);
-        
+
         $student_class = StudentClass::with(['students', 'course'])
             ->where('id', $data->student_class_id)
             ->firstOrFail();
-            $semester = $data->student_class->calculateSemester();
-            $academicYear = $student_class->calculateAcademicYear($semester);
 
-            $students = $student_class->students;
+        $semester = $data->student_class->calculateSemester();
+        $academicYear = $student_class->calculateAcademicYear($semester);
 
-            $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)->get();
+        // Load students with their attendance records for this attendance list
+        // $students = $student_class->students()->with(['attendence_list_student' => function($query) use ($data) {
+        //     $query->whereHas('attendance_list_detail', function($q) use ($data) {
+        //         $q->where('attendance_list_id', $data->id);
+        //     });
+        // }])->get();
+        $students = $student_class->students;
 
+
+        $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)
+            ->orderBy('meeting_order')
+            ->get();
+  
         return view('masterdata.a_lecturer_document.absensi_index', compact('data', 'semester', 'academicYear', 'students','attendencedetail'));
     }
     public function jurnal_perkuliahan($id)

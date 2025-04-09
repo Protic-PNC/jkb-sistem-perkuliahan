@@ -83,7 +83,7 @@
                                 <th scope="col" class="px-6 py-3">Nama</th>
                                 <th scope="col" class="px-6 py-3">NIDN</th>
                                 <th scope="col" class="px-6 py-3">NIP</th>
-                                <th scope="col" class="px-6 py-3">Daftar Matakuliah</th>
+                                <th scope="col" class="px-6 py-3">Mata Kuliah</th>
                                 <th scope="col" class="px-6 py-3">Jabatan</th>
                                 <th scope="col" class="px-6 py-3 text-center">Action</th>
                             </tr>
@@ -96,8 +96,12 @@
                                     <td class="px-3 py-2 text-slate-800">{{ $lecturer->name }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $lecturer->nidn }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $lecturer->nip }}</td>
-                                    <td class="px-3 py-2  justify-center text-slate-800 "><a href="{{ route('masterdata.assign.course.lecturer', $lecturer->id) }}" class="inline-block w-20 text-center font-medium bg-teal-400 text-white px-3 py-2 rounded-md hover:bg-teal-500 transition duration-300">Lihat Mata kuliah</a></td>
-                                    <td class="px-3 py-2  justify-center text-slate-800 "><a href="{{ route('masterdata.assign.lecturer.position', $lecturer->id) }}" class="inline-block w-20 text-center font-medium bg-teal-400 text-white px-3 py-2 rounded-md hover:bg-teal-500 transition duration-300">Lihat Jabatan</a></td>
+                                    <td class="px-3 py-2  justify-center text-slate-800 ">
+                                        @foreach ($lecturer->course as $a)
+                                        <li>{{ $a->name }}</li>
+                                        @endforeach
+                                    </td>
+                                    <td class="px-3 py-2  justify-center text-slate-800 ">{{ $lecturer->position?->name }} {{ $lecturer->position?->prodis?->name }}</td>
                                     <td class="px-3 py-2 flex space-x-2 justify-center ">
                                         <a href="{{ route('masterdata.lecturers.edit', $lecturer->id) }}"
                                             class="inline-flex items-center justify-center w-20 text-center font-medium bg-yellow-400 text-white px-3 py-2 rounded-md hover:bg-yellow-500 transition duration-300">
@@ -108,6 +112,9 @@
                                             </svg>
                                             Edit
                                         </a>
+                                        <button type="button" id="btn-hapus{{ $lecturer->id }}" class="font-medium bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline" onclick="openModal('{{ $lecturer->id }}', '{{ route('masterdata.lecturers.destroy', $lecturer->id) }}')">
+                                            <i class="fa fa-trash"></i> Hapus
+                                        </button>
                                         
                                     </td>
                                     
@@ -125,24 +132,56 @@
         </section>
 
         @push('after-script')
-            <script>
-                function confirmDelete() {
-                    return confirm('Are you sure you want to delete this user?');
-                }
-            </script>
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    var successMessage = document.getElementById('success-message');
-                    if (successMessage) {
+       
+        <script>
+            let deleteId = null;
+            let deleteUrl = '';
+        
+            function openModal(id, url) {
+                deleteId = id;
+                deleteUrl = url;
+                document.getElementById('delete-modal').classList.remove('hidden');
+            }
+        
+            function closeModal() {
+                document.getElementById('delete-modal').classList.add('hidden');
+            }
+        
+            function confirmDelete() {
+                closeModal(); // Menutup modal
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = deleteUrl;
+        
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = '_token';
+                csrfInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+                const methodInput = document.createElement('input');
+                methodInput.type = 'hidden';
+                methodInput.name = '_method';
+                methodInput.value = 'DELETE';
+        
+                form.appendChild(csrfInput);
+                form.appendChild(methodInput);
+                document.body.appendChild(form);
+                form.submit(); // Mengirimkan form
+            }
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var successMessage = document.getElementById('success-message');
+                if (successMessage) {
+                    setTimeout(function() {
+                        successMessage.style.opacity = '0';
                         setTimeout(function() {
-                            successMessage.style.opacity = '0';
-                            setTimeout(function() {
-                                successMessage.remove();
-                            }, 500); // Time for fade-out transition
-                        }, 3000); // Time to show message before fading out
-                    }
-                });
-            </script>
+                            successMessage.remove();
+                        }, 500); // Time for fade-out transition
+                    }, 3000); // Time to show message before fading out
+                }
+            });
+        </script>
         @endpush
 
     @endsection
