@@ -18,6 +18,7 @@ use App\Http\Controllers\Super_Admin\A_AttendenceListController;
 use App\Http\Controllers\Super_Admin\A_Lecturer_DocumentController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Student\M_AbsensiController;
 use App\Http\Controllers\StudentClassController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudyProgramController;
@@ -136,7 +137,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/lecturer_document/absensi/{id}', [M_LecturerDocumentController::class,'absensi'])->name('lecturer_document.absensi');
         Route::get('/lecturer_document/edit-student/{id}', [M_LecturerDocumentController::class,'edit_student'])->name('lecturer_document.edit_student');
         Route::put('/lecturer_document/update_student/{id}', [M_LecturerDocumentController::class, 'storeStudents'])->name('lecturer_document.update_student');
-
+        Route::get('/absensi-mahasiswa/{id}', [M_AbsensiController::class, 'absensi_mahasiswa'])->name('absensi_mahasiswa');
 
         Route::get('/student_class/{id}', [M_LecturerDocumentController::class, 'student_class_index'])->name('student_class');
         Route::get('attendenceList/{classId}/{code}', [AttendanceListController::class, 'index'])->name('attendenceList.index');

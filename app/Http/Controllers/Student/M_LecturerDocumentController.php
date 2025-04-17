@@ -44,22 +44,36 @@ class M_LecturerDocumentController extends Controller
 
     public function details($id)
     {
+        // $data = AttendanceList::findOrFail($id);
+
+        // $details= AttendanceListDetail::where('attendance_list_id', $data->id)
+        // ->get();
+        
+        // $student_class = StudentClass::with(['students', 'course'])
+        //     ->where('id', $data->student_class_id)
+        //     ->firstOrFail();
+        // $semester = $data->student_class->calculateSemester();
+        // $academicYear = $student_class->calculateAcademicYear($semester);
+
+        // $students = $student_class->students;
+
+        // $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)->first();
+
+        // return view('student.m_lecturer_document.m_details', compact( 'data', 'details','semester', 'academicYear', 'students'));
         $data = AttendanceList::findOrFail($id);
 
-        $details= AttendanceListDetail::where('attendance_list_id', $data->id)
-        ->get();
-        
         $student_class = StudentClass::with(['students', 'course'])
             ->where('id', $data->student_class_id)
             ->firstOrFail();
-        $semester = $data->student_class->calculateSemester();
-        $academicYear = $student_class->calculateAcademicYear($semester);
 
         $students = $student_class->students;
 
-        $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)->first();
 
-        return view('student.m_lecturer_document.m_details', compact( 'data', 'details','semester', 'academicYear', 'students'));
+        $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)
+            ->orderBy('meeting_order')
+            ->get();
+
+        return view('student.m_lecturer_document.m_details', compact( 'data', 'attendencedetail', 'students'));
     }
     public function detail_verifikasi($id)
     {
@@ -70,12 +84,10 @@ class M_LecturerDocumentController extends Controller
         $student_class = StudentClass::with(['students', 'course'])
             ->where('id', $data->student_class_id)
             ->firstOrFail();
-        $semester = $data->student_class->calculateSemester();
-        $academicYear = $student_class->calculateAcademicYear($semester);
 
         $students = $student_class->students;
 
-        return view('student.m_lecturer_document.m_detail_verifikasi', compact( 'data', 'details','semester', 'academicYear', 'students'));
+        return view('student.m_lecturer_document.m_detail_verifikasi', compact( 'data', 'details', 'students'));
     }
 
     public function create($id)

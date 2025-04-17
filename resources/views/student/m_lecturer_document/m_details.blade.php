@@ -78,7 +78,7 @@
                             </tr>
                             <tr class="bg-gray-50">
                                 <td class="p-2">Semester</td>
-                                <td class="p-2">: {{ $semester }}</td>
+                                <td class="p-2">: {{ $data->periode->tahun }} {{ $data->periode->semester }}</td>
                                 <td class="p-2">Kelas</td>
                                 <td class="p-2">: {{ $data->student_class->study_program->name }} {{ $data->student_class->level }} {{ $data->student_class->name }}</td>
                             </tr>
@@ -86,7 +86,7 @@
                                 <td class="p-2">Dosen</td>
                                 <td class="p-2">: {{ $data->lecturer->name }}</td>
                                 <td class="p-2">Tahun Akademik</td>
-                                <td class="p-2">: {{ $academicYear }}</td>
+                                <td class="p-2">: {{ $data->periode->tahun_akademik }}</td>
                             </tr>
                             <tr class="bg-gray-50">
                                 <td class="p-2">Jam Perkuliahan</td>
@@ -100,7 +100,6 @@
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4 border-collapse">
                         <thead class="text-xs uppercase bg-gray-900 text-white">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-center">No</th>
                                 <th scope="col" class="px-6 py-3 text-center">Pertemuan Ke</th>
                                 <th scope="col" class="px-6 py-3 text-center">Jumlah Mahasiswa Hadir</th>
                                 <th scope="col" class="px-6 py-3 text-center">Status Pertemuan</th>
@@ -110,9 +109,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($details as $d)
+                            @forelse ($attendencedetail as $d)
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <td class="px-6 py-4 text-center align-middle">{{ $loop->iteration }}</td>
                                 <td class="px-6 py-4 text-center align-middle">{{ $d->meeting_order }}</td>
                                 <td class="px-6 py-4 text-center align-middle">{{ $d->sum_attendance_students }}</td>
                                 <td class="px-6 py-4 text-center align-middle">

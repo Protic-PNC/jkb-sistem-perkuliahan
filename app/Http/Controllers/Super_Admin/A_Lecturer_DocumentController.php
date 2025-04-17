@@ -211,15 +211,6 @@ public function update(Request $request, $id)
             ->where('id', $data->student_class_id)
             ->firstOrFail();
 
-        $semester = $data->student_class->calculateSemester();
-        $academicYear = $student_class->calculateAcademicYear($semester);
-
-        // Load students with their attendance records for this attendance list
-        // $students = $student_class->students()->with(['attendence_list_student' => function($query) use ($data) {
-        //     $query->whereHas('attendance_list_detail', function($q) use ($data) {
-        //         $q->where('attendance_list_id', $data->id);
-        //     });
-        // }])->get();
         $students = $student_class->students;
 
 
@@ -227,7 +218,7 @@ public function update(Request $request, $id)
             ->orderBy('meeting_order')
             ->get();
   
-        return view('masterdata.a_lecturer_document.absensi_index', compact('data', 'semester', 'academicYear', 'students','attendencedetail'));
+        return view('masterdata.a_lecturer_document.absensi_index', compact('data',  'students','attendencedetail'));
     }
     public function jurnal_perkuliahan($id)
     {
