@@ -28,6 +28,9 @@ class AttendanceList extends Model
 
     //has finished, jika 0 = aktif, 1 = dokumen selesai, 2 acc kajur
 
+    public function student_class(){
+        return $this->belongsTo(StudentClass::class, 'student_class_id', 'id');
+    }
     public function lecturer(){
         return $this->belongsTo(Lecturer::class, 'lecturer_id', 'id');
     }
@@ -36,9 +39,6 @@ class AttendanceList extends Model
     }
     public function course(){
         return $this->belongsTo(Courses::class, 'course_id', 'id');
-    }
-    public function student_class(){
-        return $this->belongsTo(StudentClass::class, 'student_class_id', 'id');
     }
 
     public function attendanceListDetails(){ //attendence list details

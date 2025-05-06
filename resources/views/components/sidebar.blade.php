@@ -19,98 +19,52 @@
     <nav class="mt-10">
         <a class="flex items-center px-6 py-2 mt-4 {{ setActive('dashboard.index') }}"
             href="{{ route('dashboard.index') }}">
-            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
-            </svg>
+            <i class="fa-solid fa-house"></i>
             <span class="mx-3">Dashboard</span>
         </a>
 
         @role('super_admin')
             <a class="flex items-center px-6 py-2 mt-4 {{ setActive('masterdata.lecturer_documents.*') }}"
                 href="{{ route('masterdata.lecturer_documents.index') }}">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z">
-                    </path>
-                </svg>
+                <i class="fa-solid fa-file"></i>
                 <span class="mx-3">Dokumen Perkuliahan</span>
             </a>
-            <a class="flex items-center px-6 py-2 mt-4 {{ setActive('masterdata.users.*') }}"
+            <a class="flex items-center px-6 py-2 mt-4 {{ setActive('masterdata.users.*') }} {{ setActive('profile') }}"
                 href="{{ route('masterdata.users.index') }}">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                </svg>
-                <span class="mx-3">Users</span>
+                <i class="fa-solid fa-user"></i>
+                <span class="mx-3">Pengguna</span>
             </a>
             <a class="flex items-center px-6 py-2 mt-4 {{ setActive('masterdata.periode.*') }}"
                 href="{{ route('masterdata.periode.index') }}">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                </svg>
+                {{-- <i class="fa-solid fa-clock"></i> --}}
+                <i class="fa-solid fa-hourglass-end"></i>
                 <span class="mx-3">Periode</span>
             </a>
 
 
             <a class="flex items-center px-6 py-2 mt-4 {{ setActive('masterdata.study_programs.*') }}"
                 href="{{ route('masterdata.study_programs.index') }}">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <rect x="3" y="4" width="18" height="4" rx="2" />
-                    <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-                    <line x1="10" y1="12" x2="14" y2="12" />
-                </svg>
+                <i class="fa-solid fa-school"></i>
                 <span class="mx-3">Program Studi</span>
             </a>
             <a class="flex items-center px-6 py-2 mt-4 {{ setActive('masterdata.student_classes.*') }} {{ setActive('masterdata.assign.course.class') }} "
                 href="{{ route('masterdata.student_classes.index') }}">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke="none" d="M0 0h24v24H0z" />
-                    <line x1="3" y1="21" x2="21" y2="21" />
-                    <path d="M4 21v-15a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v15" />
-                    <path d="M9 21v-8a3 3 0 0 1 6 0v8" />
-                </svg>
+                <i class="fa-solid fa-landmark"></i>
                 <span class="mx-3">Kelas</span>
             </a>
             <a class="flex items-center px-6 py-2 mt-4 {{ setActive('masterdata.positions.*') }}"
                 href="{{ route('masterdata.positions.index') }}">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                    <circle cx="9" cy="7" r="4" />
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                </svg>
+                <i class="fa-solid fa-user-plus"></i>
                 <span class="mx-3">Jabatan</span>
             </a>
             <a class="flex items-center px-6 py-2 mt-4 {{ setActive('masterdata.courses.*') }}"
                 href="{{ route('masterdata.courses.index') }}">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke="none" d="M0 0h24v24H0z" />
-                    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-                    <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
-                    <line x1="9" y1="9" x2="10" y2="9" />
-                    <line x1="9" y1="13" x2="15" y2="13" />
-                    <line x1="9" y1="17" x2="15" y2="17" />
-                </svg>
+                <i class="fa-solid fa-brain"></i>
                 <span class="mx-3">Mata Kuliah</span>
             </a>
             <a class="flex items-center px-6 py-2 mt-4 {{ setActive('masterdata.students.*') }}"
                 href="{{ route('masterdata.students.index') }}">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z">
-                    </path>
-                </svg>
+                <i class="fa-solid fa-graduation-cap"></i>
                 <span class="mx-3">Mahasiswa</span>
             </a>
             <a class="flex items-center px-6 py-2 mt-4   
@@ -118,38 +72,37 @@
             {{ setActive('masterdata.assign.lecturer.position') }}   
             {{ setActive('masterdata.assign.course.lecturer') }}"
                 href="{{ route('masterdata.lecturers.index') }}">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z">
-                    </path>
-                </svg>
+                <i class="fa-solid fa-chalkboard-user"></i>
                 <span class="mx-3">Dosen</span>
             </a>
         @endrole
-        @php
-            $nidn = Auth::user()->lecturer->nidn ?? null;
-        @endphp
+
         @role('dosen')
             @if ($nidn)
                 <a class="flex items-center px-6 py-2 mt-4 {{ setActive('lecturer.dokumen_perkuliahan*') }} {{ setActive('lecturer.lecturer_document*') }} "
                     href="{{ route('lecturer.dokumen_perkuliahan', ['nidn' => $nidn]) }}">
-                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z">
-                        </path>
-                    </svg>
+                    <i class="fa-solid fa-file"></i>
                     <span class="mx-3">Dokumen Perkuliahan</span>
                 </a>
+                
+                @if ($user->lecturer->position->name == 'Koordinator Program Studi')
+                    <a class="flex items-center px-6 py-2 mt-4 {{ setActive('lecturer.daftar_persetujuan_dokumen*') }}"
+                        href="{{ route('lecturer.daftar_persetujuan_dokumen', ['id' => $user->lecturer->position_id]) }}">
+                        
+                        <i class="fa-solid fa-folder"></i>
+                        <span class="mx-3">Daftar Persetujuan Kaprodi</span>
+                    </a>
+                @elseif ($user->lecturer->position->name == 'Kepala Jurusan')
+                <a class="flex items-center px-6 py-2 mt-4 {{ setActive('lecturer.daftar_persetujuan_dokumen*') }}"
+                href="{{ route('lecturer.daftar_persetujuan_dokumen', ['id' => $user->lecturer->position_id]) }}">
+                
+                    <i class="fa-solid fa-folder"></i>
+                    <span class="mx-3">Daftar Persetujuan Kepala Jurusan</span>
+                </a>
+                @endif
                 <a class="flex items-center px-6 py-2 mt-4 {{ setActive('lecturer.daftar_dokumen_perkuliahan*') }}"
                     href="{{ route('lecturer.daftar_dokumen_perkuliahan', ['nidn' => $nidn]) }}">
-                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z">
-                        </path>
-                    </svg>
+                    <i class="fa-solid fa-folder-open"></i>
                     <span class="mx-3">Daftar Dokumen Perkuliahan</span>
                 </a>
             @else
@@ -169,12 +122,7 @@
 
             <a class="flex items-center px-6 py-2 mt-4 {{ setActive('student.dokumen_perkuliahan*') }} {{ setActive('student.lecturer_document*') }} "
                 href="{{ route('student.dokumen_perkuliahan', $user->student->id) }}">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z">
-                    </path>
-                </svg>
+                <i class="fa-solid fa-file"></i>
                 <span class="mx-3">Dokumen Perkuliahan</span>
             </a>
             <a class="flex items-center px-6 py-2 mt-4 {{ setActive('student.dokumen_perkuliahan*') }} {{ setActive('student.lecturer_document*') }} "
@@ -187,7 +135,6 @@
                 </svg>
                 <span class="mx-3">Absensi Mahasiswa</span>
             </a>
-           
         @endrole
     </nav>
 </div>

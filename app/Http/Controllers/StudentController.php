@@ -39,7 +39,7 @@ class StudentController extends Controller
                 });
         }
 
-        $students = $query->paginate(5);
+        $students = $query->with('student_class', 'student_class.study_program')->paginate(5);
 
         return view('masterdata.students.index', compact('students'));
     }

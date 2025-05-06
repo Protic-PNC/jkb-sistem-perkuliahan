@@ -19,7 +19,6 @@ return new class extends Migration
             $table->tinyInteger('course_status')->comment('1=sesuai jadwal, 2= pertukaran, 3= pengganti, 4= tambahan');
             $table->integer('start_hour')->nullable(); //jam pertemuan 1 
             $table->integer('end_hour')->nullable(); //jam pertemuan 2 
-            $table->string('meeting_hour')->nullable(); //opsional, 1 sd 2
             $table->integer('sum_attendance_students')->nullable(); //jumlah kehadiran
             $table->integer('sum_late_students')->nullable();
             $table->boolean('has_acc_student')->default(1);

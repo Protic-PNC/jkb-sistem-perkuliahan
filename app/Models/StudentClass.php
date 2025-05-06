@@ -15,7 +15,7 @@ class StudentClass extends Model
 
     public function study_program()
     {
-        return $this->belongsTo(StudyProgram::class);
+        return $this->belongsTo(StudyProgram::class,'study_program_id', 'id');
     }
     public function students()
     {

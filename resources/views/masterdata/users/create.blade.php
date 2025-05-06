@@ -38,7 +38,7 @@
                         <div>
                             <label for="avatar" class="block mb-2 text-sm font-medium text-gray-700">Upload
                                 Profile</label>
-                            <input type="file" id="avatar" name="avatar"
+                            <input type="file" id="avatar" name="avatar" 
                                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
                         </div>
                         <div class="w-full">

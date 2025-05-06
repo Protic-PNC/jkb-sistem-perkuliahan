@@ -5,8 +5,10 @@ namespace App\Models;
 //use Illuminate\Contracts\Auth\MustVerifyEmail;
 ;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -56,6 +58,11 @@ class User extends Authenticatable
         return $this->hasOne(Student::class);
     }
 
+    public function role()
+    {
+        return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id', 'role_id')
+            ->where('model_type', 'App\Models\User');
+    }
     
 
     

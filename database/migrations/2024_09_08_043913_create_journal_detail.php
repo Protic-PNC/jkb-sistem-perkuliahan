@@ -19,15 +19,12 @@ return new class extends Migration
             $table->string('learning_methods')->nullable();
             $table->tinyInteger('has_acc_student')->default(1);
             $table->tinyInteger('has_acc_lecturer')->default(1);
-            $table->tinyInteger('has_acc_kajur')->default(1);
             $table->tinyInteger('has_acc_kaprodi')->default(1);
             $table->foreignId('student_id')->nullable()->constrained('students')->onDelete('cascade');
             $table->foreignId('lecturer_kaprodi_id')->nullable()->constrained('lecturers')->onDelete('cascade');
-            $table->foreignId('lecturer_kajur_id')->nullable()->constrained('lecturers')->onDelete('cascade');
             $table->dateTime('date_acc_student')->nullable();
             $table->dateTime('date_acc_lecturer')->nullable();
             $table->dateTime('date_acc_kaprodi')->nullable();
-            $table->dateTime('date_acc_kajur')->nullable();
             $table->string('note')->nullable();
             $table->timestamps();
         });

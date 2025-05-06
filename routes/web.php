@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\Lecturer\AttendanceListController;
 use App\Http\Controllers\Lecturer\L_LecturerDocumentController;
+use App\Http\Controllers\Lecturer\L_PersetujuanDokumenController;
 use App\Http\Controllers\Lecturer\LecturerDocumentController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\LecturerPositionController;
@@ -100,8 +101,8 @@ Route::middleware('auth')->group(function () {
     Route::prefix('lecturer')->name('lecturer.')->middleware(['role:dosen'])->group(function(){
         Route::get('/dokumen-perkuliahan/{nidn}', [L_LecturerDocumentController::class, 'index'])->name('dokumen_perkuliahan');
         Route::get('/daftar-dokumen-perkuliahan/{nidn}', [L_LecturerDocumentController::class, 'index2'])->name('daftar_dokumen_perkuliahan');
-        
-        Route::post('/lecturer_document/store', [L_LecturerDocumentController::class, 'store'])->name('lecturer_document.store');
+      
+        Route::post('/lecturer_document/store/{id}', [L_LecturerDocumentController::class, 'store'])->name('lecturer_document.store');
         Route::get('/lecturer_document/edit/{id}', [L_LecturerDocumentController::class,'edit'])->name('lecturer_document.edit');
         Route::put('/lecturer_document/update/{id}', [L_LecturerDocumentController::class, 'update'])->name('lecturer_document.update');
         Route::get('/lecturer_document/details/{id}', [L_LecturerDocumentController::class, 'details'])->name('lecturer_document.details');
@@ -113,6 +114,13 @@ Route::middleware('auth')->group(function () {
         Route::put('/lecturer_document/update_student/{id}', [L_LecturerDocumentController::class, 'update_student'])->name('lecturer_document.update_student');
         Route::post('/lecturer_document/selesai/{id}', [L_LecturerDocumentController::class, 'selesai_document'])->name('lecturer_document.selesai');
 
+        Route::get('/daftar-persetujuan-dokumen/{id}', [L_PersetujuanDokumenController::class, 'index'])->name('daftar_persetujuan_dokumen');
+        Route::get('/daftar-persetujuan-dokumen/detail/{id}', [L_PersetujuanDokumenController::class, 'details'])->name('daftar_persetujuan_dokumen.detail');
+        Route::post('/lecturer_document/verifikasi-massal/{id}', [L_PersetujuanDokumenController::class, 'verifikasiMassal'])->name('lecturer_document.verifikasi_massal');
+        Route::get('/lecturer_document/detail-verifikasi/{id}', [L_PersetujuanDokumenController::class, 'detail_verifikasi'])->name('lecturer_document.detail_verifikasi');
+        Route::post('/lecturer_document/setuju_kajur/{id}', [L_PersetujuanDokumenController::class, 'setuju_kajur'])->name('lecturer_document.setuju_kajur');
+
+        
 
         Route::get('/student_class/{id}', [L_LecturerDocumentController::class, 'student_class_index'])->name('student_class');
         Route::get('attendenceList/{classId}/{code}', [AttendanceListController::class, 'index'])->name('attendenceList.index');

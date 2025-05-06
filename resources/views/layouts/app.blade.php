@@ -18,6 +18,7 @@
 
 <body class="min-h-screen bg-gray-100" style="background: #edf2f7;">
     <div>
+        
 
         <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-200">
             <div :class="sidebarOpen ? 'block' : 'hidden'" @click="sidebarOpen = false"
@@ -105,12 +106,15 @@
                         </div>
 
                         <div x-data="{ dropdownOpen: false }" class="relative">
-                            <button @click="dropdownOpen = ! dropdownOpen"
-                                class="relative block w-8 h-8 overflow-hidden rounded-full shadow focus:outline-none">
-                                <img class="object-cover w-full h-full" src="{{ Auth::user()->avatar ? Storage::url(Auth::user()->avatar) : asset('/image/profile.png') }}" 
-                                alt="Your avatar">
-                           
-                            </button>
+                            <div @click="dropdownOpen = ! dropdownOpen" class="flex items-center space-x-2 cursor-pointer">
+                                <button
+                                    class="relative block w-8 h-8 overflow-hidden rounded-full shadow focus:outline-none">
+                                    <img class="object-cover w-full h-full"
+                                        src="{{ Auth::user()->avatar ? Storage::url(Auth::user()->avatar) : asset('/image/profile.png') }}"
+                                        alt="Your avatar">
+                                </button>
+                                <span class="text-gray-800 font-medium">{{ Auth::user()->name }}</span>
+                            </div>
 
                             <div x-show="dropdownOpen" @click="dropdownOpen = false"
                                 class="fixed inset-0 z-10 w-full h-full" style="display: none;"></div>
@@ -184,6 +188,7 @@
         });
     </script>
     <script>
+        import '@fortawesome/fontawesome-free/css/all.min.css';
         document.addEventListener('DOMContentLoaded', function() {
             var successMessage = document.getElementById('success-message');
             if (successMessage) {

@@ -80,6 +80,7 @@
                         <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
                             <tr class="text-white mb-3">
                                 <th scope="col" class="px-6 py-3">No</th>
+                                <th scope="col" class="px-6 py-3">Email</th>
                                 <th scope="col" class="px-6 py-3">Nama</th>
                                 <th scope="col" class="px-6 py-3">NIDN</th>
                                 <th scope="col" class="px-6 py-3">NIP</th>
@@ -93,6 +94,7 @@
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
                                     </td>
+                                    <td class="px-3 py-2 text-slate-800">{{ $lecturer->user->email }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $lecturer->name }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $lecturer->nidn }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $lecturer->nip }}</td>

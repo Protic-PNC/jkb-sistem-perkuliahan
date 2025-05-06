@@ -103,23 +103,39 @@
                                     <td class="px-2 py-2 text-center border border-slate-800">{{ $loop->iteration }}</td>
                                     <td class="px-2 py-2 border border-slate-800">{{ $student->nim }}</td>
                                     <td class="px-2 py-2 border border-slate-800">{{ $student->name }}</td>
-                                    @foreach ($attendencedetail as $detail)
-                                        @php
-                                            $attendanceRecord = $student->attendence_list_student
-                                                ->where('attendance_list_detail_id', $detail->id)
-                                                ->first();
-                                        @endphp
-                                        
-                                        <!-- Attendance Status (A) -->
-                                        <td class="attendance-cell border border-slate-800 text-center">
-                                            {{ $attendanceRecord->attendance_student ?? '-' }}
-                                        </td>
-                                        
-                                        <!-- Late Minutes (T) -->
-                                        <td class="attendance-cell border border-slate-800 text-center">
-                                            {{ $attendanceRecord->minutes_late ?? '-' }}
-                                        </td>
-                                    @endforeach
+                                    @php
+                                        $totalMeetings = 16;
+                                        $rendered = 0;
+                                        $attendanceCollection = $student->attendence_list_student ?? collect();
+                                    @endphp
+
+                                    @if ($attendencedetail->isEmpty())
+                                        @for ($i = 0; $i < $totalMeetings; $i++)
+                                            <td colspan="2" class="px-1 py-1 text-center border border-slate-800">-</td>
+                                        @endfor
+                                    @else
+                                        @foreach ($attendencedetail as $detail)
+                                            @php
+                                                $attendanceRecord = $attendanceCollection->where('attendance_list_detail_id', $detail->id)->first();
+                                                $rendered++;
+                                            @endphp
+
+                                            <td class="attendance-cell border border-slate-800 text-center">
+                                                {{ $attendanceRecord->attendance_student ?? '-' }}
+                                            </td>
+                                            <td class="attendance-cell border border-slate-800 text-center">
+                                                {{ $attendanceRecord->minutes_late ?? '-' }}
+                                            </td>
+                                        @endforeach
+
+                                        @for ($i = $rendered; $i < $totalMeetings; $i++)
+                                            <td colspan="2" class="px-1 py-1 text-center border border-slate-800">-</td>
+                                        @endfor
+                                    @endif
+
+                                
+                                
+                                
                                     
                                 </tr>
                                 <!-- Add more student rows as needed -->
@@ -279,8 +295,11 @@
                         </div>
                     </div>
                 </div>
+                {{-- @if ($attendencedetail->count() > 12) --}}
                 <button type="button" id="btn-verifikasi" class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-medium rounded-lg text-sm m-4 px-4 py-1 text-center">
                     <i class="fa fa-check"></i> Cetak </button>
+                {{-- @endif --}}
+                
             </div>
             
         </section>

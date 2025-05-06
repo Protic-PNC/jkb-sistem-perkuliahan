@@ -107,20 +107,18 @@
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4 border-collapse">
                         <thead class="text-xs uppercase bg-gray-900 text-white">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-center">No</th>
                                 <th scope="col" class="px-6 py-3 text-center">Pertemuan Ke</th>
                                 <th scope="col" class="px-6 py-3 text-center">Jumlah Mahasiswa Hadir</th>
                                 <th scope="col" class="px-6 py-3 text-center">Status Pertemuan</th>
                                 <th scope="col" class="px-6 py-3 text-center">Metode Pembelajaran</th>
                                 <th scope="col" class="px-6 py-3 text-center">Materi Perkuliahan</th>
-                                <th scope="col" class="px-6 py-3 text-center">Status Konfirmasi Mahasiswa</th>
+                                <th scope="col" class="px-6 py-3 text-center">Status</th>
                                 <th scope="col" class="px-6 py-3 text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($details as $d)
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <td class="px-6 py-4 text-center align-middle">{{ $loop->iteration }}</td>
                                 <td class="px-6 py-4 text-center align-middle">{{ $d->meeting_order }}</td>
                                 <td class="px-6 py-4 text-center align-middle">{{ $d->sum_attendance_students }}</td>
                                 <td class="px-6 py-4 text-center align-middle">
@@ -137,10 +135,12 @@
                                 <td class="px-6 py-4 text-center align-middle">{{ $d->journal_detail->learning_methods}}</td>
                                 <td class="px-6 py-4 text-center align-middle">{{ $d->journal_detail->material_course}}</td>
                                 <td class="px-6 py-4 text-center align-middle">
-                                    @if($d->has_acc_student == 2)
-                                    Sudah
-                                    @else
-                                    Belum
+                                    @if($d->has_acc_student == 1)
+                                    Belum DiVerifikasi Mahasiswa
+                                    @elseif($d->has_acc_student == 2 && $d->journal_detail->has_acc_kaprodi == 1)
+                                    Sudah Diverifikasi Mahasiswa Belum Diverifikasi Kaprodi
+                                    @elseif ($d->has_acc_student == 2 && $d->journal_detail->has_acc_kaprodi == 2)
+                                    Sudah Diverifikasi Mahasiswa dan Dosen
                                     @endif
                                 </td>
                                 <td class="px-3 py-2 text-center align-middle flex space-x-1 justify-center">
@@ -168,11 +168,13 @@
                     </table>
                     
                 </div>
+               @if ($details->count() > 3 && $data->has_finished == 1)
                
-                <div class="m-3">      
-                        <button type="button" id="btn-verifikasi{{ $data->id }}" class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center" onclick="openModalSelesai('{{ $data->id }}', '{{ route('lecturer.lecturer_document.selesai', $data->id) }}')">
-                            <i class="fa fa-check"></i> Perkuliahan Selesai  </button>
-                </div>
+               <div class="m-3">      
+                       <button type="button" id="btn-verifikasi{{ $data->id }}" class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center" onclick="selesaiDocument({{ $data->id }})">
+                           <i class="fa fa-check"></i> Perkuliahan Selesai</button>
+               </div>
+               @endif
                                     
             </div>
             <div id="Selesai-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-50">
@@ -186,7 +188,7 @@
                 </div>
             </div>
         </section>
-        <script>
+        {{-- <script>
             let SelesaiId = null;
         let SelesaiUrl = '';
     
@@ -219,6 +221,48 @@
             form.appendChild(methodInput);
             document.body.appendChild(form);
             form.submit(); // Mengirimkan form
+        }
+        </script> --}}
+        <script>
+            function selesaiDocument(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Anda akan menyelesaikan dokumen ini!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Selesaikan!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('lecturer.lecturer_document.selesai', '') }}/" + id,
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            _method: 'POST'
+                        },
+                        success: function(response) {
+                            Swal.fire(
+                                'Berhasil!',
+                                response.message,
+                                'success'
+                            ).then(() => {
+                                location.reload();
+                            });
+                        },
+                        error: function(xhr) {
+                            let error = xhr.responseJSON ? xhr.responseJSON.message : 'Terjadi kesalahan';
+                            Swal.fire(
+                                'Gagal!',
+                                error,
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
         }
         </script>
 

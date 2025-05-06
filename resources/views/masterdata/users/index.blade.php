@@ -36,7 +36,12 @@
                     </div>
                 @endif
                 <div class="mb-3 flex items-center justify-between">
-                    
+                    {{-- <a href="{{ route('masterdata.users.create') }}" class="inline-block">
+                        <button type="button"
+                            class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                            Tambah Data
+                        </button>
+                    </a> --}}
 
                     <form action="{{ route('masterdata.users.index') }}" method="GET" class="flex items-center">
                         <div class="relative">
@@ -88,12 +93,10 @@
                                         @foreach ($user->roles as $role)
                                             {{ $role->name }}
                                             @if (!$loop->last)
-                                                ,
                                             @endif
                                         @endforeach
                                     </td>
                                     <td class="px-3 py-2 flex space-x-2 justify-end ">
-                                        @if ($user->hasRole('dosen'))
                                             {{-- <a href="{{ route('masterdata.lecturers.create', $user->id) }}"
                                                 class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                                 Lengkapi Identitas
@@ -103,7 +106,7 @@
                                                 class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                                 Lengkapi Identitas
                                             </a> --}}
-                                        @endif
+                                        
                                         <a href="{{ route('masterdata.users.edit', $user->id) }}"
                                             class="inline-flex items-center justify-center w-20 text-center font-medium bg-yellow-400 text-white px-3 py-2 rounded-md hover:bg-yellow-500 transition duration-300">
                                             <svg class="w-5 h-5 mr-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -112,6 +115,15 @@
                                                     d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
                                             </svg>
                                             Edit
+                                        </a>
+                                        <a href="{{ route('masterdata.users.show', $user->id) }}"
+                                            class="inline-flex items-center justify-center w-20 text-center font-medium bg-indigo-400 text-white px-3 py-2 rounded-md hover:bg-indigo-500 transition duration-300">
+                                            {{-- <svg class="w-5 h-5 mr-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                                            </svg> --}}
+                                            Detail
                                         </a>
 
                                         

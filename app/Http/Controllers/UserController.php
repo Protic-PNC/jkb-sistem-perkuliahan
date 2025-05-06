@@ -54,7 +54,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
             'role' => 'required|exists:roles,name',
-            'avatar' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'avatar' => 'nullable|max:2048',
         ]);
 
         $data = $request->only(['name', 'email', 'password']);
@@ -91,7 +91,8 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        return view('masterdata.users.show', compact('user'));
     }
 
     /**

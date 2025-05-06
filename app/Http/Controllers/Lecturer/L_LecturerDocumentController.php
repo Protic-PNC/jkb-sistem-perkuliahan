@@ -10,8 +10,10 @@ use App\Models\Courses;
 use App\Models\Journal;
 use App\Models\JournalDetail;
 use App\Models\Lecturer;
+use App\Models\Position;
 use App\Models\Student;
 use App\Models\StudentClass;
+use App\Models\StudyProgram;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +26,7 @@ class L_LecturerDocumentController extends Controller
     public function index(Request $request, string $nidn)
     {
         $user = Auth::user();
-        $attendanceLists = AttendanceList::select('attendance_lists.id', 'attendance_lists.student_class_id', 'attendance_lists.course_id', 'attendance_lists.lecturer_id');
+        $attendanceLists = AttendanceList::select('attendance_lists.id', 'attendance_lists.student_class_id', 'attendance_lists.course_id', 'attendance_lists.lecturer_id')->where('has_finished', 1);
 
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -73,7 +75,7 @@ class L_LecturerDocumentController extends Controller
         return view('lecturer.l_lecturer_document.create', compact('al', 'selectedMeetings', 'students'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
             'meeting_order' => 'required|integer',
@@ -89,12 +91,9 @@ class L_LecturerDocumentController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        DB::beginTransaction();
+        $atendance = AttendanceList::where('id', $id)->first();
         try {
-            DB::beginTransaction();
-
-            $atendance = AttendanceList::first();
-            $journal = Journal::first();
-
             $al = new AttendanceListDetail();
             $al->attendance_list_id = $atendance->id;
             $al->meeting_order = $request->meeting_order;
@@ -106,7 +105,7 @@ class L_LecturerDocumentController extends Controller
 
             // Simpan data Journal
             $jo = new JournalDetail();
-            $jo->journal_id = $journal->id;
+            $jo->journal_id = $atendance->journal->id;
             $jo->attendance_list_detail_id = $al->id;
             $jo->material_course = $request->material_course;
             $jo->learning_methods = $request->learning_methods;
@@ -122,9 +121,6 @@ class L_LecturerDocumentController extends Controller
                 ->with('error', 'System error: ' . $e->getMessage());
         }
     }
-
-   
-
     public function edit(string $id)
     {
         $ad = AttendanceListDetail::find($id);
@@ -158,23 +154,17 @@ class L_LecturerDocumentController extends Controller
         try {
             DB::beginTransaction();
 
-            $atendance = AttendanceList::first();
-            $journal = Journal::first();
-
             $al = AttendanceListDetail::find($id);
-            $al->attendance_list_id = $atendance->id;
             $al->meeting_order = $request->meeting_order;
             $al->course_status = $request->course_status;
             $al->start_hour = $request->start_hour;
             $al->end_hour = $request->end_hour;
-
             $al->save();
 
-            // Simpan data Journal
-            $jo = JournalDetail::find($id);
-            $jo->material_course = $request->material_course;
-            $jo->learning_methods = $request->learning_methods;
-            $jo->save();
+            
+            $al->journal_detail->material_course = $request->material_course;
+            $al->journal_detail->learning_methods = $request->learning_methods;
+            $al->journal_detail->save();
 
             DB::commit();
             return redirect()->route('lecturer.lecturer_document.details',  $atendance->id)->with('success', 'Daftar Hadir dan Jurnal berhasil diubah');
@@ -380,7 +370,10 @@ class L_LecturerDocumentController extends Controller
 
         return view('lecturer.l_lecturer_document.index_daftar', compact('user', 'data'));
     }
+    
+       
 
+      
     // public function selesai($id)
     // {
     //     $al_detail = AttendanceListDetail::find($id);
@@ -405,31 +398,64 @@ class L_LecturerDocumentController extends Controller
 
     public function selesai_document($id)
     {
-        Log::info('p');
         $al = AttendanceList::findOrFail($id);
-        Log::info('$al');
         $journal = Journal::where('attendance_list_id', $al->id)->first();
-
+        
+        // Cek approval AttendanceListDetail
+        $unapprovedAldetails = AttendanceListDetail::where('attendance_list_id', $al->id)
+            ->where(function($query) {
+                $query->where('has_acc_student', '!=', 2)
+                    ->orWhere('has_acc_lecturer', '!=', 2);
+            })->exists();
+        
+        if ($unapprovedAldetails) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Dokumen Tidak Dapat Dinyatakan Selesai Jika Mahasiswa atau Dosen Mata Kuliah Belum Verifikasi'
+            ], 422);
+        }
+        
+        // Cek approval JournalDetail
+        $attendanceListDetailIds = AttendanceListDetail::where('attendance_list_id', $al->id)->pluck('id');
+        
+        $unapprovedJournalDetails = JournalDetail::whereIn('attendance_list_detail_id', $attendanceListDetailIds)
+            ->where('has_acc_kaprodi', '!=', 2)
+            ->exists();
+        
+        if ($unapprovedJournalDetails) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Dokumen Tidak Dapat Dinyatakan Selesai Jika Koordinator program Belum Verifikasi'
+            ], 422);
+        }
+        
+        // Jika semua sudah di-approve
         DB::beginTransaction();
-        try{
-            
+        try {
             $user = Auth::user();
             $al->has_finished = 2;
             $al->date_finished = now();
             $al->save();
-            $journal->has_finished= 2;
-            $journal->date_finished = now();
-            $journal->save();
+            
+            if ($journal) {
+                $journal->has_finished = 2;
+                $journal->date_finished = now();
+                $journal->save();
+            }
+            
             DB::commit();
-            return redirect()
-                ->back()
-                ->with('success', 'Data Berhasil Di Verifikasi!');
-        }catch (\Exception $e) {
+            
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data Berhasil Di Verifikasi!'
+            ]);
+            
+        } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()
-                ->back()
-                ->with('error', 'Error Saat Verifikasi: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error Saat Verifikasi: ' . $e->getMessage()
+            ], 500);
         }
-    
     }
 }

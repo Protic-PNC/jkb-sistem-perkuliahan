@@ -27,7 +27,7 @@ class RoleSeeder extends Seeder
 
         $userSuperAdmin = User::create([
             'name' => 'Adisa L',
-            'avatar' => 'images/avatar-default.svg',
+            // 'avatar' => 'images/avatar-default.svg',
             'email' => 'adisa@admin.com',
             'password' => bcrypt('12345678'),
             
@@ -35,7 +35,7 @@ class RoleSeeder extends Seeder
 
         $userMahasiswa = User::create([
             'name' => 'mahasiswa',
-            'avatar' => 'images/avatar-default.svg',
+            // 'avatar' => 'images/avatar-default.svg',
             'email' => 'mahasiswa@mahasiswa.com',
             'password' => bcrypt('12345678'),
             
@@ -43,7 +43,7 @@ class RoleSeeder extends Seeder
 
         $userDosen = User::create([
             'name' => 'dosen',
-            'avatar' => 'images/avatar-default.svg',
+            // 'avatar' => 'images/avatar-default.svg',
             'email' => 'dosen@dosen.com',
             'password' => bcrypt('12345678'),
             

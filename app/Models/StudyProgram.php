@@ -15,9 +15,11 @@ class StudyProgram extends Model
         'brief',
     ];
 
-    public function student_class(){
-        return $this->hasOne(StudentClass::class);
+   
+    public function position(){
+        return $this->belongsTo(Position::class);
     }
+   
 
 
 }

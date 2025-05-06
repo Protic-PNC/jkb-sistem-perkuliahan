@@ -23,18 +23,24 @@ class A_Lecturer_DocumentController extends Controller
     public function index(Request $request)
     {
         $attendanceLists = AttendanceList::with('student_class', 'course', 'lecturer');
-        
-        // Jika ada parameter pencarian
+
+// Jika ada parameter pencarian
         if ($request->has('search')) {
             $search = $request->input('search');
-        
-            // Tambahkan kondisi pencarian berdasarkan kolom yang dipilih
+
             $attendanceLists->where(function ($q) use ($search) {
-                $q->where('student_classes.name', 'LIKE', "%{$search}%")
-                  ->orWhere('courses.name', 'LIKE', "%{$search}%")
-                  ->orWhere('lecturers.name', 'LIKE', "%{$search}%");
+                $q->whereHas('student_class.study_program', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('course', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('lecturer', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                });
             });
         }
+
         
         // Gunakan paginate untuk paginasi hasil query
         $data = $attendanceLists->paginate(5);
@@ -69,7 +75,7 @@ class A_Lecturer_DocumentController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code_al' => 'required|string|unique:attendance_lists,code_al',
+            
             'student_class_id' => 'required|exists:student_classes,id',
             'course_id' => 'required|exists:courses,id',
             'lecturer_id' => 'required|exists:lecturers,id',
@@ -92,17 +98,18 @@ class A_Lecturer_DocumentController extends Controller
                 ->where('student_class_id', $request->student_class_id)
                 ->first();
 
-            if ($existingAttendance) {
-                Log::warning('Duplicate attendance entry detected: course_id = ' . $request->course_id . ', lecturer_id = ' . $request->lecturer_id);
-                return redirect()
-                    ->back()
-                    ->withInput()
-                    ->withErrors(['error' => 'Kombinasi Mata Kuliah dan Dosen sudah ada dalam daftar hadir.']);
-            }
-
-            // Simpan data AttendanceList
+                if ($existingAttendance) {
+                    Log::warning('Data Terjadi Duplikasi');
+                
+                    // <-- flash message biasa
+                    return redirect()
+                        ->back()
+                        ->withInput()
+                        ->with('error', 'Data Terjadi Duplikasi');
+                }
+                
+                
             $al = new AttendanceList();
-            $al->code_al = $request->code_al;
             $al->student_class_id = $request->student_class_id;
             $al->course_id = $request->course_id;
             $al->lecturer_id = $request->lecturer_id;
@@ -158,7 +165,6 @@ public function update(Request $request, $id)
 
     // Validate the request data
     $validator = Validator::make($request->all(), [
-        'code_al' => 'required|string|unique:attendance_lists,code_al,' . $id,
         'student_class_id' => 'required|exists:student_classes,id',
         'course_id' => 'required|exists:courses,id',
         'lecturer_id' => 'required|exists:lecturers,id',
@@ -173,7 +179,6 @@ public function update(Request $request, $id)
 
     // Update the AttendanceList
     $attendanceList->update([
-        'code_al' => $request->code_al,
         'student_class_id' => $request->student_class_id,
         'course_id' => $request->course_id,
         'lecturer_id' => $request->lecturer_id,
@@ -212,8 +217,6 @@ public function update(Request $request, $id)
             ->firstOrFail();
 
         $students = $student_class->students;
-
-
         $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)
             ->orderBy('meeting_order')
             ->get();
