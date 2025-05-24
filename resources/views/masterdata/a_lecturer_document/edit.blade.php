@@ -1,6 +1,6 @@
 <x-app-layout>
-    @section('main_folder', '/ Master Data')
-    @section('descendant_folder', '/ Daftar Hadir')
+    @section('main_folder', '/ Dokumen Perkuliahan')
+    @section('descendant_folder', '/ Kelola')
 
     @section('content')
     <section class="bg-white dark:bg-gray-900">
@@ -18,7 +18,7 @@
 
             <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Edit Daftar Hadir</h2>
 
-            <form action="{{ route('masterdata.lecturer_documents.update', $lecturer_document->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('dokumen_perkuliahan.kelola.update', $lecturer_document->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">

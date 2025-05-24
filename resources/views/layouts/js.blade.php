@@ -51,3 +51,25 @@
             });
         }
 </script>
+
+<audio id="clickSound" src="{{ asset('sounds/click.wav') }}"></audio>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const clickSound = document.getElementById('clickSound');
+
+        // Target semua tombol <a> dan <button>
+        const clickableElements = document.querySelectorAll('a, button,submit');
+
+        clickableElements.forEach(el => {
+            el.addEventListener('click', () => {
+                // Rewind dan mainkan suara
+                clickSound.currentTime = 0;
+                clickSound.play().catch(e => {
+                    // Handle error (misal autoplay policy)
+                    console.warn('Sound not played:', e);
+                });
+            });
+        });
+    });
+</script>

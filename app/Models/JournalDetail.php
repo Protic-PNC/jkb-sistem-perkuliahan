@@ -18,15 +18,12 @@ class JournalDetail extends Model
         'learning_methods',
         'has_acc_student',
         'has_acc_lecturer',
-        'has_acc_kajur',
         'has_acc_kaprodi',
         'student_id',
         'lecturer_kaprodi_id',
-        'lecturer_kajur_id',
         'date_acc_student',
         'date_acc_lecturer',
         'date_acc_kaprodi',
-        'date_acc_kajur',
         'note'
 
     ];
@@ -36,6 +33,9 @@ class JournalDetail extends Model
     }
     public function attendance_list_detail(){ //attendence list, attendencelist dan journal 
         return $this->belongsTo(AttendanceListDetail::class);
+    }
+    public function kaprodi(){ //attendence list, attendencelist dan journal 
+        return $this->belongsTo(Lecturer::class, 'lecturer_kaprodi_id', 'id');
     }
 
 

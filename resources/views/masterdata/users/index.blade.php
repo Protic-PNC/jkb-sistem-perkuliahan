@@ -117,7 +117,7 @@
                                             Edit
                                         </a>
                                         <a href="{{ route('masterdata.users.show', $user->id) }}"
-                                            class="inline-flex items-center justify-center w-20 text-center font-medium bg-indigo-400 text-white px-3 py-2 rounded-md hover:bg-indigo-500 transition duration-300">
+                                            class="ml-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                             {{-- <svg class="w-5 h-5 mr-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round"

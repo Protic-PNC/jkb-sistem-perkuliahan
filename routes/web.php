@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AttendenceListController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\CetakController;
 use App\Http\Controllers\CourseClassController;
 use App\Http\Controllers\CourseLecturerController;
 use App\Http\Controllers\CoursesController;
@@ -43,6 +44,19 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::prefix('dokumen-perkuliahan')->name('dokumen_perkuliahan.')->middleware(['role:super_admin'])->group(function(){
+     Route::get('/kelola/index', [A_Lecturer_DocumentController::class,'index'])->name('kelola.index');
+     Route::get('/kelola/create', [A_Lecturer_DocumentController::class, 'create'])->name('kelola.create');
+     Route::get('/kelola/show/{id}', [A_Lecturer_DocumentController::class, 'show'])->name('kelola.show');
+     Route::get('/kelola/edit/{id}', [A_Lecturer_DocumentController::class,'edit'])->name('kelola.edit');
+     Route::post('/kelola/store', [A_Lecturer_DocumentController::class, 'store'])->name('kelola.store');
+     Route::put('/kelola/update/{id}', [A_Lecturer_DocumentController::class, 'update'])->name('kelola.update');
+     Route::delete('/kelola/destroy/{id}', [A_Lecturer_DocumentController::class, 'destroy'])->name('kelola.destroy');
+     Route::get('/daftar/daftar-index', [A_Lecturer_DocumentController::class,'daftar_index'])->name('daftar.index');
+     Route::get('/daftar/absensi-perkuliahan/{id}', [A_Lecturer_DocumentController::class, 'absensi_perkuliahan'])->name('daftar.absensi-perkuliahan');
+    Route::get('/daftar/jurnal-perkuliahan/{id}', [A_Lecturer_DocumentController::class, 'jurnal_perkuliahan'])->name('daftar.jurnal_perkuliahan');
+
+    });
     Route::prefix('masterdata')->name('masterdata.')->middleware(['role:super_admin'])->group(function(){
         Route::resource('users', UserController::class);
         Route::resource('periode', PeriodeController::class);
@@ -81,21 +95,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/store/course/class/{student_class}', [CourseClassController::class,'store'])->name('store.course.class');
         Route::resource('course_classes', CourseClassController::class); 
 
-        Route::get('/lecturer_documents/index', [A_Lecturer_DocumentController::class,'index'])->name('lecturer_documents.index');
-        Route::get('/lecturer_documents/create', [A_Lecturer_DocumentController::class, 'create'])->name('lecturer_documents.create');
-        Route::get('/lecturer_documents/show/{id}', [A_Lecturer_DocumentController::class, 'show'])->name('lecturer_documents.show');
-        Route::get('/lecturer_documents/edit/{id}', [A_Lecturer_DocumentController::class,'edit'])->name('lecturer_documents.edit');
-        Route::post('/lecturer_documents/store/', [A_Lecturer_DocumentController::class, 'store'])->name('lecturer_documents.store');
-        Route::put('/lecturer_documents/update/{id}', [A_Lecturer_DocumentController::class, 'update'])->name('lecturer_documents.update');
-        Route::get('/lecturer-documents/absensi-perkuliahan/{id}', [A_Lecturer_DocumentController::class, 'absensi_perkuliahan'])->name('lecturer_documents.absensi-perkuliahan');
-        Route::get('/lecturer-documents/jurnal-perkuliahan/{id}', [A_Lecturer_DocumentController::class, 'jurnal_perkuliahan'])->name('lecturer_documents.jurnal_perkuliahan');
-        Route::delete('/lecturer_documents/destroy/{id}', [A_Lecturer_DocumentController::class, 'destroy'])->name('lecturer_documents.destroy');
-
+       
         Route::get('/get-courses-by-class/{classId}', [A_Lecturer_DocumentController::class, 'getCoursesByClass']);
         Route::get('/get-lecturer-by-course/{courseId}', [A_Lecturer_DocumentController::class, 'getLecturerByClass']);
+        
 
         //Route::resource('attendence_lists', A_AttendenceListController::class)->middleware('role:super_admin');
     });
+
+    Route::get('/cetak-daftar-hadir/{id}', [CetakController::class, 'cetak_dh'])->name('cetak.daftar.hadir');
 
     //dosen->daftar matkul->daftar kelas->jurnal dan absensi
     Route::prefix('lecturer')->name('lecturer.')->middleware(['role:dosen'])->group(function(){

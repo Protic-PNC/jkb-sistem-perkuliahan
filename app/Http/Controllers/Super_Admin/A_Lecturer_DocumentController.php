@@ -22,7 +22,7 @@ class A_Lecturer_DocumentController extends Controller
      */
     public function index(Request $request)
     {
-        $attendanceLists = AttendanceList::with('student_class', 'course', 'lecturer');
+        $attendanceLists = AttendanceList::with('student_class', 'course', 'lecturer','attendanceListDetails');
 
 // Jika ada parameter pencarian
         if ($request->has('search')) {
@@ -47,6 +47,35 @@ class A_Lecturer_DocumentController extends Controller
         
         // Return ke view dengan data yang dipaginasi
         return view('masterdata.a_lecturer_document.index', compact('data'));
+        
+    }
+    public function daftar_index(Request $request)
+    {
+        $attendanceLists = AttendanceList::with('student_class', 'course', 'lecturer','attendanceListDetails');
+
+// Jika ada parameter pencarian
+        if ($request->has('search')) {
+            $search = $request->input('search');
+
+            $attendanceLists->where(function ($q) use ($search) {
+                $q->whereHas('student_class.study_program', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('course', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('lecturer', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                });
+            });
+        }
+
+        
+        // Gunakan paginate untuk paginasi hasil query
+        $data = $attendanceLists->paginate(5);
+        
+        // Return ke view dengan data yang dipaginasi
+        return view('masterdata.a_lecturer_document.daftar_index', compact('data'));
         
     }
 
@@ -98,14 +127,13 @@ class A_Lecturer_DocumentController extends Controller
                 ->where('student_class_id', $request->student_class_id)
                 ->first();
 
-                if ($existingAttendance) {
-                    Log::warning('Data Terjadi Duplikasi');
                 
-                    // <-- flash message biasa
-                    return redirect()
-                        ->back()
-                        ->withInput()
-                        ->with('error', 'Data Terjadi Duplikasi');
+                if ($existingAttendance) {
+                    return redirect()->back()->with([
+                        'status' => 'error',
+                        'message' => 'Dokumen Sudah Pernah Dibuat, Silahkan buat variasi dokumen yang baru'
+                    ]);
+
                 }
                 
                 
@@ -125,11 +153,11 @@ class A_Lecturer_DocumentController extends Controller
 
             DB::commit();
             Log::info('Database transaction committed.');
-            return redirect()->route('masterdata.lecturer_documents.index')->with('success', 'Daftar Hadir dan Jurnal berhasil disimpan');
+            return redirect()->route('dokumen_perkuliahan.kelola.index')->with('success', 'Daftar Hadir dan Jurnal berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Database transaction rolled back due to exception: ' . $e->getMessage());
-            return redirect()->back()->with('errors', 'System error: ' . $e->getMessage());
+            // Log::error('Database transaction rolled back due to exception: ' . $e->getMessage());
+            // return redirect()->back()->with('errors', 'System error: ' . $e->getMessage());
         }
     
 }
@@ -172,7 +200,7 @@ public function update(Request $request, $id)
     ]);
 
     if ($validator->fails()) {
-        return redirect()->route('masterdata.lecturer_documents.edit', $id)
+        return redirect()->route('dokumen_perkuliahan.kelola.edit', $id)
             ->withErrors($validator)
             ->withInput();
     }
@@ -186,7 +214,7 @@ public function update(Request $request, $id)
     ]);
 
     // Redirect with success message
-        return redirect()->route('masterdata.lecturer_documents.index')
+        return redirect()->route('dokumen_perkuliahan.kelola.index')
             ->with('success', 'Daftar Hadir berhasil diperbarui.');
     }
     
@@ -235,8 +263,10 @@ public function update(Request $request, $id)
 
             $students = $student_class->students;
 
-            $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)->get();
+            $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)->orderBy('meeting_order', 'asc')->get();
 
         return view('masterdata.a_lecturer_document.jurnal_index', compact('data', 'semester', 'academicYear', 'students','attendencedetail'));
     }
+
+    
 }

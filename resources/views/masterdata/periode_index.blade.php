@@ -1,6 +1,6 @@
 <x-app-layout>
     @section('main_folder', '/ Master Data')
-    @section('descendant_folder', '/ Dosen')
+    @section('descendant_folder', '/ Periode')
 
 
     @section('content')
@@ -20,10 +20,10 @@
                 <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" type="button" id="btn-tambah"
                     class="px-5 py-2.5 mb-4 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Tambah
                     Data</button>
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table id="period-data" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                            <tr>
+                {{-- <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
+                        <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
+                           
                                 <th scope="col" class="px-6 py-3">
                                     Tahun
                                 </th>
@@ -36,39 +36,33 @@
                                 <th scope="col" class="px-6 py-3">
                                     Tanggal Batas Akhir
                                 </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Status
-                                </th>
-                                <th scope="col" class="px-6 py-3 sr-only">
+                                
+                                <th scope="col" class="px-6 py-3 ">
                                     Aksi
                                 </th>
-                            </tr>
                         </thead>
                         <tbody>
                             @forelse ($data as $a)
-                                <tr
-                                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <th scope="row"
-                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <td scope="row"
+                                        class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ $a->tahun }}
-                                    </th>
-                                    <th scope="row"
-                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    </td>
+                                    <td scope="row"
+                                        class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ $a->semester }}
-                                    </th>
-                                    <td class="px-6 py-4">
+                                    </td>
+                                    <td class="px-3 py-2">
                                         {{ \Carbon\Carbon::parse($a->tanggal_batas_awal)->translatedFormat('j F Y') }}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-3 py-2">
                                         {{ \Carbon\Carbon::parse($a->tanggal_batas_akhir)->translatedFormat('j F Y') }}
                                     </td>
-                                    <td class="px-6 py-4">
-                                        {{ $a->status==1 ? 'Aktif' : 'Tidak Aktif' }}
-                                    </td>
-                                    <td class="px-6 py-4 text-right">
+                                    
+                                    <td class="px-3 py-2 text-right">
                                         <button type="button" data-modal-target="crud-modal-edit"
                                             data-modal-toggle="crud-modal-edit" data-id="{{ $a->id }}"
-                                            class="edit-btn px-5 py-2.5 mb-4 text-sm font-medium text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 rounded-lg text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Edit</button>
+                                            class="edit-btn inline-flex items-center justify-center w-20 text-center font-medium bg-yellow-400 text-white px-3 py-2 rounded-md hover:bg-yellow-500 transition duration-300">Edit</button>
 
                                         <button type="button" id="btn-hapus{{ $a->id }}"
                                             class="font-medium bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline"
@@ -84,6 +78,75 @@
 
                         </tbody>
                     </table>
+                </div> --}}
+                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
+                        <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
+                            <tr class="text-white mb-3">
+                                <th scope="col" class="px-6 py-3">
+                                    Tahun
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Tahun Akademik
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Semester
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Tanggal Batas Awal
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Tanggal Batas Akhir
+                                </th>
+                                
+                                <th scope="col" class="px-6 py-3 ">
+                                    Aksi
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($data as $a)
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <td scope="row"
+                                        class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $a->tahun }}
+                                    </td>
+                                    <td scope="row"
+                                        class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $a->tahun_akademik }}
+                                    </td>
+                                    <td scope="row"
+                                        class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $a->semester }}
+                                    </td>
+                                    <td class="px-3 py-2">
+                                        {{ \Carbon\Carbon::parse($a->tanggal_batas_awal)->translatedFormat('j F Y') }}
+                                    </td>
+                                    <td class="px-3 py-2">
+                                        {{ \Carbon\Carbon::parse($a->tanggal_batas_akhir)->translatedFormat('j F Y') }}
+                                    </td>
+                                    
+                                    <td class="px-3 py-2 text-right">
+                                        <button type="button" data-modal-target="crud-modal-edit"
+                                            data-modal-toggle="crud-modal-edit" data-id="{{ $a->id }}"
+                                            class="edit-btn inline-flex items-center justify-center w-20 text-center font-medium bg-yellow-400 text-white px-3 py-2 rounded-md hover:bg-yellow-500 transition duration-300">Edit</button>
+
+                                        <button type="button" id="btn-hapus{{ $a->id }}"
+                                            class="font-medium bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline"
+                                            onclick="openModal('{{ $a->id }}', '{{ route('masterdata.periode.destroy', $a->id) }}')">
+                                            <i class="fa fa-trash"></i> Hapus
+                                        </button>
+
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-3 py-2 text-center">Belum Ada Data</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                    {{-- {{ $data->appends(request()->query())->onEachSide(5)->links() }} --}}
                 </div>
             </div>
         </section>

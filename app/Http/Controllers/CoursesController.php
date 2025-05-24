@@ -43,17 +43,18 @@ class CoursesController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string',
-            'code' => 'required|string|unique:courses',
+            'code' => 'required|string|unique:courses,code',
             'type' => 'required|string',
             'sks' => 'required|integer',
             'hours' => 'required|integer',
+            'meeting' => 'required|integer',
         ]);
-            $hoursPerSKS = 16; // 16 jam per SKS
-            $totalHours = $validated['sks'] * $hoursPerSKS;
+            // $hoursPerSKS = 16; // 16 jam per SKS
+            // $totalHours = $validated['sks'] * $hoursPerSKS;
             
-            $meeting = ceil($totalHours / $validated['hours']); // Pembulatan ke atas
-            // Tambahkan meeting ke data yang akan disimpan
-            $validated['meeting'] = $meeting;
+            // $meeting = ceil($totalHours / $validated['hours']); // Pembulatan ke atas
+            // // Tambahkan meeting ke data yang akan disimpan
+            // $validated['meeting'] = $meeting;
             
         try {
             DB::beginTransaction();
@@ -92,16 +93,17 @@ class CoursesController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string',
-            'code' => 'required|string|unique:courses, code,' . $course->id,
+            'code' => 'required|string|unique:courses,code,' . $course->id,
             'type' => 'required|string',
             'sks' => 'required|integer',
             'hours' => 'required|integer',
+            'meeting' => 'required|integer',
         ]);
-            $hoursPerSKS = 16; // 16 jam per SKS
-            $totalHours = $validated['sks'] * $hoursPerSKS;
-            $meeting = ceil($totalHours / $validated['hours']); // Pembulatan ke atas
-            // Tambahkan meeting ke data yang akan disimpan
-            $validated['meeting'] = $meeting;
+            // $hoursPerSKS = 16; // 16 jam per SKS
+            // $totalHours = $validated['sks'] * $hoursPerSKS;
+            // $meeting = ceil($totalHours / $validated['hours']); // Pembulatan ke atas
+            // // Tambahkan meeting ke data yang akan disimpan
+            // $validated['meeting'] = $meeting;
             DB::beginTransaction();
         try {
             // Buat record baru

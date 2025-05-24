@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 
@@ -67,8 +68,8 @@ class StudentController extends Controller
                 'nim' => 'required|string|unique:students,nim',
                 'address' => 'required|string',
                 'number_phone' => 'required|string',
+                'signature' => 'required|image|mimes:png,jpg,jpeg',
                 'student_class_id' => 'required|exists:student_classes,id',
-                'signature' => 'nullable|image|mimes:png,jpg,jpeg',
             ]);
 
             
@@ -80,6 +81,20 @@ class StudentController extends Controller
             ]);
             $user->assignRole('mahasiswa');
             $validated['user_id'] = $user->id;
+            $signature = $request->file('signature');
+            $signatureFilename = null;
+            if ($signature) {
+                $signatureFilename = date('Ymd') . time() . '-' . $signature->getClientOriginalName();
+                Storage::disk('google')->putFileAs(
+                    'signatures',
+                    $request->file('signatures'),
+                    $signatureFilename
+                );
+            }
+            if ($request->hasFile('signature')) {
+                $signaturePath = $request->file('signature')->store('signatures', 'public');
+                $validated['signature'] = $signaturePath;
+            }
             Student::create($validated);
             return redirect()->route('masterdata.students.index')->with('success', 'Data berhasil disimpan.');
         } catch (Exception $e) {
@@ -125,11 +140,16 @@ class StudentController extends Controller
             'address' => 'required|string',
             'number_phone' => 'required|string',
             'student_class_id' => 'required|exists:student_classes,id',
+            'signature' => 'required|image|mimes:png,jpg,jpeg',
         ]);
         DB::beginTransaction();
        
         try {
             
+            if ($request->hasFile('signature')) {
+                $signaturePath = $request->file('signature')->store('signatures', 'public');
+                $validated['signature'] = $signaturePath;
+            }
             $student = Student::updateOrCreate(
                 ['id' => $student->id], 
                 $validated 

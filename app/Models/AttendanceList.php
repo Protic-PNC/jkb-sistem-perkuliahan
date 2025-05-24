@@ -42,7 +42,7 @@ class AttendanceList extends Model
     }
 
     public function attendanceListDetails(){ //attendence list details
-        return $this->belongsTo(AttendanceListDetail::class);
+        return $this->hasMany(AttendanceListDetail::class, 'attendance_list_id','id');
     }
 
     public function journal(){

@@ -61,7 +61,7 @@ class LecturerController extends Controller
             'name' => 'required|string',
             'number_phone' => 'required|string',
             'address' => 'required|string',
-            // 'signature' => 'nullable|image|mimes:png,jpg,jpeg',
+            'signature' => 'required|image|mimes:png,jpg,jpeg',
             'nidn' => 'required|string|unique:lecturers,nidn',
             'nip' => 'required|string|unique:lecturers,nip',
             'position_id' => 'nullable|exists:positions,id', 
@@ -72,10 +72,10 @@ class LecturerController extends Controller
         DB::beginTransaction();
         try {
             
-            // if ($request->hasFile('signature')) {
-            //     $signaturePath = $request->file('signature')->store('signatures', 'public');
-            //     $validated['signature'] = $signaturePath;
-            // }
+            if ($request->hasFile('signature')) {
+                $signaturePath = $request->file('signature')->store('signatures', 'public');
+                $validated['signature'] = $signaturePath;
+            }
             $user = User::create([
                 'name' => $request->nidn,
                 'avatar' => null,
@@ -157,6 +157,7 @@ class LecturerController extends Controller
             'position_id' => 'nullable|exists:positions,id', 
             'course_id' => 'nullable|array', 
             'course_id.*' => 'exists:courses,id', 
+            'signature' => 'required|image|mimes:png,jpg,jpeg',
         ]);
         DB::beginTransaction();
         try {
@@ -164,7 +165,10 @@ class LecturerController extends Controller
                 ['id' => $lecturer->id], 
                 $validated 
             );
-            // dd($lecturerupdate);
+            if ($request->hasFile('signature')) {
+                $signaturePath = $request->file('signature')->store('signatures', 'public');
+                $validated['signature'] = $signaturePath;
+            }
             $data = [
                 'name' => $validated['nidn'],
                 'email' => $validated['nidn']. '@pnc.ac.id',

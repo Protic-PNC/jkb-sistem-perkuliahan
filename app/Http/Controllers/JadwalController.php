@@ -2,25 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Lecturer;
-use App\Models\Student;
-use App\Models\User;
+use App\Models\Jadwal;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class DashboardController extends Controller
+class JadwalController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $auth = Auth::user();
-        $user = User::count();
-        $lecturer = Lecturer::count();
-        $student = Student::count();
-        
-        return view('masterdata.dashboard', compact('auth', 'user', 'lecturer', 'student'));
+        //
     }
 
     /**
@@ -42,7 +34,7 @@ class DashboardController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Jadwal $jadwal)
     {
         //
     }
@@ -50,7 +42,7 @@ class DashboardController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Jadwal $jadwal)
     {
         //
     }
@@ -58,7 +50,7 @@ class DashboardController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Jadwal $jadwal)
     {
         //
     }
@@ -66,7 +58,7 @@ class DashboardController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Jadwal $jadwal)
     {
         //
     }

@@ -28,10 +28,22 @@
 
         <section class="bg-white dark:bg-gray-900">
             <div class="py-4 px-2 mx-auto lg:m-8 sm:m-4">
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Daftar Hadir Kuliah</h3>
-                    <hr class="border-t-4 my-2 mb-6 rounded-sm bg-gray-300">
-                </div>
+                <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                    Daftar Hadir Kuliah
+                </h3>
+
+                @if ($attendencedetail->count() > 3)
+                    <a href="{{ route('cetak.daftar.hadir', $data->id) }}"
+                    id="btn-verifikasi{{ $data->id }}"
+                    class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-semibold rounded-lg text-base px-6 py-3 inline-flex items-center">
+                        <i class="fa fa-print mr-2 text-lg"></i> Cetak
+                    </a>
+                @endif
+            </div>
+
+            <hr class="border-t-4 my-2 mb-6 rounded-sm bg-gray-300">
+
 
                 <!-- Error and success messages remain unchanged -->
 
@@ -295,14 +307,13 @@
                         </div>
                     </div>
                 </div>
-                {{-- @if ($attendencedetail->count() > 12) --}}
-                <button type="button" id="btn-verifikasi" class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-medium rounded-lg text-sm m-4 px-4 py-1 text-center">
-                    <i class="fa fa-check"></i> Cetak </button>
-                {{-- @endif --}}
+                
                 
             </div>
             
+            
         </section>
+        
 
         @push('after-script')
             <script>

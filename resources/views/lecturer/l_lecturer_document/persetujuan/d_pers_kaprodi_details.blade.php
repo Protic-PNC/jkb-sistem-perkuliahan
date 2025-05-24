@@ -139,8 +139,11 @@
                                                 class="text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-lg text-sm px-4 py-1 text-center">
                                                 <i class="fa fa-info"></i> Detail
                                             </a>
-                                            @else
+                                            @elseif ($d->journal_detail->has_acc_kaprodi == 1 && $d->journal_detail->has_acc_student == 2 && !empty($d->sum_attendance_students))
+                                            @elseif ( $d->journal_detail->has_acc_student == 1 && !empty($d->sum_attendance_students))
                                                 Belum Diverifikasi Mahasiswa
+                                            @elseif ( $d->journal_detail->has_acc_lecturer == 1 && empty($d->sum_attendance_students))
+                                            Dosen Belum Mengisi Daftar Hadir
                                             @endif
                                         </td>
                                     </tr>

@@ -1,16 +1,27 @@
 <x-app-layout>
-    @section('main_folder', '/ Master Data')
-    @section('descendant_folder', '/ Daftar Hadir')
+   @section('main_folder', '/ Dokumen Perkuliahan')
+    @section('descendant_folder', '/ Kelola')
 
     @section('content')
 
         <section class="bg-white dark:bg-gray-900">
             <div class="py-4 px-2 mx-auto lg:m-8 sm:m-4">
-                @if (session('error'))
-    <div class="text-red-500 text-sm">
-        {{ session('error') }}
-    </div>
-@endif
+                @if (session('status'))
+                <div class="p-4 mb-4 text-sm rounded-lg {{ session('status') === 'success' ? 'text-green-800 bg-green-50' : 'text-red-800 bg-red-50' }}">
+                    {{ session('message') }}
+                </div>
+            @endif
+
+            @isset($error)
+                <div class="p-4 mb-4 text-sm text-red-800 bg-red-50 rounded-lg">
+                    {{ $error }}
+                </div>
+            @endisset
+                {{-- @if (session('status'))
+                        <div class="p-4 mb-4 text-sm rounded-lg {{ session('status') === 'success' ? 'text-green-800 bg-green-50' : 'text-red-800 bg-red-50' }}">
+                            {{ session('message') }}
+                        </div>
+                @endif --}}
                 {{-- @if ($errors->any())
                     <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
                         role="alert">
@@ -25,7 +36,7 @@
 
                 
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambah Daftar Hadir</h2>
-                <form action="{{ route('masterdata.lecturer_documents.store') }}" method="POST"
+                <form action="{{ route('dokumen_perkuliahan.kelola.store') }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
