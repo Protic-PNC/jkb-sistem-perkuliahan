@@ -38,7 +38,7 @@
                 @endif
 
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambah Daftar Hadir</h2>
-                <form id="form1" action="{{ route('lecturer.lecturer_document.store', $al->id) }}" method="POST">
+                <form id="form1" action="{{ route('d.dokumen_perkuliahan.store', $al->id) }}" method="POST">
                     @csrf
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                         <div class="w-full">

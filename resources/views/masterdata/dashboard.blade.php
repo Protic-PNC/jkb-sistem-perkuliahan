@@ -110,6 +110,54 @@
                             </div>
                         </div>
                     </div>
+                    <div class="w-full mt-8 px-6">
+                        <form method="GET" action="{{ route('dashboard.index') }}" class="mb-4">
+                        <label for="periode" class="block mb-1 font-semibold">Pilih Periode:</label>
+                        <select name="periode" id="periode" onchange="this.form.submit()" class="border rounded px-3 py-2">
+                            <option value="">Semua</option>
+                            @foreach($availablePeriods as $period)
+                                <option value="{{ $period }}" {{ request('periode') == $period ? 'selected' : '' }}>
+                                    {{ $period }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
+                    </div>
+                    
+
+                    <div class="w-full mt-8 px-6">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Grafik Kehadiran Mahasiswa</h2>
+                        <canvas id="attendanceChart" height="100"></canvas>
+                    </div>
+                </div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    new Chart(document.getElementById('attendanceChart'), {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($labels) !!},
+            datasets: [{
+                label: 'Jumlah Mahasiswa',
+                data: {!! json_encode($data) !!},
+                backgroundColor: ['#34d399', '#facc15', '#60a5fa', '#c084fc', '#f87171']
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    precision: 0
+                }
+            }
+        }
+    });
+</script>
+
                 @endrole
                 @role('dosen')
                 <p class="font-medium text-gray-900 m-4"> Daftar Mata Kuliah Yang Di Ampu</p>

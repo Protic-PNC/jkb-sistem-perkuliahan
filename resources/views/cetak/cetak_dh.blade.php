@@ -97,64 +97,58 @@
             height: 8mm;
         }
 
-      .legend {
-            font-size: 6.5pt;
-        }
+     .legend {
+    font-size: 6.5pt;
+}
 
-        .legend-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 10mm;
-            margin-top: 2mm;
-            flex-wrap: wrap; /* agar responsif di layar kecil */
-        }
+.legend-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10mm;
+    margin-top: 2mm;
+    flex-wrap: wrap; /* responsif di layar kecil */
+}
 
-        .legend-section {
-            flex: 1 1 45%; /* masing-masing ambil 45%, fleksibel jika sempit */
-        }
+.legend-section {
+    flex: 1 1 45%; /* ambil 45% dari lebar container */
+    box-sizing: border-box;
+}
 
-        .legend-table {
-            font-size: 6pt;
-            border-collapse: collapse;
-            width: 100%;
-        }
+.legend-table {
+    font-size: 6pt;
+    border-collapse: collapse;
+    width: 100%;
+}
 
-        .legend-table th, 
-        .legend-table td {
-            text-align: left;
-            padding: 1mm;
-            border: 1px solid #ddd;
-        }
+.legend-table th,
+.legend-table td {
+    text-align: left;
+    padding: 1mm;
+    border: 1px solid #ddd;
+}
 
-        .legend-list {
-            list-style-type: disc;
-            padding-left: 5mm;
-            font-size: 6.5pt;
-        }
+.legend-list {
+    list-style-type: disc;
+    padding-left: 5mm;
+    font-size: 6.5pt;
+}
 
-        .legend-list ul {
-            list-style-type: disc;
-            padding-left: 5mm;
-            margin-top: 1mm;
-        }
+.legend-list ul {
+    list-style-type: lower-alpha;
+    padding-left: 5mm;
+    margin-top: 1mm;
+}
 
-        .legend-list li {
-            margin-top: 1mm;
-        }
+.legend-list li {
+    margin-top: 1mm;
+}
 
-        @media print {
-            table {
-                page-break-inside: avoid;
-            }
+.legend-main-table {
+    border: none !important;
+}
 
-            .legend-container {
-                flex-wrap: nowrap;
-            }
-
-            .legend-section {
-                width: 50%;
-            }
-        }
 
     </style>
 </head>
@@ -228,7 +222,7 @@
                         <th colspan="32" style="text-align: center;">PERTEMUAN KE-</th>
                         <th rowspan="2" style="width: 15mm; text-align: center;">Catatan</th>
                     </tr>
-                    <tr>
+                    {{-- <tr>
                         @for ($i = 1; $i <= 16; $i++)
                             <th colspan="2" style="text-align: center; padding: 0 !important;">
                                 <div class="attendance-header">{{ $i }}</div>
@@ -238,7 +232,16 @@
                                 </div>
                             </th>
                         @endfor
-                    </tr>
+                    </tr> --}}
+                     <tr>
+                                @for ($i = 1; $i <= 16; $i++)
+                                    <th colspan="2" class="attendance-cell">
+                                        <div class="attendance-header">{{ $i }}</div>
+                                        <div class="attendance-subheader">A | T</div>
+                                    </th>
+ 
+                                @endfor
+                            </tr>
                 </thead>
                 <tbody>
                     @foreach ($students as $student)
@@ -267,7 +270,7 @@
                                         {{ $attendanceRecord->attendance_student ?? '-' }}
                                     </td>
                                     <td class="attendance-cell">
-                                        {{ $attendanceRecord->minutes_late ?? '-' }}
+                                        {{ $attendanceRecord->sum_late_students ?? '-' }}
                                     </td>
                                 @endforeach
 
@@ -359,46 +362,54 @@
                 </tbody>
             </table>
 
-            <div class="legend">
-                <p><strong>KETERANGAN:</strong></p>
-                <div class="legend-container">
-                    <!-- Kolom Keterangan -->
-                    <div class="legend-section">
-                        <table class="legend-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 5mm;">Kode</th>
-                                    <th style="width: 15mm;">Status</th>
-                                    <th>Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>T</td><td>Telat</td><td></td></tr>
-                                <tr><td>H</td><td>Hadir</td><td></td></tr>
-                                <tr><td>B</td><td>Bolos</td><td></td></tr>
-                                <tr><td>S</td><td>Sakit</td><td></td></tr>
-                                <tr><td>I</td><td>Izin</td><td></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Kolom Status Pertemuan -->
-                    <div class="legend-section">
-                        <ul class="legend-list">
-                            <li>Status pertemuan diisi dengan:
-                                <ul>
-                                    <li>a. Sesuai Jadwal</li>
-                                    <li>b. Pengganti</li>
-                                    <li>c. Tambahan</li>
+            <table class="legend-main-table mb-2">
+                
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="legend-section">
+                                <table class="legend-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 5mm;">Kode</th>
+                                            <th style="width: 15mm;">Status</th>
+                                            <th>Keterangan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>T</td><td>Telat</td><td></td></tr>
+                                        <tr><td>H</td><td>Hadir</td><td></td></tr>
+                                        <tr><td>B</td><td>Bolos</td><td></td></tr>
+                                        <tr><td>S</td><td>Sakit</td><td></td></tr>
+                                        <tr><td>I</td><td>Izin</td><td></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                        <td> 
+                            <div class="legend-section">
+                                <ul class="legend-list">
+                                    <li>Status pertemuan diisi dengan:
+                                        <ul>
+                                            <li>a. Sesuai Jadwal</li>
+                                            <li>b. Pengganti</li>
+                                            <li>c. Tambahan</li>
+                                        </ul>
+                                    </li>
+                                    <li>1 SKS = 50 menit</li>
+                                    <li>Dosen hanya mengisi daftar hadir mahasiswa dan jurnal dosen, sedangkan ketua kelas yang mengisi absen</li>
+                                    <li>Ketua kelas mengambil absen</li>
                                 </ul>
-                            </li>
-                            <li>1 SKS = 50 menit</li>
-                            <li>Dosen hanya mengisi daftar hadir mahasiswa dan jurnal dosen, sedangkan ketua kelas yang mengisi absen</li>
-                            <li>Ketua kelas mengambil absen</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+                            </div>
+                        </td>
+                        
+                    </tr>
+                   
+                    
+                </tbody>
+            </table>
+
+            
 
         </div>
     </section>

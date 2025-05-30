@@ -45,7 +45,8 @@ class AttendanceList extends Model
         return $this->hasMany(AttendanceListDetail::class, 'attendance_list_id','id');
     }
 
-    public function journal(){
-        return $this->belongsTo(Journal::class, 'attendance_list_id', 'id' );
-    } //1 daftar hadir punay 1 jurnal
+   public function journal()
+{
+    return $this->hasOne(Journal::class, 'attendance_list_id');
+}
 }

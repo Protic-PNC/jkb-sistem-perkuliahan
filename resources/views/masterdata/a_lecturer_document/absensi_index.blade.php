@@ -136,7 +136,7 @@
                                                 {{ $attendanceRecord->attendance_student ?? '-' }}
                                             </td>
                                             <td class="attendance-cell border border-slate-800 text-center">
-                                                {{ $attendanceRecord->minutes_late ?? '-' }}
+                                                {{ $attendanceRecord->sum_late_students ?? '-' }}
                                             </td>
                                         @endforeach
 
@@ -180,11 +180,24 @@
                             <tr>
                                 <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800">Tanda tangan dosen pengampu
                                 </td>
-                                @for ($i = 1; $i <= 16; $i++)
-                                    <td colspan="2" class="px-1 py-1 border border-slate-800">
-                                        <div class="signature-line"></div>
-                                    </colspan=>
-                                @endfor
+                                    @for ($i = 1; $i <= 16; $i++)
+                                        @php
+                                            $currentDetail = $attendencedetail->where('meeting_order', $i)->first();
+                                            $signature = optional($attendencedetail->first()?->attendenceList?->lecturer)->signature;
+                                        @endphp
+
+                                        <td colspan="2" class="px-1 py-1 border border-slate-800">
+                                            @if (!empty($currentDetail?->sum_attendance_students) && $signature)
+                                                <div>
+                                                    <img src="{{ Storage::url($signature) }}" alt="Tanda tangan dosen"
+                                                        class=" h-[20px] ">
+                                                </div>
+                                            @else
+                                                <div class="signature-line"></div>
+                                            @endif
+                                        </td>
+                                    @endfor
+
                                 <td></td>
                             </tr>
                             <tr>

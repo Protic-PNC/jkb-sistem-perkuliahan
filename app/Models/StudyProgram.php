@@ -19,6 +19,9 @@ class StudyProgram extends Model
     public function position(){
         return $this->belongsTo(Position::class);
     }
+    public function jadwal(){
+    return $this->hasOne(Jadwal::class, 'prodi_id', 'id');
+}
    
 
 

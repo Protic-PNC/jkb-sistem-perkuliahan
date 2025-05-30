@@ -24,10 +24,21 @@
 
         <section class="bg-white dark:bg-gray-900">
             <div class="py-4 px-2 mx-auto lg:m-8 sm:m-4">
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Jurnal Dosen dan Rekaman Materi Perkuliahan</h3>
-                    <hr class="border-t-4 my-2 mb-6 rounded-sm bg-gray-300">
-                </div>
+                <div class="py-4 px-2 mx-auto lg:m-8 sm:m-4">
+                <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                    Jurnal Dosen dan Rekaman Materi Perkuliahan
+                </h3>
+
+                @if ($attendencedetail->count() > 3)
+                    <a href="{{ route('cetak.jurnal', $data->id) }}"
+                    id="btn-verifikasi{{ $data->id }}"
+                    class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-semibold rounded-lg text-base px-6 py-3 inline-flex items-center">
+                        <i class="fa fa-print mr-2 text-lg"></i> Cetak
+                    </a>
+                @endif
+            </div>
+               
 
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border border-slate-800">
@@ -107,9 +118,66 @@
                             
                         </tbody>
                     </table>
+                    <div class="mt-4 px-6 py-2 legend border-t border-gray-300">
+                        <p><strong>KETERANGAN:</strong></p>
+                        
+                        <div class="grid grid-cols-3 gap-4 mt-2">
+                            <!-- Status Kehadiran Table -->
+                            <div class="col-span-1">
+                                <table class="w-full border border-gray-400">
+                                    <thead class="bg-gray-100">
+                                        <tr>
+                                            <th class="border border-gray-400 px-2 py-1 text-left">T</th>
+                                            <th class="border border-gray-400 px-2 py-1 text-left">Telat</th>
+                                            <th class="border border-gray-400 px-2 py-1 text-left">KETERANGAN</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="border border-gray-400 px-2 py-1">H</td>
+                                            <td class="border border-gray-400 px-2 py-1">Hadir</td>
+                                            <td class="border border-gray-400 px-2 py-1"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-400 px-2 py-1">B</td>
+                                            <td class="border border-gray-400 px-2 py-1">Bolos</td>
+                                            <td class="border border-gray-400 px-2 py-1"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-400 px-2 py-1">S</td>
+                                            <td class="border border-gray-400 px-2 py-1">Sakit</td>
+                                            <td class="border border-gray-400 px-2 py-1"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-400 px-2 py-1">I</td>
+                                            <td class="border border-gray-400 px-2 py-1">Ijin</td>
+                                            <td class="border border-gray-400 px-2 py-1"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Additional Notes -->
+                            <div class="col-span-2 pl-4">
+                                <ul class="list-disc pl-5 text-sm">
+                                    <li>Status pertemuan diisi dengan:
+                                        <ul class="list-disc pl-5 mt-1">
+                                            <li>a. Sesuai Jadwal</li>
+                                            <li>b. Pengganti</li>
+                                            <li>c. Tambahan</li>
+                                        </ul>
+                                    </li>
+                                    <li class="mt-1">1 SKS = 50 menit</li>
+                                    <li class="mt-1">Dosen hanya mengisi daftar hadir mahasiswa dan jurnal dosen, sedangkan ketua kelas yang mengisi absen</li>
+                                    <li class="mt-1">Ketua kelas mengambil absen</li>
+                                </ul>
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button type="button" id="btn-verifikasi" class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-medium rounded-lg text-sm m-4 px-4 py-1 text-center">
-                    <i class="fa fa-check"></i> Cetak </button>
+                
             </div>
         </section>
     @endsection

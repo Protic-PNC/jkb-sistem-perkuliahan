@@ -83,18 +83,31 @@ class StudentController extends Controller
             $validated['user_id'] = $user->id;
             $signature = $request->file('signature');
             $signatureFilename = null;
-            if ($signature) {
-                $signatureFilename = date('Ymd') . time() . '-' . $signature->getClientOriginalName();
-                Storage::disk('google')->putFileAs(
-                    'signatures',
-                    $request->file('signatures'),
-                    $signatureFilename
-                );
-            }
-            if ($request->hasFile('signature')) {
-                $signaturePath = $request->file('signature')->store('signatures', 'public');
-                $validated['signature'] = $signaturePath;
-            }
+            // if ($signature) {
+            //     // Storage::disk('gcs')->put('folder/file.txt', 'Isi file…');
+            //     $signatureFilename = date('Ymd') . time() . '-' . $signature->getClientOriginalName();
+            //     Storage::disk('gcs')->put(
+            //         'signatures',
+            //         $request->file('signatures'),
+            //         $signatureFilename
+            //     );
+            // }
+            
+            if ($signature = $request->file('signature')) {
+    $signatureFilename = date('Ymd') . time() . '-' . $signature->getClientOriginalName();
+
+    // Laravel otomatis baca stream dan metadata
+    $path = Storage::disk('gcs')
+        ->putFileAs('signatures', $signature, $signatureFilename);
+
+    // $path berisi “signatures/20250524xxxx-filename.png”
+    $validated['signature'] = $signatureFilename;
+}
+
+            // if ($request->hasFile('signature')) {
+            //     $signaturePath = $request->file('signature')->store('signatures', 'public');
+            //     $validated['signature'] = $signaturePath;
+            // }
             Student::create($validated);
             return redirect()->route('masterdata.students.index')->with('success', 'Data berhasil disimpan.');
         } catch (Exception $e) {
@@ -140,7 +153,7 @@ class StudentController extends Controller
             'address' => 'required|string',
             'number_phone' => 'required|string',
             'student_class_id' => 'required|exists:student_classes,id',
-            'signature' => 'required|image|mimes:png,jpg,jpeg',
+            'signature' => 'nullable|image|mimes:png,jpg,jpeg',
         ]);
         DB::beginTransaction();
        

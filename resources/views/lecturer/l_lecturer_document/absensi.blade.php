@@ -51,7 +51,7 @@
                                 </tr>
                             </thead>
                             <tbody id="studentList">
-                                <form id="form2" action="{{ route('lecturer.lecturer_document.storeStudents') }}"
+                                <form id="form2" action="{{ route('d.dokumen_perkuliahan.storeStudents') }}"
                                     method="POST">
                                     @csrf
                                     <input type="hidden" id="attendance_list_detail_id" name="attendance_list_detail_id"
@@ -174,7 +174,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <a href="{{ route('lecturer.lecturer_document.edit_student', $ad->id) }}"
+                    <a href="{{ route('d.dokumen_perkuliahan.edit_student', $ad->id) }}"
                             class="inline-flex items-center justify-center  text-center font-medium bg-yellow-400 text-white px-3 py-2 rounded-md hover:bg-yellow-500 transition duration-300 mt-3">
                             <svg class="w-5 h-5 mr-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

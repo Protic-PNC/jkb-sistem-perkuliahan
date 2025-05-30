@@ -7,6 +7,7 @@ use App\Http\Controllers\CourseClassController;
 use App\Http\Controllers\CourseLecturerController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\Lecturer\AttendanceListController;
 use App\Http\Controllers\Lecturer\L_LecturerDocumentController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudyProgramController;
 use App\Http\Controllers\UserController;
 use App\Models\Student;
+use App\Models\StudentClass;
 use App\Models\StudyProgram;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +42,7 @@ Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login'
 
 Route::middleware('auth')->group(function () {
     Route::resource('dashboard', DashboardController::class);
+    Route::get('/dashboard/admin/{attendanceListId}', [DashboardController::class, 'index_admin'])->name('dashboard.admin');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -60,11 +63,14 @@ Route::middleware('auth')->group(function () {
     Route::prefix('masterdata')->name('masterdata.')->middleware(['role:super_admin'])->group(function(){
         Route::resource('users', UserController::class);
         Route::resource('periode', PeriodeController::class);
+        // Route::resource('jadwal', JadwalController::class);
         Route::resource('study_programs', StudyProgramController::class);
         
         Route::resource('student_classes', StudentClassController::class);
         Route::resource('positions', PositionController::class);   
         Route::resource('courses', CoursesController::class); 
+         Route::get('/jadwal/index', [JadwalController::class, 'index'])->name('jadwal.index');
+         Route::get('/jadwal/edit/{id}', [JadwalController::class, 'edit'])->name('jadwal.edit');
 
         Route::get('/students/index', [StudentController::class,'index'])->name('students.index');
         Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
@@ -75,6 +81,8 @@ Route::middleware('auth')->group(function () {
         Route::put('/students/update/{id}', [StudentController::class, 'update'])->name('students.update');
         Route::delete('/students/destroy/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
 
+        
+    Route::get('/export/studentclass', [StudentClass::class, 'export_siswa'])->name('student_class.export');
         Route::get('/lecturers/index', [LecturerController::class,'index'])->name('lecturers.index');
         Route::get('/lecturers/create', [LecturerController::class, 'create'])->name('lecturers.create');
         Route::get('/lecturers/show/{userId}', [LecturerController::class, 'show'])->name('lecturers.show');
@@ -104,62 +112,59 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/cetak-daftar-hadir/{id}', [CetakController::class, 'cetak_dh'])->name('cetak.daftar.hadir');
+    Route::get('/cetak-jurnal/{id}', [CetakController::class, 'cetak_jurnal'])->name('cetak.jurnal');
+    Route::get('jadwal/download/{id}', [JadwalController::class, 'download'])->name('jadwal.download');
+    Route::post('jadwal/update/{id}', [JadwalController::class, 'update'])->name('jadwal.update');
+   
 
     //dosen->daftar matkul->daftar kelas->jurnal dan absensi
-    Route::prefix('lecturer')->name('lecturer.')->middleware(['role:dosen'])->group(function(){
+    Route::prefix('d')->name('d.')->middleware(['role:dosen'])->group(function(){
         Route::get('/dokumen-perkuliahan/{nidn}', [L_LecturerDocumentController::class, 'index'])->name('dokumen_perkuliahan');
         Route::get('/daftar-dokumen-perkuliahan/{nidn}', [L_LecturerDocumentController::class, 'index2'])->name('daftar_dokumen_perkuliahan');
       
-        Route::post('/lecturer_document/store/{id}', [L_LecturerDocumentController::class, 'store'])->name('lecturer_document.store');
-        Route::get('/lecturer_document/edit/{id}', [L_LecturerDocumentController::class,'edit'])->name('lecturer_document.edit');
-        Route::put('/lecturer_document/update/{id}', [L_LecturerDocumentController::class, 'update'])->name('lecturer_document.update');
-        Route::get('/lecturer_document/details/{id}', [L_LecturerDocumentController::class, 'details'])->name('lecturer_document.details');
+        Route::get('/dokumen-perkuliahan/create/{id}', [L_LecturerDocumentController::class, 'create'])->name('dokumen_perkuliahan.create');
+        Route::post('/dokumen-perkuliahan/store/{id}', [L_LecturerDocumentController::class, 'store'])->name('dokumen_perkuliahan.store');
+        Route::get('/dokumen-perkuliahan/edit/{id}', [L_LecturerDocumentController::class,'edit'])->name('dokumen_perkuliahan.edit');
+        Route::put('/dokumen-perkuliahan/update/{id}', [L_LecturerDocumentController::class, 'update'])->name('dokumen_perkuliahan.update');
+        Route::get('/dokumen-perkuliahan/details/{id}', [L_LecturerDocumentController::class, 'details'])->name('dokumen_perkuliahan.details');
         
-        Route::get('/lecturer_document/create/{id}', [L_LecturerDocumentController::class, 'create'])->name('lecturer_document.create');
-        Route::post('/lecturer_document/store-students', [L_LecturerDocumentController::class, 'storeStudents'])->name('lecturer_document.storeStudents');
-        Route::get('/lecturer_document/absensi/{id}', [L_LecturerDocumentController::class,'absensi'])->name('lecturer_document.absensi');
-        Route::get('/lecturer_document/edit-student/{id}', [L_LecturerDocumentController::class,'edit_student'])->name('lecturer_document.edit_student');
-        Route::put('/lecturer_document/update_student/{id}', [L_LecturerDocumentController::class, 'update_student'])->name('lecturer_document.update_student');
-        Route::post('/lecturer_document/selesai/{id}', [L_LecturerDocumentController::class, 'selesai_document'])->name('lecturer_document.selesai');
+        Route::post('/dokumen-perkuliahan/store-students', [L_LecturerDocumentController::class, 'storeStudents'])->name('dokumen_perkuliahan.storeStudents');
+        Route::get('/dokumen-perkuliahan/absensi/{id}', [L_LecturerDocumentController::class,'absensi'])->name('dokumen_perkuliahan.absensi');
+        Route::get('/dokumen-perkuliahan/edit-student/{id}', [L_LecturerDocumentController::class,'edit_student'])->name('dokumen_perkuliahan.edit_student');
+        Route::put('/dokumen-perkuliahan/update_student/{id}', [L_LecturerDocumentController::class, 'update_student'])->name('dokumen_perkuliahan.update_student');
+        Route::post('/dokumen-perkuliahan/selesai/{id}', [L_LecturerDocumentController::class, 'selesai_document'])->name('dokumen_perkuliahan.selesai');
 
         Route::get('/daftar-persetujuan-dokumen/{id}', [L_PersetujuanDokumenController::class, 'index'])->name('daftar_persetujuan_dokumen');
         Route::get('/daftar-persetujuan-dokumen/detail/{id}', [L_PersetujuanDokumenController::class, 'details'])->name('daftar_persetujuan_dokumen.detail');
-        Route::post('/lecturer_document/verifikasi-massal/{id}', [L_PersetujuanDokumenController::class, 'verifikasiMassal'])->name('lecturer_document.verifikasi_massal');
-        Route::get('/lecturer_document/detail-verifikasi/{id}', [L_PersetujuanDokumenController::class, 'detail_verifikasi'])->name('lecturer_document.detail_verifikasi');
-        Route::post('/lecturer_document/setuju_kajur/{id}', [L_PersetujuanDokumenController::class, 'setuju_kajur'])->name('lecturer_document.setuju_kajur');
+        Route::post('/dokumen-perkuliahan/verifikasi-massal/{id}', [L_PersetujuanDokumenController::class, 'verifikasiMassal'])->name('dokumen_perkuliahan.verifikasi_massal');
+        Route::get('/dokumen-perkuliahan/detail-verifikasi/{id}', [L_PersetujuanDokumenController::class, 'detail_verifikasi'])->name('dokumen_perkuliahan.detail_verifikasi');
+        Route::post('/dokumen-perkuliahan/setuju_kajur/{id}', [L_PersetujuanDokumenController::class, 'setuju_kajur'])->name('dokumen_perkuliahan.setuju_kajur');
 
         
 
         Route::get('/student_class/{id}', [L_LecturerDocumentController::class, 'student_class_index'])->name('student_class');
-        Route::get('attendenceList/{classId}/{code}', [AttendanceListController::class, 'index'])->name('attendenceList.index');
-        Route::get('attendenceList/create/{id}', [AttendanceListController::class, 'create'])->name('attendenceList.create');
+        // Route::get('attendenceList/{classId}/{code}', [AttendanceListController::class, 'index'])->name('attendenceList.index');
+        // Route::get('attendenceList/create/{id}', [AttendanceListController::class, 'create'])->name('attendenceList.create');
         
         Route::get('journal/{id}', [JournalController::class, 'index'])->name('journal.index');
         
     });
-    Route::prefix('student')->name('student.')->middleware(['role:mahasiswa'])->group(function(){
+    Route::prefix('m')->name('m.')->middleware(['role:mahasiswa'])->group(function(){
         Route::get('/dokumen-perkuliahan/{id}', [M_LecturerDocumentController::class, 'index'])->name('dokumen_perkuliahan');
-        Route::get('/daftar-dokumen-perkuliahan/{id}', [M_LecturerDocumentController::class, 'index2'])->name('daftar_dokumen_perkuliahan');
+        Route::get('/riwayat-absensi/{nim}', [M_LecturerDocumentController::class, 'riwayat_absensi'])->name('riwayat_absensi');
         
-        Route::post('/lecturer_document/store', [M_LecturerDocumentController::class, 'store'])->name('lecturer_document.store');
-        Route::get('/lecturer_document/edit/{id}', [M_LecturerDocumentController::class,'edit'])->name('lecturer_document.edit');
-        Route::put('/lecturer_document/update/{id}', [M_LecturerDocumentController::class, 'update'])->name('lecturer_document.update');
-        Route::post('/lecturer_document/verifikasi/{id}', [M_LecturerDocumentController::class, 'verifikasi'])->name('lecturer_document.verifikasi');
+        
+        Route::post('/dokumen-perkuliahan/verifikasi/{id}', [M_LecturerDocumentController::class, 'verifikasi'])->name('dokumen_perkuliahan.verifikasi');
 
-        Route::get('/lecturer_document/details/{id}', [M_LecturerDocumentController::class, 'details'])->name('lecturer_document.details');
-        Route::get('/lecturer_document/detail-verifikasi/{id}', [M_LecturerDocumentController::class, 'detail_verifikasi'])->name('lecturer_document.detail_verifikasi');
-        Route::get('/lecturer_document/create/{id}', [M_LecturerDocumentController::class, 'create'])->name('lecturer_document.create');
-        Route::post('/lecturer_document/store-students', [M_LecturerDocumentController::class, 'storeStudents'])->name('lecturer_document.storeStudents');
-        Route::get('/lecturer_document/absensi/{id}', [M_LecturerDocumentController::class,'absensi'])->name('lecturer_document.absensi');
-        Route::get('/lecturer_document/edit-student/{id}', [M_LecturerDocumentController::class,'edit_student'])->name('lecturer_document.edit_student');
-        Route::put('/lecturer_document/update_student/{id}', [M_LecturerDocumentController::class, 'storeStudents'])->name('lecturer_document.update_student');
+        Route::get('/dokumen-perkuliahan/details/{id}', [M_LecturerDocumentController::class, 'details'])->name('dokumen_perkuliahan.details');
+        Route::get('/dokumen-perkuliahan/detail-verifikasi/{id}', [M_LecturerDocumentController::class, 'detail_verifikasi'])->name('dokumen_perkuliahan.detail_verifikasi');
+        Route::get('/dokumen-perkuliahan/absensi/{id}', [M_LecturerDocumentController::class,'absensi'])->name('dokumen_perkuliahan.absensi');
         Route::get('/absensi-mahasiswa/{id}', [M_AbsensiController::class, 'absensi_mahasiswa'])->name('absensi_mahasiswa');
 
-        Route::get('/student_class/{id}', [M_LecturerDocumentController::class, 'student_class_index'])->name('student_class');
-        Route::get('attendenceList/{classId}/{code}', [AttendanceListController::class, 'index'])->name('attendenceList.index');
-        Route::get('attendenceList/create/{id}', [AttendanceListController::class, 'create'])->name('attendenceList.create');
+        // Route::get('attendenceList/{classId}/{code}', [AttendanceListController::class, 'index'])->name('attendenceList.index');
+        // Route::get('attendenceList/create/{id}', [AttendanceListController::class, 'create'])->name('attendenceList.create');
         
-        Route::get('journal/{id}', [JournalController::class, 'index'])->name('journal.index');
+        // Route::get('journal/{id}', [JournalController::class, 'index'])->name('journal.index');
         
     });
     

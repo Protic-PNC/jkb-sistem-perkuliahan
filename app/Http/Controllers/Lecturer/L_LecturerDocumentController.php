@@ -103,7 +103,13 @@ class L_LecturerDocumentController extends Controller
 
             $al->save();
 
-            // Simpan data Journal
+            if (!$atendance->journal) {
+                DB::rollBack();
+                return redirect()
+                    ->back()
+                    ->withInput()
+                    ->with('error', 'Data jurnal tidak ditemukan untuk daftar hadir ini.');
+            }
             $jo = new JournalDetail();
             $jo->journal_id = $atendance->journal->id;
             $jo->attendance_list_detail_id = $al->id;
@@ -112,7 +118,7 @@ class L_LecturerDocumentController extends Controller
             $jo->save();
 
             DB::commit();
-            return redirect()->route('lecturer.lecturer_document.details',  $atendance->id)->with('success', 'Daftar Hadir dan Jurnal berhasil disimpan');
+            return redirect()->route('d.dokumen_perkuliahan.details',  $atendance->id)->with('success', 'Daftar Hadir dan Jurnal berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()
@@ -167,7 +173,7 @@ class L_LecturerDocumentController extends Controller
             $al->journal_detail->save();
 
             DB::commit();
-            return redirect()->route('lecturer.lecturer_document.details',  $atendance->id)->with('success', 'Daftar Hadir dan Jurnal berhasil diubah');
+            return redirect()->route('d.dokumen_perkuliahan.details',  $al->attendance_list_id)->with('success', 'Daftar Hadir dan Jurnal berhasil diubah');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()
@@ -251,7 +257,7 @@ class L_LecturerDocumentController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->route('lecturer.lecturer_document.details', $dh->id)->with('success', 'Daftar Hadir dan Jurnal Detail Berhasil Di simpan!');
+            return redirect()->route('d.dokumen_perkuliahan.details', $dh->id)->with('success', 'Daftar Hadir dan Jurnal Detail Berhasil Di simpan!');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()
@@ -319,7 +325,7 @@ class L_LecturerDocumentController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->route('lecturer.lecturer_document.details', $dh->id)->with('success', 'Daftar Hadir dan Jurnal Detail Berhasil Di simpan!');
+            return redirect()->route('d.dokumen_perkuliahan.details', $dh->id)->with('success', 'Daftar Hadir dan Jurnal Detail Berhasil Di simpan!');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()

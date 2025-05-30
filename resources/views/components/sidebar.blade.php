@@ -17,6 +17,7 @@
     </div>
 
     <nav class="mt-10">
+        
         <a class="flex items-center p-2 w-full text-base font-medium rounded-lg transition duration-75 group text-white hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 dark:text-white{{ setActive('dashboard.index') }}"
             href="{{ route('dashboard.index') }}">
             <i class="fa-solid fa-house"></i>
@@ -52,21 +53,15 @@
             </button>
 
             <ul id="dropdown-pages"
-                {{-- class="py-2 space-y-2 {{ 
-                    request()->routeIs([
-                        'dokumen_perkuliahan.*', 
-                        'lecturer_documents.absensi-perkuliahan*',
-                        'lecturer_documents.jurnal_perkuliahan*'
-                    ]) ? '' : 'hidden' 
-                }}"> --}}
+                
                 class="py-2 space-y-2 {{ request()->routeIs(
                     'dokumen_perkuliahan.kelola.*',
                     'dokumen_perkuliahan.daftar.*',
                 ) ? '' : 'hidden' }}">
                 
                 <li>
-                    <a href="{{ route(name: 'dokumen_perkuliahan.kelola.index') }}"
-                        class="flex items-center p-2 pl-11 w-full text-base font-medium {{ setActive('dokumen_perkuliahan.kelola.index') }}">
+                    <a href="{{ route('dokumen_perkuliahan.kelola.index') }}"
+                        class="flex items-center p-2 pl-11 w-full text-base font-medium {{ setActive('dokumen_perkuliahan.kelola.*') }}">
                         <i class="fa fa-circle mr-2"></i> Kelola
                     </a>
                 </li>
@@ -74,7 +69,6 @@
                     <a href="{{ route('dokumen_perkuliahan.daftar.index') }}"
                         class="flex items-center p-2 pl-11 w-full text-base font-medium {{ 
                             setActive([
-                                'dokumen_perkuliahan.daftar.index',
                                 'dokumen_perkuliahan.daftar.*',
                             ]) 
                         }}">
@@ -118,6 +112,7 @@
                     'masterdata.courses.*',
                     'masterdata.students.*',
                     'masterdata.lecturers.*',
+                    'masterdata.jadwal.*',
                     'masterdata.assign.lecturer.position',
                     'masterdata.assign.course.lecturer'
                 ) ? '' : 'hidden' }}">
@@ -126,6 +121,12 @@
                     <a href="{{ route('masterdata.users.index') }}"
                         class="flex items-center p-2 pl-11 w-full text-base font-medium {{ setActive('masterdata.users.*') }} {{ setActive('profile') }}">
                         <i class="fa-solid fa-user mr-2"></i> Pengguna
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('masterdata.jadwal.index') }}"
+                        class="flex items-center p-2 pl-11 w-full text-base font-medium {{ setActive('masterdata.jadwal.*') }}">
+                        <i class="fa-solid fa-list mr-2"></i> Jadwal
                     </a>
                 </li>
                 <li>
@@ -180,10 +181,10 @@
 
         @role('dosen')
             @if ($nidn)
-                <a class="flex items-center px-6 py-2 mt-4 {{ setActive('lecturer.dokumen_perkuliahan*') }} {{ setActive('lecturer.lecturer_document*') }} "
+                {{-- <a class="flex items-center px-6 py-2 mt-4 {{ setActive('lecturer.dokumen_perkuliahan*') }} {{ setActive('lecturer.lecturer_document*') }} "
                     href="{{ route('lecturer.dokumen_perkuliahan', ['nidn' => $nidn]) }}">
                     <i class="fa-solid fa-file"></i>
-                    <span class="mx-3">Dokumen Perkuliahan</span>
+                    <span class="mx-3">Kelola</span>
                 </a>
                 
                 @if ($user->lecturer->position->name == 'Koordinator Program Studi')
@@ -200,12 +201,68 @@
                     <i class="fa-solid fa-folder"></i>
                     <span class="mx-3">Daftar Persetujuan Kepala Jurusan</span>
                 </a>
-                @endif
-                <a class="flex items-center px-6 py-2 mt-4 {{ setActive('lecturer.daftar_dokumen_perkuliahan*') }}"
-                    href="{{ route('lecturer.daftar_dokumen_perkuliahan', ['nidn' => $nidn]) }}">
-                    <i class="fa-solid fa-folder-open"></i>
-                    <span class="mx-3">Daftar Dokumen Perkuliahan</span>
-                </a>
+                @endif --}}
+                <li>
+            <button type="button"
+                class="flex items-center p-2 w-full text-base font-medium rounded-lg transition duration-75 group text-white hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 dark:text-white"
+                aria-controls="dropdown-pages"
+                data-collapse-toggle="dropdown-pages">
+                
+                {{-- Icon folder --}}
+                <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                    fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                        clip-rule="evenodd"></path>
+                </svg>
+
+                {{-- Label --}}
+                <span class="flex-1 ml-3 text-left whitespace-nowrap">Dokumen Perkuliahan</span>
+
+                {{-- Icon dropdown --}}
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </button>
+
+            <ul id="dropdown-pages"
+                
+                class="py-2 space-y-2 {{ request()->routeIs(
+                    'd.dokumen_perkuliahan.*',
+                    'dokumen_perkuliahan.daftar.*',
+                    'd.daftar_persetujuan_dokumen.*'
+                ) ? '' : 'hidden' }}">
+                
+                <li>
+                    <a href="{{ route('d.dokumen_perkuliahan', ['nidn' => $nidn]) }}"
+                        class="flex items-center p-2 pl-11 w-full text-base font-medium {{ setActive('d.dokumen_perkuliahan.*') }}">
+                        <i class="fa fa-circle mr-2"></i> Kelola
+                    </a>
+                </li>
+                
+                @if ($user->lecturer->position->name == 'Koordinator Program Studi')
+                <li>
+                    <a  href="{{ route('d.daftar_persetujuan_dokumen', ['id' => $user->lecturer->position_id]) }}"
+                        class="flex items-center p-2 pl-11 w-full text-base font-medium {{ setActive('d.daftar_persetujuan_dokumen*') }}">
+                        <i class="fa fa-circle mr-2"></i> Daftar Persetujuan Kaprodi
+                    </a>
+                </li>
+                    
+                @elseif ($user->lecturer->position->name == 'Kepala Jurusan')
+                <li>
+                    <a  href="{{ route('d.daftar_persetujuan_dokumen', ['id' => $user->lecturer->position_id]) }}"
+                        class="flex items-center p-2 pl-11 w-full text-base font-medium {{ setActive('d.daftar_persetujuan_dokumen*') }}">
+                        <i class="fa fa-circle mr-2"></i> Daftar Persetujuan Kepala Jurusan
+                    </a>
+                </li>
+                
+                @endif 
+            </ul>
+        </li>
+                
             @else
                 <div class="flex items-center px-6 py-2 mt-4 m-4 text-red-500 bg-red-100 rounded-lg">
                     <svg class="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -221,21 +278,20 @@
                 $user = Auth::user();
             @endphp
 
-            <a class="flex items-center px-6 py-2 mt-4 {{ setActive('student.dokumen_perkuliahan*') }} {{ setActive('student.lecturer_document*') }} "
+            {{-- <a class="flex items-center px-6 py-2 mt-4 {{ setActive('student.dokumen_perkuliahan*') }} {{ setActive('student.lecturer_document*') }} "
                 href="{{ route('student.dokumen_perkuliahan', $user->student->id) }}">
                 <i class="fa-solid fa-file"></i>
                 <span class="mx-3">Dokumen Perkuliahan</span>
+            </a> --}}
+            <a class="flex items-center p-2 w-full text-base font-medium rounded-lg transition duration-75 group text-white hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 dark:text-white{{ setActive('m.dokumen_perkuliahan') }}"
+            href="{{ route('m.dokumen_perkuliahan', $user->student->id) }}"><i class="fa-solid fa-file"></i>
+            <span class="mx-3">Dokumen Perkuliahan</span>
             </a>
-            <a class="flex items-center px-6 py-2 mt-4 {{ setActive('student.dokumen_perkuliahan*') }} {{ setActive('student.lecturer_document*') }} "
-                href="#">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z">
-                    </path>
-                </svg>
-                <span class="mx-3">Absensi Mahasiswa</span>
+            <a class="flex items-center p-2 w-full text-base font-medium rounded-lg transition duration-75 group text-white hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 dark:text-white{{ setActive('m.riwayat_absensi*') }}"
+            href="{{ route('m.riwayat_absensi', $user->student->nim) }}"><i class="fa-solid fa-layer-group"></i>
+            <span class="mx-3">Riwayat Absensi</span>
             </a>
+            
         @endrole
     </nav>
 </div>

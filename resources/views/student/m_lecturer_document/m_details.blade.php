@@ -130,12 +130,12 @@
                                 <td class="px-3 py-2 text-center align-middle flex space-x-1 justify-center">
                                     
                                     @if (($d->has_acc_student == 1) && !empty($d->sum_attendance_students))
-                                    <button type="button" id="btn-verifikasi{{ $d->id }}" class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center" onclick="openModalVerifikasi('{{ $d->id }}', '{{ route('student.lecturer_document.verifikasi', $d->id) }}')">
+                                    <button type="button" id="btn-verifikasi{{ $d->id }}" class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center" onclick="openModalVerifikasi('{{ $d->id }}', '{{ route('m.dokumen_perkuliahan.verifikasi', $d->id) }}')">
                                         <i class="fa fa-check"></i> Verifikasi </button>
                                     @elseif(($d->has_acc_lecturer == 1) && empty($d->sum_attendance_students))
                                     Dosen Belum Mengisi Daftar Hadir
                                     @else
-                                    <a href="{{ route('student.lecturer_document.detail_verifikasi', ['id' => $d->id]) }}"  class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center">
+                                    <a href="{{ route('m.dokumen_perkuliahan.detail_verifikasi', ['id' => $d->id]) }}"  class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center">
                                         <i class="fa fa-info"></i> Detail </a>
                                     @endif
                                     

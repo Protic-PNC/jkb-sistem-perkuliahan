@@ -97,7 +97,7 @@
                         </tbody>
                     </table>
                     <div class="m-3 flex items-center justify-between">
-                        <a href="{{ route('lecturer.lecturer_document.create', $data->id) }}" class="inline-block">
+                        <a href="{{ route('d.dokumen_perkuliahan.create', $data->id) }}" class="inline-block">
                             <button type="button"
                                 class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-5 text-center">
                                 Tambah Detail Pertemuan
@@ -145,14 +145,14 @@
                                 </td>
                                 <td class="px-3 py-2 text-center align-middle flex space-x-1 justify-center">
                                     
-                                    <a href="{{ route('lecturer.lecturer_document.edit', $d->id) }}"
+                                    <a href="{{ route('d.dokumen_perkuliahan.edit', $d->id) }}"
                                         class="inline-flex items-center justify-center  text-center font-medium bg-yellow-400 text-white px-2 py-1 rounded-md hover:bg-yellow-500 transition duration-300">
                                         <svg class="w-4 h-4 mr-1 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
                                         </svg>
                                         Edit Detail
                                     </a>
-                                    <a href="{{ route('lecturer.lecturer_document.absensi', $d->id) }}" class="inline-block">
+                                    <a href="{{ route('d.dokumen_perkuliahan.absensi', $d->id) }}" class="inline-block">
                                         <button type="button" class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center">
                                             Isi Absensi
                                         </button>
@@ -237,7 +237,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{ route('lecturer.lecturer_document.selesai', '') }}/" + id,
+                        url: "{{ route('d.dokumen_perkuliahan.selesai', '') }}/" + id,
                         type: 'POST',
                         data: {
                             _token: '{{ csrf_token() }}',

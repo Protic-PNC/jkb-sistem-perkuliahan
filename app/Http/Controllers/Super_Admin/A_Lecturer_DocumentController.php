@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class A_Lecturer_DocumentController extends Controller
 {
@@ -96,11 +97,16 @@ class A_Lecturer_DocumentController extends Controller
         return response()->json($courses);
     }
     public function getLecturerByClass($courseId)
-    {
-        $lecturers = DB::table('lecturers')->join('course_lecturers', 'lecturers.id', '=', 'course_lecturers.lecturer_id')->where('course_lecturers.course_id', $courseId)->select('lecturers.id', 'lecturers.name')->get();
-
-        return response()->json($lecturers);
-    }
+{
+    // Menggunakan model CourseLecturer sebagai pivot
+    $lecturers = Lecturer::whereHas('courseLecturers', function($query) use ($courseId) {
+                    $query->where('course_id', $courseId);
+                })
+                ->select('id', 'name')
+                ->get();
+    
+    return response()->json($lecturers);
+}
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -138,6 +144,7 @@ class A_Lecturer_DocumentController extends Controller
                 
                 
             $al = new AttendanceList();
+            $al->code_al = Str::uuid()->toString();
             $al->student_class_id = $request->student_class_id;
             $al->course_id = $request->course_id;
             $al->lecturer_id = $request->lecturer_id;
@@ -245,7 +252,7 @@ public function update(Request $request, $id)
             ->firstOrFail();
 
         $students = $student_class->students;
-        $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)
+        $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)->with('attendenceList')
             ->orderBy('meeting_order')
             ->get();
   

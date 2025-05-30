@@ -52,7 +52,7 @@
                             </tr>
                         </thead>
                         <tbody id="studentList">
-                            <form id="form2" action="{{ route('lecturer.lecturer_document.update_student', $ad->id) }}"
+                            <form id="form2" action="{{ route('d.dokumen_perkuliahan.update_student', $ad->id) }}"
                                 method="POST">
                                 @csrf
                                 @method('PUT')

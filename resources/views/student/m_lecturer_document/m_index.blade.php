@@ -14,7 +14,7 @@
 
             <div class="py-4 px-2 mx-auto lg:m-8 sm:m-4">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Daftar Mata Kuliah Yang Diampu</h3>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Daftar Mata Kuliah</h3>
                     <hr class="border-t-4 my-2 mb-6 rounded-sm bg-gray-300">
                 </div>
                 @if ($errors->any())
@@ -58,7 +58,7 @@
                                     <td class="px-3 py-2 text-slate-800">{{ $d->course->name }}</td>
                                     
                                     <td class="px-3 py-2 flex space-x-2 justify-center ">
-                                        <a href="{{ route('student.lecturer_document.details', $d->id) }}"
+                                        <a href="{{ route('m.dokumen_perkuliahan.details', $d->id) }}"
                                             class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                             Pilih Dokumen
                                         </a>

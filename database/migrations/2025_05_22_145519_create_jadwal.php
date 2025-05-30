@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('jadwal', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('prodi_id')->nullable()->constrained('study_program')->onDelete('cascade');
+            $table->foreignId('prodi_id')->nullable()->constrained('study_programs')->onDelete('cascade');
             $table->string('file');
             $table->timestamps();
         });
