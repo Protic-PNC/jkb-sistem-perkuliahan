@@ -38,7 +38,7 @@
 
                     <div class="flex items-center">
                         <div x-data="{ notificationOpen: false }" class="relative">
-                            <button @click="notificationOpen = ! notificationOpen"
+                            {{-- <button @click="notificationOpen = ! notificationOpen"
                                 class="flex mx-4 text-gray-600 focus:outline-none">
                                 <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -48,13 +48,13 @@
                                         stroke-linejoin="round">
                                     </path>
                                 </svg>
-                            </button>
+                            </button> --}}
 
                             {{-- <div class="relative mx-4 lg:mx-0">
                                 @yield('search')
                             </div> --}}
 
-                            <div x-show="notificationOpen" @click="notificationOpen = false"
+                            {{-- <div x-show="notificationOpen" @click="notificationOpen = false"
                                 class="fixed inset-0 z-10 w-full h-full" style="display: none;"></div>
 
                             <div x-show="notificationOpen"
@@ -103,7 +103,7 @@
                                     </p>
                                 </a>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div x-data="{ dropdownOpen: false }" class="relative">
                             <div @click="dropdownOpen = ! dropdownOpen" class="flex items-center space-x-2 cursor-pointer">

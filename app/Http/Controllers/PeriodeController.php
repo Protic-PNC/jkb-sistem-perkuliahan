@@ -49,7 +49,7 @@ class PeriodeController extends Controller
             'semester' => 'required|string|max:10',
         ]);
         $data['tahun_akademik'] = $data['tahun'] . '/' . ($data['tahun'] + 1);
-        
+        $data['status'] = 1;
         $data['tanggal_batas_awal'] = date('Y-m-d', strtotime($data['tanggal_batas_awal']));
         $data['tanggal_batas_akhir'] = date('Y-m-d', strtotime($data['tanggal_batas_akhir']));
         

@@ -160,15 +160,20 @@ class StudentClassController extends Controller
             $student_class->code = $prodi->brief . $request->input('name') . $request->input('academic_year');
             $student_class->save();
             CourseClass::where('student_class_id', $student_class->id)->delete();
-            if (!empty($request->course_id)) {
-                foreach ($request->course_id as $courseId) {
-                    $cl =  CourseClass::create([
-                        'course_id' => $courseId,
-                        'student_class_id' => $student_class->id,
-                    ]);
-                    
-                }
-            }
+
+    // Tambahkan kembali course_class jika ada
+    if (!empty($request->course_id)) {
+        $newCourses = [];
+        foreach ($request->course_id as $courseId) {
+            $newCourses[] = [
+                'course_id' => $courseId,
+                'student_class_id' => $student_class->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+        CourseClass::insert($newCourses); // insert massal lebih efisien
+    }
             DB::commit();
             return redirect()->route('masterdata.student_classes.index')->with('success', 'Kelas Berhasil Diedit');
         } catch (\Exception $e) {

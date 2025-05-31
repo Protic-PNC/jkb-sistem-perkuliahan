@@ -120,7 +120,7 @@
                                             </svg>
                                             Edit
                                         </a>
-                                        <button type="button" id="btn-hapus{{ $student->id }}" class="font-medium bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline" onclick="openModal('{{ $student->id }}', '{{ route('masterdata.students.destroy', $student->id) }}')">
+                                        <button type="button" id="btn-hapus{{ $student->id }}" class="font-medium bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline" onclick="openModal('{{ $student->id }}', '{{ route('masterdata.students.destroy', $student) }}')">
                                             <i class="fa fa-trash"></i> Hapus
                                         </button>
 
@@ -151,7 +151,7 @@
           <div
             class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-              Import Hasil
+              Import Mahasisiswa
             </h3>
             <button type="button"
               class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -170,6 +170,12 @@
               stroke="currentColor" class="w-5 h-5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l7.5 7.5 7.5-7.5M12 3v17.25" />
             </svg> Download Daftar Kelas </a>
+          <a href="{{ route('masterdata.student.template') }}" id="btn-template"
+            class="flex items-center gap-2 px-5 py-2.5 mb-4 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-5">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l7.5 7.5 7.5-7.5M12 3v17.25" />
+            </svg> Download Template Import</a>
           <form class="p-4 md:p-5" action="{{ route('masterdata.students.import') }}" method="POST"
             enctype="multipart/form-data">
             @csrf
@@ -179,7 +185,7 @@
                 file</label>
               <input
                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                aria-describedby="file_import_nilai" id="file_import_nilai" name="file_import_nilai" type="file"
+                aria-describedby="file_import" id="file_import" name="file_import" type="file"
                 accept=".xls,.xlsx">
               <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Upload file .xls atau .xslx
               </p>

@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('nim')->unique();;
-            $table->string('name');
+            $table->string('nim',10)->unique();;
+            $table->string('name',50);
             $table->string('address')->nullable();
             $table->string('signature')->nullable();
-            $table->string('number_phone');
+            $table->string('number_phone',15);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('student_class_id')->constrained()->onDelete('cascade');
             $table->softDeletes();

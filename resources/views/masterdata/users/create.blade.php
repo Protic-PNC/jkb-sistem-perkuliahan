@@ -1,6 +1,6 @@
 <x-app-layout>
     @section('main_folder', '/ Master Data')
-    @section('descendant_folder', '/ Users')
+    @section('descendant_folder', '/ Pengguna')
 
     @section('content')
 
@@ -17,7 +17,7 @@
                         </ul>
                     </div>
                 @endif
-                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambah Users</h2>
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambah Pengguna</h2>
                 <form action="{{ route('masterdata.users.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">

@@ -30,71 +30,105 @@ class StudentImport implements ToModel, WithStartRow
      */
     public function model(array $row)
     {
-        if (count($row) < 4) {
+        if (count($row) < 5) {
             return null;
         }
-        Log::info($row);
+        Log::info('row:', $row);
 
-        $class = StudentClass::where('code', $row[2])->first();
+        $class = StudentClass::where('code', trim($row[5]))->first();
+
         if (!$class) {
-            // Handle the case where the class is not found
+           
             return null; // or throw an exception
         }
-        DB::beginTransaction();
-\Log::info('Transaction started');
+        
 
-try {
-    // Sebelum create user
-   Log::info('About to create user');
-    
-    $user = User::create([
-        'name' => $row[1],
-        'email' => $row[3],
-        'username' => (string)$row[0], // konversi float ke string
-        'password' => bcrypt('pass' . $row[0]),
-    ]);
-    
-   Log::info('User created with ID: ' . $user->id);
-   Log::info('User data: ' . json_encode($user->toArray()));
-    
-    // Sebelum assign role
-   Log::info('About to assign role');
-    $user->assignRole('mahasiswa');
-   Log::info('Role assigned successfully');
-    
-    // Sebelum create student
-   Log::info('About to create student');
-    $student = Student::create([
-        'nim' => (string)$row[0],
-        'name' => $row[1],
-        'user_id' => $user->id,
-        'student_class_id' => $class->id,
-        'number_phone' => $row[4],
-        'address' => $row[4] ?? '', // gunakan default jika tidak ada
-        'email' => $row[3],
-    ]);
-    
-   Log::info('Student created with ID: ' . $student->id);
-   Log::info('Student data: ' . json_encode($student->toArray()));
-    
-   Log::info('About to commit transaction');
-    DB::commit();
-   Log::info('Transaction committed successfully');
-    
-    // Verifikasi setelah commit
-    $verifyUser = User::find($user->id);
-    $verifyStudent = Student::find($student->id);
-    
-   Log::info('Post-commit verification:');
-   Log::info('User exists: ' . ($verifyUser ? 'Yes' : 'No'));
-   Log::info('Student exists: ' . ($verifyStudent ? 'Yes' : 'No'));
-    
-} catch (\Exception $e) {
-   Log::error('Exception caught: ' . $e->getMessage());
-   Log::error('Exception trace: ' . $e->getTraceAsString());
-    DB::rollBack();
-   Log::info('Transaction rolled back');
-    return null;
-}
+        DB::beginTransaction();
+
+        try {
+            
+            $user = User::create([
+                'name' => $row[1],
+                'email' => $row[2] . '@pnc.ac.id',
+                'avatar' => ' ', 
+                'password' => bcrypt( $row[2]),
+            ]);
+            
+        
+            Log::info('user:', [$user]);
+            $user->assignRole('mahasiswa');
+        
+            $student = Student::create([
+                'nim' => $row[2],
+                'name' => $row[1],
+                'user_id' => $user->id,
+                'student_class_id' => $class->id,
+                'number_phone' => $row[4],
+                'address' => $row[3], 
+            ]);
+        
+
+            Log::info('student:', [$student]);
+            DB::commit();
+        } catch (\Exception $e) {
+            Log::error('Exception caught: ' . $e->getMessage());
+            
+            DB::rollBack();
+        }
     }
+//     public function model(array $row)
+// {
+//     if (count($row) < 6) {
+//         Log::warning('Row does not have enough columns', $row);
+//         throw new \Exception("Invalid row format: not enough columns");
+//     }
+
+//     Log::info('Import row: ', $row);
+
+//     try {
+//         $class = StudentClass::where('code', trim($row[5]))->first();
+//         if (!$class) {
+//             throw new \Exception("KODE KELAS tidak ditemukan: " . $row[5]);
+//         }
+
+//         $email = strtolower($row[2]) . '@pnc.ac.id';
+//         if (User::where('email', $email)->exists()) {
+//             throw new \Exception("Email duplikat: " . $email);
+//         }
+
+//         DB::beginTransaction();
+
+//         $user = User::create([
+//             'name' => $row[1],
+//             'email' => $email,
+//             'password' => bcrypt($row[2]),
+//         ]);
+
+//         $user->assignRole('mahasiswa');
+
+//         $student = Student::create([
+//             'nim' => $row[2],
+//             'name' => $row[1],
+//             'user_id' => $user->id,
+//             'student_class_id' => $class->id,
+//             'number_phone' => $row[4],
+//             'address' => $row[3],
+//         ]);
+
+//         DB::commit();
+
+//         Log::info('Import successful for row' . ['student_id' => $student->id]);
+//         return $student; // Kembalikan model Student
+
+//     } catch (\Exception $e) {
+//         DB::rollBack();
+//         Log::error('Student import error', [
+//             'message' => $e->getMessage(),
+//             'row' => $row,
+//         ]);
+//         throw $e; // Re-throw exception agar bisa ditangkap oleh Laravel Excel
+//     }
+// }
+
+
 }

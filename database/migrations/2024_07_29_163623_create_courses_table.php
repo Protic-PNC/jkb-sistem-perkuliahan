@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
-            $table->string('type');//praktek/teori
-            $table->string('name');
+            $table->string('code',20);
+            $table->string('type',10);//praktek/teori
+            $table->string('name',50);
             $table->integer('sks'); //1 sks = 8pertemuan
             $table->integer('hours'); //2 jam
             $table->float('meeting')->nullable(); //pertemuan(meeting) diisi $meeting = banyak sks * 8 pertemuan

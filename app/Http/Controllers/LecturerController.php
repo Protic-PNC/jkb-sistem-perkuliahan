@@ -61,7 +61,7 @@ class LecturerController extends Controller
             'name' => 'required|string',
             'number_phone' => 'required|string',
             'address' => 'required|string',
-            'signature' => 'required|image|mimes:png,jpg,jpeg',
+            'signature' => 'nullable|image|mimes:png,jpg,jpeg',
             'nidn' => 'required|string|unique:lecturers,nidn',
             'nip' => 'required|string|unique:lecturers,nip',
             'position_id' => 'nullable|exists:positions,id', 
@@ -121,7 +121,7 @@ class LecturerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Lecturer $lecturer, $id)
+    public function edit( $id)
     {
         $lecturer = lecturer::with('course')->find($id);
         $jabatan = Position::with('prodis')->get();

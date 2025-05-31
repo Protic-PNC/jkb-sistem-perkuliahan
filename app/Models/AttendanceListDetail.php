@@ -17,7 +17,6 @@ class AttendanceListDetail extends Model
         'course_status',
         'start_hour',
         'end_hour',
-        'meeting_hour',
         'sum_attendance_students',
         'sum_late_students',
         'has_acc_student',

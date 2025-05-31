@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('journal_id')->constrained()->onDelete('cascade');
             $table->foreignId('attendance_list_detail_id')->constrained('attendance_list_details')->onDelete('cascade');
             $table->string('material_course')->nullable();
-            $table->string('learning_methods')->nullable();
+            $table->string('learning_methods',20)->nullable();
             $table->tinyInteger('has_acc_student')->default(1);
             $table->tinyInteger('has_acc_lecturer')->default(1);
             $table->tinyInteger('has_acc_kaprodi')->default(1);

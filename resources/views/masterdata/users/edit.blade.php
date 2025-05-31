@@ -1,13 +1,13 @@
 <x-app-layout>
     @section('main_folder', '/ Master Data')
-    @section('descendant_folder', '/ Users')
+    @section('descendant_folder', '/ Pengguna')
 
     @section('content')
 
         <section class="bg-white dark:bg-gray-900">
 
             <div class="py-4 px-2 mx-auto lg:m-8 sm:m-4">
-                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Edit Users</h2>
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Edit Pengguna</h2>
                 @if ($errors->any())
                     <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
                         role="alert">

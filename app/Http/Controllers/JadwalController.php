@@ -61,28 +61,26 @@ class JadwalController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-{
-    $request->validate([
-        'file_jadwal' => 'required|file|mimes:xlsx,csv,xls|max:10240', // Max 10MB
-    ]);
+    {
+        $request->validate([
+            'file_jadwal' => 'required|file|mimes:xlsx,csv,xls|max:10240', 
+        ]);
 
-    // Simpan file ke storage/app/public/file_jadwal
-    $file = $request->file('file_jadwal');
-    $filename = time() . '-' . $file->getClientOriginalName();
-    $path = $file->storeAs('file_jadwal', $filename, 'public'); // Simpan di storage/app/public/file_jadwal
+        
+        $file = $request->file('file_jadwal');
+        $filename = time() . '-' . $file->getClientOriginalName();
+        $path = $file->storeAs('file_jadwal', $filename, 'public'); 
+        $jadwal = Jadwal::updateOrCreate(
+            ['prodi_id' => $id],
+            ['file' => $filename] 
+        );
 
-    // Simpan path ke database
-    $jadwal = Jadwal::updateOrCreate(
-        ['prodi_id' => $id],
-        ['file' => $filename] // Hanya simpan nama file, bukan full path
-    );
-
-    return response()->json([
-        'success' => true,
-        'message' => 'File berhasil diupload',
-        'file_url' => asset("storage/file_jadwal/{$filename}") // Generate URL publik
-    ]);
-}
+        return response()->json([
+            'success' => true,
+            'message' => 'File berhasil diupload',
+            'file_url' => asset("storage/file_jadwal/{$filename}") 
+        ]);
+    }
 
 
     /**
@@ -94,22 +92,21 @@ class JadwalController extends Controller
     }
     public function download($id)
     {
-        // 1. Cari data jadwal berdasarkan ID
+        
         $jadwal = Jadwal::findOrFail($id);
 
-        // 2. Verifikasi file exist
+        
         $filePath = storage_path('app/public/file_jadwal/' . $jadwal->file);
         
         if (!file_exists($filePath)) {
             abort(404, 'File tidak ditemukan');
         }
 
-        // 3. Tentukan header untuk response download
+        
         $headers = [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ];
 
-        // 4. Return response download
         return response()->download($filePath, $jadwal->file, $headers);
     }
 }

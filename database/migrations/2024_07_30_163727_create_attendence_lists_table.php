@@ -22,7 +22,7 @@ return new class extends Migration
             $table->tinyInteger('has_acc_kajur')->default(1);
             $table->dateTime('date_acc_kajur')->nullable();
             $table->foreignId('lecturer_kajur_id')->nullable()->constrained('lecturers')->onDelete('cascade');
-            $table->foreignId('d')->nullable()->constrained('periodes')->onDelete('cascade');
+            $table->foreignId('periode_id')->nullable()->constrained('periodes')->onDelete('cascade');
             $table->timestamps();
         });
     }

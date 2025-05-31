@@ -79,10 +79,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/students/store', [StudentController::class, 'store'])->name('students.store');
         Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
         Route::put('/students/update/{id}', [StudentController::class, 'update'])->name('students.update');
-        Route::delete('/students/destroy/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
+        Route::delete('/students/destroy/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
 
         
-    Route::get('/export/studentclass', [StudentClass::class, 'export_siswa'])->name('student_class.export');
+    Route::get('/export/studentclass', [StudentController::class, 'export_kelas'])->name('student_class.export');
+    Route::get('/template/student', [StudentController::class, 'download_template'])->name('student.template');
         Route::get('/lecturers/index', [LecturerController::class,'index'])->name('lecturers.index');
         Route::get('/lecturers/create', [LecturerController::class, 'create'])->name('lecturers.create');
         Route::get('/lecturers/show/{userId}', [LecturerController::class, 'show'])->name('lecturers.show');

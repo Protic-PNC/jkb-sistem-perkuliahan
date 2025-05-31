@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\Masterdata\Student_ClassExport;
+use App\Exports\StudentClassesExport;
 use App\Imports\Masterdata\StudentImport;
 use App\Models\Student;
 use App\Models\StudentClass;
@@ -68,7 +70,7 @@ class StudentController extends Controller
                 'nim' => 'required|string|unique:students,nim',
                 'address' => 'required|string',
                 'number_phone' => 'required|string',
-                'signature' => 'required|image|mimes:png,jpg,jpeg',
+                'signature' => 'nullable|image|mimes:png,jpg,jpeg',
                 'student_class_id' => 'required|exists:student_classes,id',
             ]);
 
@@ -191,6 +193,7 @@ class StudentController extends Controller
     {
         try{
             $student->delete();
+            $student->user->delete();
             return redirect()->back()->with('success','Mahasiswa deleted sussesfully');
         }
         catch(Exception $e){
@@ -199,6 +202,22 @@ class StudentController extends Controller
             return redirect()->back()->with('error', 'System eror'.$e->getMessage());
         }
     }
+
+    public function download_template()
+    {
+        $filePath = public_path('file/Template-Import-Mahasiswa.xlsx');
+        
+        if (!file_exists($filePath)) {
+            abort(404, 'File tidak ditemukan');
+        }
+
+        $headers = [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ];
+
+        return response()->download($filePath, 'Template-Import-Mahasiswa.xlsx', $headers);
+    }
+
     public function import(Request $request)
     {
      
@@ -206,22 +225,29 @@ class StudentController extends Controller
        DB::beginTransaction();
        try {
         $request->validate([
-            'file' => ['required', 'max:2048', new ExcelFile()],
+            'file_import' => ['required', 'max:2048', new ExcelFile()],
         ]);
         
-        $file = $request->file('file');
+        $file = $request->file('file_import');
         $filename = time() . '-' . $file->getClientOriginalName();
     
-        $store = $file->store('import_students', 'public');
+        $store = $file->store('file_import', 'public');
         Log::info('File uploaded: ' . $filename);
     
         Excel::import(new StudentImport(), $file);
-        
-        return response()->json(['success' => true, 'message' => 'File imported successfully'], 200);
-    } catch (Exception $e) {
+        DB::commit();
+        return back()->with('success', 'File berhasil diimport!');
+        } catch (\Throwable $e) {
+        DB::rollBack();
         Log::error('Import Error: ' . $e->getMessage());
-        return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        return back()->withErrors(['file_import' => 'Terjadi kesalahan saat mengimpor file. Lihat log untuk detail.']);
     }
+
     
+    }
+
+    public function export_kelas()
+    {
+        return Excel::download(new StudentClassesExport(), 'Daftar-Kelas.xlsx');
     }
 }

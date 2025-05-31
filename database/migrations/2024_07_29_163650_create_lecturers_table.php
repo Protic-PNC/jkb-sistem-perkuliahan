@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('lecturers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('number_phone');
+            $table->string('name',50);
+            $table->string('number_phone',15);
             $table->string('address')->nullable();
             $table->string('signature')->nullable(); //ttd
-            $table->string('nidn');
-            $table->string('nip');
+            $table->string('nidn',20);
+            $table->string('nip',20);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('position_id')->constrained()->onDelete('cascade');
             $table->softDeletes();

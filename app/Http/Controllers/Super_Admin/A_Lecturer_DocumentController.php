@@ -97,37 +97,33 @@ class A_Lecturer_DocumentController extends Controller
         return response()->json($courses);
     }
     public function getLecturerByClass($courseId)
-{
-    // Menggunakan model CourseLecturer sebagai pivot
-    $lecturers = Lecturer::whereHas('courseLecturers', function($query) use ($courseId) {
-                    $query->where('course_id', $courseId);
-                })
-                ->select('id', 'name')
-                ->get();
-    
-    return response()->json($lecturers);
-}
+    {
+        
+        $lecturers = Lecturer::whereHas('courseLecturers', function($query) use ($courseId) {
+                        $query->where('course_id', $courseId);
+                    })
+                    ->select('id', 'name')
+                    ->get();
+        
+        return response()->json($lecturers);
+    }
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            
+        
+        // dd($request->all());
+        $validated = $request->validate([
             'student_class_id' => 'required|exists:student_classes,id',
             'course_id' => 'required|exists:courses,id',
             'lecturer_id' => 'required|exists:lecturers,id',
             'periode_id' => 'required|exists:periodes,id',
         ]);
 
-        // Jika validasi gagal
-        if ($validator->fails()) {
-            Log::error('Validation failed: ' . json_encode($validator->errors()->all()));
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         DB::beginTransaction();
         try {
             Log::info('Database transaction started.');
 
-            // Cek apakah kombinasi course_id dan lecturer_id sudah ada
+            
             $existingAttendance = AttendanceList::where('course_id', $request->course_id)
                 ->where('lecturer_id', $request->lecturer_id)
                 ->where('student_class_id', $request->student_class_id)
@@ -163,23 +159,19 @@ class A_Lecturer_DocumentController extends Controller
             return redirect()->route('dokumen_perkuliahan.kelola.index')->with('success', 'Daftar Hadir dan Jurnal berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
-            // Log::error('Database transaction rolled back due to exception: ' . $e->getMessage());
-            // return redirect()->back()->with('errors', 'System error: ' . $e->getMessage());
+            Log::error('Database transaction rolled back due to exception: ' . $e->getMessage());
+            return redirect()->back()->with('errors', 'System error: ' . $e->getMessage());
         }
     
-}
+    }
 
-    /**
-     * Display the specified resource.
-     */
+    
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    
     public function edit(string $id)
     {
         $lecturer_document = AttendanceList::findOrFail($id);
@@ -234,7 +226,7 @@ public function update(Request $request, $id)
         $al = AttendanceList::find($id);
         try{
             $al->delete();
-            return redirect()->back()->with('success','Course deleted sussesfully');
+            return redirect()->back()->with('success','Dokumen Perkuliahan Berhasil Dihapus');
         }
         catch(\Exception $e){
             DB::rollBack();
