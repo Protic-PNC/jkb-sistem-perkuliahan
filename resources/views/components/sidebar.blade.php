@@ -231,14 +231,14 @@
             <ul id="dropdown-pages"
                 
                 class="py-2 space-y-2 {{ request()->routeIs(
-                    'd.dokumen_perkuliahan.*',
-                    'dokumen_perkuliahan.daftar.*',
-                    'd.daftar_persetujuan_dokumen.*'
+                    'd.dokumen_perkuliahan*',
+                    'dokumen_perkuliahan.daftar*',
+                    'd.daftar_persetujuan_dokumen*'
                 ) ? '' : 'hidden' }}">
                 
                 <li>
                     <a href="{{ route('d.dokumen_perkuliahan', ['nidn' => $nidn]) }}"
-                        class="flex items-center p-2 pl-11 w-full text-base font-medium {{ setActive('d.dokumen_perkuliahan.*') }}">
+                        class="flex items-center p-2 pl-11 w-full text-base font-medium {{ setActive('d.dokumen_perkuliahan*') }}">
                         <i class="fa fa-circle mr-2"></i> Kelola
                     </a>
                 </li>

@@ -44,7 +44,7 @@ class A_Lecturer_DocumentController extends Controller
 
         
         // Gunakan paginate untuk paginasi hasil query
-        $data = $attendanceLists->paginate(5);
+        $data = $attendanceLists->paginate(10);
         
         // Return ke view dengan data yang dipaginasi
         return view('masterdata.a_lecturer_document.index', compact('data'));

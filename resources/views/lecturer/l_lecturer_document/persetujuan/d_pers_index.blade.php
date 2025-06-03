@@ -64,7 +64,7 @@
                                     <td class="px-3 py-2 text-slate-800">{{\Carbon\Carbon::parse($d->date_finished)->translatedFormat('j F Y') }}</td>
                                     
                                     <td class="px-3 py-2 flex space-x-2 justify-center ">
-                                        <a href="{{ route('lecturer.daftar_persetujuan_dokumen.detail', $d->id) }}"
+                                        <a href="{{ route('d.daftar_persetujuan_dokumen.detail', $d->id) }}"
                                             class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                             Pilih Dokumen
                                         </a>

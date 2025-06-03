@@ -79,7 +79,7 @@
                                     <td class="px-3 py-2 text-slate-800">{{ $d->periode->tahun }} - {{ $d->periode->semester }} </td>
                                     <td class="px-3 py-2 text-slate-800">{{ $d->student_class->study_program->name }} {{ $d->student_class->level }}  {{ $d->student_class->name }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{ $d->course->name }}</td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $d->lecturer->name }}</td>
+                                    <td class="px-3 py-2 text-slate-800">  {{ $d->lecturer->nidn }} <br> {{ $d->lecturer->name }}</td>
                                     <td class="px-3 py-2 flex space-x-2 justify-center ">
                                         <a href="{{ route('dokumen_perkuliahan.kelola.edit', $d->id) }}"
                                             class="inline-flex items-center justify-center w-20 text-center font-medium bg-yellow-400 text-white px-3 py-2 rounded-md hover:bg-yellow-500 transition duration-300">
