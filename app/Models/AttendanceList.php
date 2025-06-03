@@ -28,6 +28,10 @@ class AttendanceList extends Model
 
     //has finished, jika 0 = aktif, 1 = dokumen selesai, 2 acc kajur
 
+    public function kajur()
+    {
+        return $this->belongsTo(Lecturer::class, 'lecturer_kajur_id', 'id');
+    }
     public function student_class(){
         return $this->belongsTo(StudentClass::class, 'student_class_id', 'id');
     }

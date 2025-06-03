@@ -15,7 +15,7 @@ class JadwalController extends Controller
      */
     public function index()
     {
-            $data = StudyProgram::with('jadwal')->select('id','name')->get();
+        $data = StudyProgram::with('jadwal')->select('id','name')->orderBy('id','desc')->get();
 
         
         return view('masterdata.jadwal_index', compact('data'));

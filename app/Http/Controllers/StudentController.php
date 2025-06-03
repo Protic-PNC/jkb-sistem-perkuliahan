@@ -26,7 +26,7 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Student::query();
+        $query = Student::query()->orderBy('id','desc');
 
         if ($request->has('search')) {
             $search = $request->input('search');

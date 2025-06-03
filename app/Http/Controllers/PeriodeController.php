@@ -14,7 +14,7 @@ class PeriodeController extends Controller
      */
     public function index()
     {
-        $data = Periode::all();
+        $data = Periode::orderBy('id','desc')->get();
 
         foreach ($data as $periode) {
             $batasAkhir = Carbon::createFromFormat('Y-m-d', $periode->tanggal_batas_akhir);

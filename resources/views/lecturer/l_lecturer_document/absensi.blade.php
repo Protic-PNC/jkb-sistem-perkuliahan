@@ -1,6 +1,6 @@
 <x-app-layout>
-    @section('main_folder', '/ Master Data')
-    @section('descendant_folder', '/ Daftar Hadir')
+    @section('main_folder', '/ Dokumen Perkuliahan')
+    @section('descendant_folder', '/ Kelola')
 
     @section('content')
         <style>

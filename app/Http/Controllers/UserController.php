@@ -20,7 +20,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::query();
+        $query = User::query()->orderBy('id','desc');
 
         if ($request->has('search')) {
             $search = $request->input('search');

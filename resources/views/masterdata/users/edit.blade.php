@@ -66,8 +66,8 @@
 
                     </div>
                     <button type="submit"
-                        class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                        Edit
+                        class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center m-2">
+                        Simpan
                     </button>
                 </form>
             </div>

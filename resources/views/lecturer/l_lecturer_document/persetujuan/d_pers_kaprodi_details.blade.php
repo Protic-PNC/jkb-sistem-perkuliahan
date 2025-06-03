@@ -1,6 +1,6 @@
 <x-app-layout>
-    @section('main_folder', '/ Master Data')
-    @section('descendant_folder', '/ Daftar Hadir Kuliah')
+    @section('main_folder', '/ Dokumen Perkuliahan')
+    @section('descendant_folder', '/ Daftar Persetujuan Koordinator Program Studi')
 
     @section('content')
         <style>
@@ -32,7 +32,7 @@
         <section class="bg-white dark:bg-gray-900">
             <div class="py-4 px-2 mx-auto lg:m-8 sm:m-4">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Daftar Hadir Kuliah</h3>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Daftar Persetujuan Koordinator Program Studi</h3>
                     <hr class="border-t-4 my-2 mb-6 rounded-sm bg-gray-300">
                 </div>
 
@@ -62,7 +62,7 @@
                     <table class="w-full border-collapse font-sans">
                         <thead>
                             <tr class="bg-gray-900 text-white">
-                                <th colspan="4" class="p-3 text-center text-lg font-bold">DAFTAR HADIR KULIAH</th>
+                                <th colspan="4" class="p-3 text-center text-lg font-bold">Daftar Persetujuan Koordinator Program Studi</th>
                             </tr>
                             <tr class="bg-gray-100 text-gray-700">
                                 <th colspan="4" class="p-2 text-center text-sm font-medium uppercase">JURUSAN TEKNIK
@@ -99,7 +99,7 @@
                         </tbody>
                     </table>
                     <p class="mt-3 mb-3 ml-3">Checkbox tidak dapat dipilih jika mahsiswa belum melakukan verifikasi</p>
-                    <form action="{{ route('lecturer.lecturer_document.verifikasi_massal', $data->id) }}" method="POST">
+                    <form action="{{ route('d.dokumen_perkuliahan.verifikasi_massal', $data->id) }}" method="POST">
                         @csrf
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4 border-collapse">
                             <thead class="text-xs uppercase bg-gray-900 text-white">
@@ -135,7 +135,7 @@
                                         <td class="px-6 py-4 text-center align-middle">{{ $d->journal_detail->material_course }}</td>
                                         <td class="px-3 py-2 text-center flex space-x-1 justify-center">
                                             @if ($d->journal_detail->has_acc_kaprodi == 2 && $d->journal_detail->has_acc_student == 2 && !empty($d->sum_attendance_students))
-                                            <a href="{{ route('lecturer.lecturer_document.detail_verifikasi', ['id' => $d->id]) }}"
+                                            <a href="{{ route('d.dokumen_perkuliahan.detail_verifikasi', ['id' => $d->id]) }}"
                                                 class="text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-lg text-sm px-4 py-1 text-center">
                                                 <i class="fa fa-info"></i> Detail
                                             </a>

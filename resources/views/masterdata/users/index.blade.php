@@ -117,7 +117,7 @@
                                             Edit
                                         </a>
                                         <a href="{{ route('masterdata.users.show', $user->id) }}"
-                                            class="ml-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
+                                            class="ml-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300"><i class="fa fa-info"></i>
                                             {{-- <svg class="w-5 h-5 mr-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -127,9 +127,7 @@
                                         </a>
 
                                         
-                                        <button type="button" id="btn-hapus{{ $user->id }}" class="font-medium bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition duration-300 hover:underline" onclick="openModal('{{ $user->id }}', '{{ route('masterdata.users.destroy', $user->id) }}')">
-                                            <i class="fa fa-trash"></i> Hapus
-                                        </button>
+                                        
                                     </td>
                                 </tr>
                             @empty

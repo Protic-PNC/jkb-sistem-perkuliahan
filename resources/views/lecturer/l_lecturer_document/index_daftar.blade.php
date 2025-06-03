@@ -14,7 +14,7 @@
 
             <div class="py-4 px-2 mx-auto lg:m-8 sm:m-4">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Daftar Mata Kuliah Yang Diampu</h3>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Daftar Persetujuan Dokumen/h3>
                     <hr class="border-t-4 my-2 mb-6 rounded-sm bg-gray-300">
                 </div>
                 @if ($errors->any())

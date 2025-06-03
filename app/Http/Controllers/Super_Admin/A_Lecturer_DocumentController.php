@@ -23,7 +23,7 @@ class A_Lecturer_DocumentController extends Controller
      */
     public function index(Request $request)
     {
-        $attendanceLists = AttendanceList::with('student_class', 'course', 'lecturer','attendanceListDetails');
+        $attendanceLists = AttendanceList::with('student_class', 'course', 'lecturer','attendanceListDetails')->orderBy('id','desc');
 
 // Jika ada parameter pencarian
         if ($request->has('search')) {
@@ -52,7 +52,7 @@ class A_Lecturer_DocumentController extends Controller
     }
     public function daftar_index(Request $request)
     {
-        $attendanceLists = AttendanceList::with('student_class', 'course', 'lecturer','attendanceListDetails');
+        $attendanceLists = AttendanceList::with('student_class', 'course', 'lecturer','attendanceListDetails')->orderBy('id','desc');
 
 // Jika ada parameter pencarian
         if ($request->has('search')) {

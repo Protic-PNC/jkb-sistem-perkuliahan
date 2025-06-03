@@ -13,6 +13,59 @@
                 <div class="py-4 px-2 mx-auto lg:m-4 sm:m-2">
                     <div class="text-2xl font-semibold text-gray-600"> Selamat Datang, {{ Auth::user()->name }}!</div>
                 </div>
+                 @role('dosen')
+        <p class="font-medium text-gray-900 m-4">Daftar Mata Kuliah Yang Diampu</p>
+                <div class="m-5">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
+            <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
+                <tr class="text-white">
+                    <th scope="col" class="px-6 py-3">No</th>
+                    <th scope="col" class="px-6 py-3">Nama Mata Kuliah</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($auth->lecturer?->course as $d)
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}</td>
+                        <td class="px-6 py-3 text-slate-800">{{ $d->name }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="2" class="px-6 py-3 text-center text-gray-500">Belum Ada Data</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+                </div>
+        
+        @endrole
+
+        @role('mahasiswa')
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 px-4">
+            <div class="">
+                <h3 class="text-lg font-semibold text-gray-950 dark:text-gray-200 mb-2">
+                    Jadwal Program Studi {{ $jadwal->prodi->name ?? '-' }}
+                </h3>
+                <p class="text-gray-950 dark:text-gray-400">
+                    {{-- Tambahkan detail jadwal jika diperlukan --}}
+                </p>
+            </div>
+
+            <div class="">
+                <h3 class="text-lg font-semibold text-gray-950 dark:text-gray-200 mb-2">File</h3>
+                <p class="text-gray-950 dark:text-gray-400 p-5">
+                    @if(isset($jadwal) && !empty($jadwal->file))
+                        <a href="{{ route('jadwal.download', $jadwal->id) }}"
+                           class="inline-flex items-center justify-center w-auto h-10 text-center font-medium bg-green-400 text-white px-4 py-2 rounded-md hover:bg-green-500 transition duration-300">
+                            <i class="fa fa-download mr-2"></i>Download
+                        </a>
+                    @else
+                        <span class="text-sm text-gray-500">Tidak ada file tersedia</span>
+                    @endif
+                </p>
+            </div>
+        </div>
+        @endrole
                 @role('super_admin')
                     <div class="mt-4">
                         <div class="flex flex-wrap -mx-6">
@@ -159,34 +212,7 @@
 </script>
 
                 @endrole
-                @role('dosen')
-                <p class="font-medium text-gray-900 m-4"> Daftar Mata Kuliah Yang Di Ampu</p>
                
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
-                        <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
-                            <tr class="text-white mb-3">
-                                <th scope="col" class="px-6 py-3">No</th>
-                                <th scope="col" class="px-6 py-3">Nama Mata Kuliah</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($auth->lecturer?->course as $d)
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
-                                    </td>
-                                    <td class="px-3 py-2 text-slate-800">{{ $d->name }}</td>
-
-
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="px-3 py-2 text-center">Belum Ada Data</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                @endrole
             </div>
 
 

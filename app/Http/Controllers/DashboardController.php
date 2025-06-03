@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\AttendanceList;
 use App\Models\AttendanceListStudent;
+use App\Models\Jadwal;
 use App\Models\Lecturer;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Contracts\Role;
 
 class DashboardController extends Controller
 {
@@ -55,9 +57,16 @@ class DashboardController extends Controller
                 $defaultCounts[$status]++;
             }
         }
+        $jadwal = null;
+        if($auth->hasRole('mahasiswa')){
 
+            $jadwal = Jadwal::where('prodi_id', $auth->student->student_class->study_program_id)->first();
+        }
+        
         $labels = ['Hadir', 'Telat', 'Sakit', 'Izin', 'Bolos'];
         $data = array_values($defaultCounts);
+        // dd($jadwal);
+        
         return view('masterdata.dashboard', [
             'auth' => $auth,
             'user' => $user,
@@ -67,6 +76,7 @@ class DashboardController extends Controller
             'labels' => $labels,
             'data' => $data,
             'availablePeriods' => $availablePeriods,
+            'jadwal' => $jadwal,
         ]);
     }
    

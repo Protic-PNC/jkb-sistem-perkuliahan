@@ -26,7 +26,7 @@ class L_LecturerDocumentController extends Controller
     public function index(Request $request, string $nidn)
     {
         $user = Auth::user();
-        $attendanceLists = AttendanceList::select('attendance_lists.id', 'attendance_lists.student_class_id', 'attendance_lists.course_id', 'attendance_lists.lecturer_id')->where('has_finished', 1);
+        $attendanceLists = AttendanceList::select('attendance_lists.id', 'attendance_lists.student_class_id', 'attendance_lists.course_id', 'attendance_lists.lecturer_id')->where('has_finished', 1)->orderBy('id','desc');
 
         if ($request->has('search')) {
             $search = $request->input('search');

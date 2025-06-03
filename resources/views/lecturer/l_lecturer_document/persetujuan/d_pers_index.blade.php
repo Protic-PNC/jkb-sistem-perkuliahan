@@ -1,6 +1,6 @@
 <x-app-layout>
-    @section('main_folder', '/ Master Data')
-    @section('descendant_folder', '/ Daftar Mata Kuliah')
+    @section('main_folder', '/ Dokumen Perkuliahan')
+    @section('descendant_folder', '/ Daftar Persetujuan')
 
 
     @section('content')
@@ -51,6 +51,10 @@
                                 <th scope="col" class="px-6 py-3">Kelas</th>
                                 <th scope="col" class="px-6 py-3">Mata Kuliah</th>
                                 <th scope="col" class="px-6 py-3">Tanggal Selesai</th>
+                                @if (Auth::user()->lecturer->position->name == 'Kepala Jurusan')
+                                <th scope="col" class="px-6 py-3">Status</th>
+                                @endif
+                                
                                 <th scope="col" class="px-6 py-3 text-center">Pilih Perkuliahan</th>
                             </tr>
                         </thead>
@@ -60,11 +64,25 @@
                                     <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
                                     </td>
                                     <td class="px-3 py-2 text-slate-800">{{ $d->student_class->study_program->name }} {{ $d->student_class->level }} {{ $d->student_class->name }} </td>
+
                                     <td class="px-3 py-2 text-slate-800">{{ $d->course->name }}</td>
                                     <td class="px-3 py-2 text-slate-800">{{\Carbon\Carbon::parse($d->date_finished)->translatedFormat('j F Y') }}</td>
                                     
+                                    @if (Auth::user()->lecturer->position->name == 'Kepala Jurusan')
+                                    <td>
+                                        @if ($d->has_acc_kajur == 2)
+                                    <b> Sudah Disetujui Kepala Jurusan </b> Tanggal : {{\Carbon\Carbon::parse($d->date_acc_kajur)->translatedFormat('j F Y') }}
+                                        @else
+                                    Belum Disetujui Kepala Jurusan
+                                        @endif
+                                        </td>
+                                    @endif
+                                    
+                                    
+                                    
                                     <td class="px-3 py-2 flex space-x-2 justify-center ">
-                                        <a href="{{ route('lecturer.daftar_persetujuan_dokumen.detail', $d->id) }}"
+                                        
+                                        <a href="{{ route('d.daftar_persetujuan_dokumen.detail', $d->id) }}"
                                             class="inline-block text-center font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                                             Pilih Dokumen
                                         </a>

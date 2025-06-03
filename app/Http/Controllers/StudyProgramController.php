@@ -14,7 +14,7 @@ class StudyProgramController extends Controller
      */
     public function index(Request $request)
     {
-        $query = StudyProgram::query();
+        $query = StudyProgram::query()->orderBy('id','desc');
 
         if ($request->has('search')) {
             $search = $request->input('search');

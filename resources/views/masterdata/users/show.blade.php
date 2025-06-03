@@ -35,7 +35,7 @@
                 <hr class="my-6 border-gray-200 dark:border-gray-700">
 
                 <div class="mb-6">
-                    <h3 class="text-lg font-semibold text-gray-950 dark:text-gray-200 mb-2">Nama</h3>
+                    <h3 class="text-lg font-semibold text-gray-950 dark:text-gray-200 mb-2">Username</h3>
                     <p class="text-gray-950 dark:text-gray-400">{{ $user->name }}</p>
                 </div>
                 <div class="mb-6">
@@ -44,17 +44,25 @@
                 </div>
 
                 <hr class="my-6 border-gray-200 dark:border-gray-700">
-
-                {{-- <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                @role('mahasiswa')
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-gray-950 dark:text-gray-200 mb-2">Nim</h3>
+                        <p class="text-gray-950 dark:text-gray-400">{{ $user->student->nim }}</p>
+                    </div>
                     <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
                         <h3 class="text-lg font-semibold text-gray-950 dark:text-gray-200 mb-2">Alamat</h3>
-                        <p class="text-gray-950 dark:text-gray-400">{{ $user->address }}</p>
+                        <p class="text-gray-950 dark:text-gray-400">{{ $user->student->address }}</p>
                     </div>
                     <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
                         <h3 class="text-lg font-semibold text-gray-950 dark:text-gray-200 mb-2">No Telefon</h3>
-                        <p class="text-gray-950 dark:text-gray-400">{{ $user->number_phone }}</p>
+                        <p class="text-gray-950 dark:text-gray-400">{{ $user->student->number_phone }}</p>
                     </div>
-                </div> --}}
+                </div>
+                @endrole
+
+                
+
 
                 <hr class="my-6 border-gray-200 dark:border-gray-700">
 
