@@ -31,7 +31,7 @@ class Journal extends Model
         return $this->belongsTo(StudentClass::class);
     }
 
-   
+    
 
     public function journalDetails(){
         return $this->hasMany(JournalDetail::class);

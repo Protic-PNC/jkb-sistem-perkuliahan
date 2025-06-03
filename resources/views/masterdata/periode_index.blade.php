@@ -84,6 +84,9 @@
                         <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
                             <tr class="text-white mb-3">
                                 <th scope="col" class="px-6 py-3">
+                                    No
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                     Tahun
                                 </th>
                                 <th scope="col" class="px-6 py-3">
@@ -107,6 +110,10 @@
                         <tbody>
                             @forelse ($data as $a)
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <td scope="row"
+                                        class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $loop->iteration }}
+                                    </td>
                                     <td scope="row"
                                         class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ $a->tahun }}
@@ -160,7 +167,7 @@
 
 
         <div id="crud-modal" tabindex="-1" aria-hidden="true"
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-black bg-opacity-50">
             <div class="relative p-4 w-full max-w-md max-h-full">
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">

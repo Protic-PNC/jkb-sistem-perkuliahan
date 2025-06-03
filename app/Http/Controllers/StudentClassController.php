@@ -22,7 +22,7 @@ class StudentClassController extends Controller
      */
     public function index(Request $request)
     {
-        $query = StudentClass::query();
+        $query = StudentClass::query()->orderBy('id','desc');
 
         if ($request->has('search')) {
             $search = $request->input('search');

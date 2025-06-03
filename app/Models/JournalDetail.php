@@ -28,6 +28,7 @@ class JournalDetail extends Model
 
     ];
 
+   
     public function journal(){ //attendence list, attendencelist dan journal 
         return $this->belongsTo(Journal::class);
     }

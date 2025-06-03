@@ -14,7 +14,7 @@ class PositionController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Position::query();
+        $query = Position::query()->orderBy('id','desc');
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where(function($q) use ($search){

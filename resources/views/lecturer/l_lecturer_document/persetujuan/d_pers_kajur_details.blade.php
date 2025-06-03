@@ -133,7 +133,7 @@
                                         <td class="px-6 py-4 text-center align-middle">{{ $d->journal_detail->material_course }}</td>
                                         {{-- <td class="px-3 py-2 text-center flex space-x-1 justify-center">
                                             @if ($d->journal_detail->has_acc_kaprodi == 2 && $d->journal_detail->has_acc_student == 2 && !empty($d->sum_attendance_students))
-                                            <a href="{{ route('lecturer.lecturer_document.detail_verifikasi', ['id' => $d->id]) }}"
+                                            <a href="{{ route('d.lecturer_document.detail_verifikasi', ['id' => $d->id]) }}"
                                                 class="text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-lg text-sm px-4 py-1 text-center">
                                                 <i class="fa fa-info"></i> Detail
                                             </a>
@@ -184,7 +184,7 @@
 
                 function openModalVerifikasi(id, url) {
                     verifikasiId = id;
-                    verifikasiUrl = "{{ route('lecturer.lecturer_document.setuju_kajur', $data->id) }}";
+                    verifikasiUrl = "{{ route('d.dokumen_perkuliahan.setuju_kajur', $data->id) }}";
                     document.getElementById('verifikasi-modal').classList.remove('hidden');
                 }
 

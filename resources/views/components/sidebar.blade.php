@@ -232,7 +232,6 @@
                 
                 class="py-2 space-y-2 {{ request()->routeIs(
                     'd.dokumen_perkuliahan*',
-                    'dokumen_perkuliahan.daftar*',
                     'd.daftar_persetujuan_dokumen*'
                 ) ? '' : 'hidden' }}">
                 
@@ -283,7 +282,7 @@
                 <i class="fa-solid fa-file"></i>
                 <span class="mx-3">Dokumen Perkuliahan</span>
             </a> --}}
-            <a class="flex items-center p-2 w-full text-base font-medium rounded-lg transition duration-75 group text-white hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 dark:text-white{{ setActive('m.dokumen_perkuliahan') }}"
+            <a class="flex items-center p-2 w-full text-base font-medium rounded-lg transition duration-75 group text-white hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 dark:text-white{{ setActive('m.dokumen_perkuliahan*') }}"
             href="{{ route('m.dokumen_perkuliahan', $user->student->id) }}"><i class="fa-solid fa-file"></i>
             <span class="mx-3">Dokumen Perkuliahan</span>
             </a>

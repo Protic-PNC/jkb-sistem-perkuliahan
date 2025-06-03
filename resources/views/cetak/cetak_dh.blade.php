@@ -267,7 +267,18 @@
                                     @endphp
 
                                     <td class="attendance-cell">
-                                        {{ $attendanceRecord->attendance_student ?? '-' }}
+                                        {{-- {{ $attendanceRecord->attendance_student ?? '-' }} --}}
+                                        @if ($attendanceRecord->attendance_student == 1)
+                                        H
+                                        @elseif($attendanceRecord->attendance_student == 2)
+                                        T 1:hadir, 2:telat, 3:sakit, 4:izin, 5: bolos
+                                        @elseif($attendanceRecord->attendance_student == 3)
+                                        S
+                                        @elseif($attendanceRecord->attendance_student == 4)
+                                        I
+                                        @elseif($attendanceRecord->attendance_student == 5)
+                                        B
+                                        @endif
                                     </td>
                                     <td class="attendance-cell">
                                         {{ $attendanceRecord->sum_late_students ?? '-' }}

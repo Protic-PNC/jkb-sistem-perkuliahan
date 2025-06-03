@@ -1,6 +1,6 @@
 <x-app-layout>
-    @section('main_folder', '/ Master Data')
-    @section('descendant_folder', '/ Daftar Mata Kuliah')
+    @section('main_folder', '/ Dokumen Perkuliahan')
+    @section('descendant_folder', '/ Kelola')
 
 
     @section('content')
@@ -38,7 +38,7 @@
                     </div>
                 @endif --}}
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Daftar Mata Kuliah Yang Diampu</h3>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Kelola Dokumen Perkuliahan</h3>
                     <hr class="border-t-4 my-2 mb-6 rounded-sm bg-gray-300">
                 </div>
                 <div class="mb-3 flex items-center justify-between">

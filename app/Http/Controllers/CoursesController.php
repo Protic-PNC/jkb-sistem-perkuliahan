@@ -13,7 +13,7 @@ class CoursesController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Courses::query();
+        $query = Courses::query()->orderBy('id','desc');
 
         if ($request->has('search')) {
             $search = $request->input('search');

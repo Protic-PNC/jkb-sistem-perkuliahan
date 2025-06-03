@@ -21,7 +21,7 @@ class LecturerController extends Controller
      */
     public function index(Request $request)
     {
-        $query = lecturer::query();
+        $query = lecturer::query()->orderBy('id','desc');
 
         if ($request->has('search')) {
             $search = $request->input('search');

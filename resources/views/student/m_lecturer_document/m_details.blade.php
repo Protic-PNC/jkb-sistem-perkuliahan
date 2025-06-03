@@ -1,6 +1,5 @@
 <x-app-layout>
-    @section('main_folder', '/ Master Data')
-    @section('descendant_folder', '/ Daftar Hadir Kuliah')
+    @section('main_folder', '/ Dokumen Perkuliahan')
 
     @section('content')
         <style>
@@ -32,7 +31,7 @@
         <section class="bg-white dark:bg-gray-900">
             <div class="py-4 px-2 mx-auto lg:m-8 sm:m-4">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Daftar Hadir Kuliah</h3>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Dokumen Perkuliahan</h3>
                     <hr class="border-t-4 my-2 mb-6 rounded-sm bg-gray-300">
                 </div>
 
@@ -62,7 +61,7 @@
                     <table class="w-full border-collapse font-sans">
                         <thead>
                             <tr class="bg-gray-900 text-white">
-                                <th colspan="4" class="p-3 text-center text-lg font-bold">DAFTAR HADIR KULIAH</th>
+                                <th colspan="4" class="p-3 text-center text-lg font-bold">Dokumen Perkuliahan</th>
                             </tr>
                             <tr class="bg-gray-100 text-gray-700">
                                 <th colspan="4" class="p-2 text-center text-sm font-medium uppercase">JURUSAN TEKNIK INFORMATIKA - PROGRAM STUDI {{  $data->student_class->study_program->jenjang }} -

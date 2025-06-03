@@ -29,6 +29,7 @@ class AttendanceListDetail extends Model
     public function attendenceList(){
         return $this->belongsTo(AttendanceList::class, 'attendance_list_id', 'id');
     }
+    
 
     public function journal_detail()
     {

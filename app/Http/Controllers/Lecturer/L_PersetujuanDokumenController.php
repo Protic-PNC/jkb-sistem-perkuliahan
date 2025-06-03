@@ -24,7 +24,7 @@ class L_PersetujuanDokumenController extends Controller
         if($jabatan->name == 'Kepala Jurusan') {
             $prodi_id = $jabatan->prodi_id;
             
-            $attendanceLists = AttendanceList::select('attendance_lists.id', 'attendance_lists.student_class_id', 'attendance_lists.course_id') ->where('has_finished','=', 2);
+            $attendanceLists = AttendanceList::select('attendance_lists.id', 'attendance_lists.student_class_id', 'attendance_lists.course_id','has_acc_kajur') ->where('has_finished','=', 2)->orderBy('id','desc');
     
             if ($request->has('search')) {
                 $search = $request->input('search');
@@ -42,7 +42,7 @@ class L_PersetujuanDokumenController extends Controller
         else if ($jabatan->name == 'Koordinator Program Studi') {
             $prodi_id = $jabatan->prodi_id;
             
-            $attendanceLists = AttendanceList::select('attendance_lists.id', 'attendance_lists.student_class_id', 'attendance_lists.course_id')->where('has_finished', 1)
+            $attendanceLists = AttendanceList::select('attendance_lists.id', 'attendance_lists.student_class_id', 'attendance_lists.course_id')->where('has_finished', 1)->orderBy('id','desc')
                 ->whereHas('student_class', function($query) use ($prodi_id) {
                     $query->whereHas('study_program', function($q) use ($prodi_id) {
                         $q->where('id', $prodi_id);
