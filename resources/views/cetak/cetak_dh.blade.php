@@ -443,8 +443,11 @@
                                 <br>
                                 Ketua,
                                 <br>
-                                
+                                @if ($data->kajur && $data->kajur?->signature)
                                 <img src="{{ public_path('storage/' . $data->kajur?->signature ?? '') }}" alt="" style="height: 8mm" class="header-logo">
+                                @else
+                                    <span>-</span>
+                                @endif
                                 <br>
                                 <p style="text-decoration: underline;">
                                 {{ $data->kajur->name }}
