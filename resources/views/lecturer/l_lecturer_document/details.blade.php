@@ -97,12 +97,14 @@
                         </tbody>
                     </table>
                     <div class="m-3 flex items-center justify-between">
+                        @if ($details->count() > $data->course->meeting && $data->has_finished == 1)
                         <a href="{{ route('d.dokumen_perkuliahan.create', $data->id) }}" class="inline-block">
                             <button type="button"
                                 class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-5 text-center">
                                 Tambah Detail Pertemuan
                             </button>
                         </a>
+                        @endif
                     </div>
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4 border-collapse">
                         <thead class="text-xs uppercase bg-gray-900 text-white">
@@ -140,7 +142,7 @@
                                     @elseif($d->has_acc_student == 2 && $d->journal_detail->has_acc_kaprodi == 1)
                                     Sudah Diverifikasi Mahasiswa Belum Diverifikasi Kaprodi
                                     @elseif ($d->has_acc_student == 2 && $d->journal_detail->has_acc_kaprodi == 2)
-                                    Sudah Diverifikasi Mahasiswa dan Dosen
+                                    Sudah Diverifikasi Mahasiswa dan Kaprodi
                                     @endif
                                 </td>
                                 <td class="px-3 py-2 text-center align-middle flex space-x-1 justify-center">
@@ -168,7 +170,7 @@
                     </table>
                     
                 </div>
-               @if ($details->count() > 3 && $data->has_finished == 1)
+               @if ($details->count() > $data->course->meeting && $data->has_finished == 1)
                
                <div class="m-3">      
                        <button type="button" id="btn-verifikasi{{ $data->id }}" class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-medium rounded-lg text-sm px-4 py-1 text-center" onclick="selesaiDocument({{ $data->id }})">

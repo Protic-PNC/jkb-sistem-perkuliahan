@@ -98,7 +98,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <p class="mt-3 mb-3 ml-3">Checkbox tidak dapat dipilih jika mahsiswa belum melakukan verifikasi</p>
+                    <p class="mt-3 mb-3 ml-3">Checkbox tidak dapat dipilih jika mahasiswa belum melakukan verifikasi</p>
                     <form action="{{ route('d.dokumen_perkuliahan.verifikasi_massal', $data->id) }}" method="POST">
                         @csrf
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4 border-collapse">
@@ -158,7 +158,7 @@
                         {{-- Tombol Verifikasi Massal --}}
                         <div class="mt-4 text-left">
                             <button type="submit"
-                                class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg">
+                                class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg m-3">
                                 Verifikasi Data
                             </button>
                         </div>

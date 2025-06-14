@@ -44,26 +44,44 @@ class M_LecturerDocumentController extends Controller
     public function riwayat_absensi(Request $request, string $nim)
     {
         $user = Auth::user();
-
-        // Ambil student berdasarkan NIM
         $student = Student::where('nim', $nim)->firstOrFail();
 
-        // Ambil semua daftar absensi yang memiliki data detail untuk student ini
-        $data = AttendanceList::with([
-            'course',
-            'student_class.study_program',
-            'attendanceListDetails.attendence_list_student' => function ($query) use ($student) {
-                $query->where('student_id', $student->id)
-                    ->where('attendance_student', 'hadir');
-            }
-        ])
-        ->whereHas('attendanceListDetails.attendence_list_student', function ($query) use ($student) {
-            $query->where('student_id', $student->id);
-        })
-        ->get();
+        // Ambil semua daftar absensi untuk mahasiswa ini
+        $data = AttendanceList::with(['course', 'attendanceListDetails.attendence_list_student'])
+            ->whereHas('attendanceListDetails.attendence_list_student', function ($query) use ($student) {
+                $query->where('student_id', $student->id);
+            })
+            ->get()
+            ->map(function ($item) use ($student) {
+                // Ambil semua detail absensi untuk mahasiswa ini saja
+                $details = $item->attendanceListDetails
+                    ->flatMap(function ($detail) use ($student) {
+                        return $detail->attendence_list_student
+                            ->where('student_id', $student->id);
+                    });
+
+                $jumlahHadir = $details->where('attendance_student', 1)->count();
+                $jumlahTerlambat = $details->where('attendance_student', 2)->count();
+                $jumlahSakit = $details->where('attendance_student', 3)->count();
+                $jumlahIzin = $details->where('attendance_student', 4)->count();
+                $jumlahBolos = $details->where('attendance_student', 5)->count();
+
+                $total = $jumlahHadir + $jumlahTerlambat + $jumlahSakit + $jumlahIzin + $jumlahBolos;
+                $persentase = $total > 0 ? round(($jumlahHadir / $total) * 100, 2) : 0;
+
+                $item->jumlah_hadir = $jumlahHadir;
+                $item->jumlah_terlambat = $jumlahTerlambat;
+                $item->jumlah_sakit = $jumlahSakit;
+                $item->jumlah_izin = $jumlahIzin;
+                $item->jumlah_bolos = $jumlahBolos;
+                $item->persentase = $persentase;
+
+                return $item;
+            });
 
         return view('student.m_lecturer_document.m_riwayat_index', compact('user', 'data', 'student'));
     }
+
 
 
     public function details($id)

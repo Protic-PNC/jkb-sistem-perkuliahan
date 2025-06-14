@@ -16,7 +16,7 @@
                 </div>
             @endif
 
-            <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Edit Daftar Hadir</h2>
+            <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Edit Dokumen Perkuliahan</h2>
 
             <form action="{{ route('dokumen_perkuliahan.kelola.update', $lecturer_document->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
-                    Update
+                    Simpan
                 </button>
             </form>
         </div>

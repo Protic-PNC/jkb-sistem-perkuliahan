@@ -24,12 +24,24 @@ class StudentClassController extends Controller
     {
         $query = StudentClass::query()->orderBy('id','desc');
 
-        if ($request->has('search')) {
+       if ($request->has('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'LIKE', "%{$search}%")->orWhere('academic_year', 'LIKE', "%{$search}%");
+                $q->orWhere('name', 'LIKE', "%{$search}%")
+                ->orWhere('level', 'LIKE', "%{$search}%")
+                ->orWhere('academic_year', 'LIKE', "%{$search}%")
+                ->orWhereHas('study_program', function ($subQuery) use ($search) {
+                    $subQuery->where('name', 'LIKE', "%{$search}%");
+                });
+
+                // Tambahan untuk pencarian gabungan (concatenated match)
+                $q->orWhereRaw("CONCAT_WS(' ', 
+                    (SELECT name FROM study_programs WHERE study_programs.id = student_classes.study_program_id), 
+                    level, name
+                ) LIKE ?", ["%{$search}%"]);
             });
         }
+
         $data = $query->with('study_program')->orderBy('academic_year', 'asc')->paginate(5);  
        
         $currentDate = Carbon::now();    
@@ -39,8 +51,6 @@ class StudentClassController extends Controller
         foreach ($data as $item) {    
             $classNumber = '';    
             $academicYear = $item->academic_year;    
-        
-            Log::info("Current Year: $currentYear, Academic Year: $academicYear");    
         
             if ($currentYear == $academicYear) {  
                  

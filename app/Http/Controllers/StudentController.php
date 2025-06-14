@@ -42,7 +42,7 @@ class StudentController extends Controller
                 });
         }
 
-        $students = $query->with('student_class', 'student_class.study_program')->paginate(5);
+        $students = $query->with('student_class', 'student_class.study_program')->paginate(10);
 
         return view('masterdata.students.index', compact('students'));
     }
@@ -83,33 +83,11 @@ class StudentController extends Controller
             ]);
             $user->assignRole('mahasiswa');
             $validated['user_id'] = $user->id;
-            $signature = $request->file('signature');
-            $signatureFilename = null;
-            // if ($signature) {
-            //     // Storage::disk('gcs')->put('folder/file.txt', 'Isi file…');
-            //     $signatureFilename = date('Ymd') . time() . '-' . $signature->getClientOriginalName();
-            //     Storage::disk('gcs')->put(
-            //         'signatures',
-            //         $request->file('signatures'),
-            //         $signatureFilename
-            //     );
-            // }
             
-            if ($signature = $request->file('signature')) {
-    $signatureFilename = date('Ymd') . time() . '-' . $signature->getClientOriginalName();
-
-    // Laravel otomatis baca stream dan metadata
-    $path = Storage::disk('gcs')
-        ->putFileAs('signatures', $signature, $signatureFilename);
-
-    // $path berisi “signatures/20250524xxxx-filename.png”
-    $validated['signature'] = $signatureFilename;
-}
-
-            // if ($request->hasFile('signature')) {
-            //     $signaturePath = $request->file('signature')->store('signatures', 'public');
-            //     $validated['signature'] = $signaturePath;
-            // }
+            if ($request->hasFile('signature')) {
+                $signaturePath = $request->file('signature')->store('signatures', 'public');
+                $validated['signature'] = $signaturePath;
+            }
             Student::create($validated);
             return redirect()->route('masterdata.students.index')->with('success', 'Data berhasil disimpan.');
         } catch (Exception $e) {

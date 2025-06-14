@@ -31,7 +31,8 @@ class CetakController extends Controller
     }
     public function cetak_jurnal($id)
     {
-        $data = AttendanceList::findOrFail($id);
+        $data = AttendanceList::with('kajur')->findOrFail($id);
+        
         
         $student_class = StudentClass::with(['students', 'course'])
             ->where('id', $data->student_class_id)
@@ -42,9 +43,9 @@ class CetakController extends Controller
             $students = $student_class->students;
 
             $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)->orderBy('meeting_order', 'asc')->get();
-            $fileName = "Daftar Hadir Perkuliahan-{$data->course->code} {$data->course->name} .pdf";
+            $fileName = "Jurnal Perkuliahan -{$data->course->code} {$data->course->name}.pdf";
             $pdf = Pdf::loadView('cetak.cetak_jurnal', compact('data', 'semester', 'academicYear', 'students','attendencedetail'))
-            ->setPaper('a4', 'portrait');
+            ->setPaper('a4', 'portrait'); 
 
         return $pdf->download($fileName);
     }

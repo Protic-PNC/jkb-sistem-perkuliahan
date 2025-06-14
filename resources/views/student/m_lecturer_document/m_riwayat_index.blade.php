@@ -68,59 +68,42 @@
                                 </div>
 
                 
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
-                        <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
-                            <tr class="text-white mb-3">
-                                <th scope="col" class="px-6 py-3">No</th>
-                                <th scope="col" class="px-6 py-3">Mata Kuliah</th>
-                                <th scope="col" class="px-6 py-3">Jumlah Kehadiran</th>
-                                <th scope="col" class="px-6 py-3 text-center">Persentase Kehadiran</th>
+                                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
+                                        <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
+                                            <tr class="text-white mb-3">
+                                                <th scope="col" class="px-6 py-3">No</th>
+                                                <th scope="col" class="px-6 py-3">Mata Kuliah</th>
+                                                <th scope="col" class="px-6 py-3">Jumlah Hadir</th>
+                                                <th scope="col" class="px-6 py-3">Jumlah Terlambat</th>
+                                                <th scope="col" class="px-6 py-3">Jumlah Sakit</th>
+                                                <th scope="col" class="px-6 py-3">Jumlah Izin</th>
+                                                <th scope="col" class="px-6 py-3">Jumlah Bolos</th>
+                                                <th scope="col" class="px-6 py-3 text-center">Persentase Kehadiran</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse ($data as $d)
+                                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}</td>
+                                                    <td class="px-3 py-2 text-slate-800">{{ $d->course->name }}</td>
+                                                    <td class="px-3 py-2 text-slate-800">{{ $d->jumlah_hadir }}</td>
+                                                    <td class="px-3 py-2 text-slate-800">{{ $d->jumlah_terlambat }}</td>
+                                                    <td class="px-3 py-2 text-slate-800">{{ $d->jumlah_sakit }}</td>
+                                                    <td class="px-3 py-2 text-slate-800">{{ $d->jumlah_izin }}</td>
+                                                    <td class="px-3 py-2 text-slate-800">{{ $d->jumlah_bolos }}</td>
+                                                    <td class="px-3 py-2 text-center">{{ $d->persentase }}%</td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="8" class="px-3 py-2 text-center">Belum Ada Data</td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($data as $d)
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}
-                                    </td>
-                                    
-                                    <td class="px-3 py-2 text-slate-800">{{ $d->course->name }}</td>
-                                    <td class="px-3 py-2 text-slate-800">{{
-                                        $d->attendanceListDetails
-                                            ->flatMap(function ($detail) {
-                                                return $detail->attendence_list_student;
-                                            })
-                                            ->count()
-                                    }}
-                                    </td>
-                                    <td class="px-3 py-2 text-center">
-                                        @php
-                                            $totalPertemuan = $d->attendanceListDetails->count();
-
-                                            $jumlahHadir = $d->attendanceListDetails
-                                                ->flatMap(fn($detail) => $detail->attendence_list_student)
-                                                ->count();
-
-                                            $persentase = $totalPertemuan > 0
-                                                ? round(($jumlahHadir / $totalPertemuan) * 100, 2)
-                                                : 0;
-                                        @endphp
-
-                                        {{ $persentase }}%
-                                    </td>
-
-                                    
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="px-3 py-2 text-center">Belum Ada Data</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                    {{-- {{ $courses->appends(request()->query())->onEachSide(5)->links() }} --}}
-                </div>
+                                    {{-- {{ $courses->appends(request()->query())->onEachSide(5)->links() }} --}}
+                                </div>
             </div>
         </section>
 

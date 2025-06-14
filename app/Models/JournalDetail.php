@@ -38,6 +38,9 @@ class JournalDetail extends Model
     public function kaprodi(){ //attendence list, attendencelist dan journal 
         return $this->belongsTo(Lecturer::class, 'lecturer_kaprodi_id', 'id');
     }
+    public function student(){ //attendence list, attendencelist dan journal 
+        return $this->belongsTo(Student::class, 'student_id', 'id');
+    }
 
 
     

@@ -83,12 +83,14 @@
                                             <i class="fa-solid fa-eye"></i>
                                             <span> Lihat</span>
                                         </a>
-                                        @if ($d->attendanceListDetails->count() == $d->course->meeting)
-                                            <a href="{{ route('cetak.daftar.hadir', $d->id) }}"
-                                            id="btn-verifikasi{{ $d->id }}"
-                                            class="inline-flex items-center font-medium bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300">
-                                                <i class="fa fa-print mr-2 text-lg"></i> Cetak
-                                            </a>
+                                        @if(Auth::user()->hasRole('super_admin'))
+                                            @if ($d->attendanceListDetails->count() == $d->course->meeting)
+                                                <a href="{{ route('cetak.daftar.hadir', $d->id) }}"
+                                                id="btn-verifikasi{{ $d->id }}"
+                                                class="inline-flex items-center font-medium bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300">
+                                                    <i class="fa fa-print mr-2 text-lg"></i> Cetak
+                                                </a>
+                                            @endif
                                         @endif
                                     </td>
                                     <td class="px-3 py-2 justify-center">
@@ -98,12 +100,14 @@
                                             <i class="fa-solid fa-eye"></i>
                                             <span> Lihat</span>
                                         </a>
-                                        @if ($d->attendanceListDetails->count() == $d->course->meeting)
-                                            <a href="{{ route('cetak.jurnal', $d->id) }}"
-                                            id="btn-verifikasi{{ $d->id }}"
-                                            class="inline-flex items-center font-medium bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300">
-                                                <i class="fa fa-print mr-2 text-lg"></i> Cetak
-                                            </a>
+                                        @if(Auth::user()->hasRole('super_admin'))
+                                            @if ($d->attendanceListDetails->count() == $d->course->meeting)
+                                                <a href="{{ route('cetak.jurnal', $d->id) }}"
+                                                id="btn-verifikasi{{ $d->id }}"
+                                                class="inline-flex items-center font-medium bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300">
+                                                    <i class="fa fa-print mr-2 text-lg"></i> Cetak
+                                                </a>
+                                            @endif
                                         @endif
                                     </td>
                                 </tr>

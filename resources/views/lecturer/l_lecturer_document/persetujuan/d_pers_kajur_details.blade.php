@@ -99,7 +99,7 @@
                         </tbody>
                     </table>
                     @if($data->has_acc_kajur == 1)
-                    <p class="mt-3 mb-3 ml-3 text-xl">Silahkan Lakukan Verifikasi Untuk Menyatakan Dokumen Perkuliahan Telah Selesai</p>
+                    <p class="mt-3 mb-3 ml-3 text-xl">Silahkan Setujui Dokumen Untuk Menyatakan Dokumen Perkuliahan Telah Selesai</p>
                     @else
                     <p class="mt-3 mb-3 ml-3 text-xl">Dokumen Telah Disetujui</p>
                     @endif

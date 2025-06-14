@@ -283,10 +283,10 @@
                         <td>{{ $d->journal_detail->learning_methods }}</td>
                         <td>{{ $d->journal_detail->material_course }}</td>
                         <td>{{ $d->journal_detail->material_course }}</td>
-                        <td><img src="{{ Storage::url($d->attendenceList?->lecturer->signature ?? ' ' ) }}" alt="" style="height: 8mm" class="header-logo"></td>
-                        <td><img src="{{ Storage::url($d->student?->signature ) ?? ' '}}" alt="" style="height: 8mm" class="header-logo"></td>
-                        <td>2 Januari 2025</td> 
-                        <td><img src="{{ Storage::url($d->journal_detail->kaprodi?->signature) }}" style="height: 8mm" class="header-logo"></td>
+                        <td><img src="{{ public_path('storage/' . $d->attendenceList->lecturer?->signature ?? '') }}" alt="" style="height: 8mm" class="header-logo"></td>
+                        <td><img src="{{ public_path('storage/' . $d->journal_detail->student?->signature ?? '') }}" alt="" style="height: 8mm" class="header-logo"></td>
+                        <td>{{\Carbon\Carbon::parse( $d->journal_detail->date_acc_kaprodi)->translatedFormat('d F Y') }}</td> 
+                        <td><img src="{{ public_path('storage/' . $d->journal_detail->kaprodi?->signature ?? '') }}" alt="" style="height: 8mm" class="header-logo"></td>
                         <td>-</td>
                     </tr>
                     @endforeach
@@ -332,6 +332,23 @@
                                     <li>Dosen hanya mengisi daftar hadir mahasiswa dan jurnal dosen, sedangkan ketua kelas yang mengisi absen</li>
                                     <li>Ketua kelas mengambil absen</li>
                                 </ul>
+                            </div>
+                        </td>
+                        <td> 
+                            <div class="legend-section">
+                                @if($data->has_acc_kajur ==2)
+                                Cilacap, {{ \Carbon\Carbon::parse($data->date_acc_kajur)->format('d M Y')  }}
+                                <br>
+                                Ketua,
+                                <br>
+                                
+                                <img src="{{ public_path('storage/' . $data->kajur?->signature ?? '') }}" alt="" style="height: 8mm" class="header-logo">
+                                <br>
+                                <p style="text-decoration: underline;">
+                                {{ $data->kajur->name }}
+                                </p>
+                                NIP. {{ $data->kajur->nip }}
+                                @endif
                             </div>
                         </td>
                         

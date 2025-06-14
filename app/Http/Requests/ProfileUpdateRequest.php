@@ -18,6 +18,8 @@ class ProfileUpdateRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'signature' => ['nullable', 'file', 'max:2048', 'mimes:jpg,jpeg,png'],
+            'avatar' => ['nullable', 'file', 'max:2048', 'mimes:jpg,jpeg,png'],
         ];
     }
 }

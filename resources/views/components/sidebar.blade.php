@@ -232,7 +232,8 @@
                 
                 class="py-2 space-y-2 {{ request()->routeIs(
                     'd.dokumen_perkuliahan*',
-                    'd.daftar_persetujuan_dokumen*'
+                    'd.daftar_persetujuan_dokumen*',
+                    'dokumen_perkuliahan.daftar.*',
                 ) ? '' : 'hidden' }}">
                 
                 <li>
@@ -258,7 +259,17 @@
                     </a>
                 </li>
                 
-                @endif 
+                @endif
+                <li>
+                    <a href="{{ route('dokumen_perkuliahan.daftar.index') }}"
+                        class="flex items-center p-2 pl-11 w-full text-base font-medium {{ 
+                            setActive([
+                                'dokumen_perkuliahan.daftar.*',
+                            ]) 
+                        }}">
+                        <i class="fa fa-circle mr-2"></i> Daftar
+                    </a>
+                </li> 
             </ul>
         </li>
                 

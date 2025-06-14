@@ -11,6 +11,7 @@ use App\Models\Lecturer;
 use App\Models\Periode;
 use App\Models\StudentClass;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -54,7 +55,7 @@ class A_Lecturer_DocumentController extends Controller
     {
         $attendanceLists = AttendanceList::with('student_class', 'course', 'lecturer','attendanceListDetails')->orderBy('id','desc');
 
-// Jika ada parameter pencarian
+
         if ($request->has('search')) {
             $search = $request->input('search');
 
@@ -72,10 +73,14 @@ class A_Lecturer_DocumentController extends Controller
         }
 
         
-        // Gunakan paginate untuk paginasi hasil query
-        $data = $attendanceLists->paginate(5);
         
-        // Return ke view dengan data yang dipaginasi
+        if (Auth::user()->hasRole("dosen")) {
+            $data = $attendanceLists->where('lecturer_id', Auth::user()->lecturer->id)->paginate(5);
+        } else {
+
+            $data = $attendanceLists->paginate(5);
+        }
+        
         return view('masterdata.a_lecturer_document.daftar_index', compact('data'));
         
     }
@@ -110,15 +115,12 @@ class A_Lecturer_DocumentController extends Controller
     public function store(Request $request)
     {
         
-        // dd($request->all());
         $validated = $request->validate([
             'student_class_id' => 'required|exists:student_classes,id',
             'course_id' => 'required|exists:courses,id',
             'lecturer_id' => 'required|exists:lecturers,id',
             'periode_id' => 'required|exists:periodes,id',
         ]);
-
-
         DB::beginTransaction();
         try {
             Log::info('Database transaction started.');
@@ -128,17 +130,19 @@ class A_Lecturer_DocumentController extends Controller
                 ->where('lecturer_id', $request->lecturer_id)
                 ->where('student_class_id', $request->student_class_id)
                 ->first();
+                // if ($existingAttendance) {
+                //     return redirect()->back()->with([
+                //         'status' => 'error',
+                //         'message' => 'Dokumen Sudah Pernah Dibuat, Silahkan buat variasi dokumen yang baru'
+                //     ]);
 
-                
-                if ($existingAttendance) {
-                    return redirect()->back()->with([
-                        'status' => 'error',
-                        'message' => 'Dokumen Sudah Pernah Dibuat, Silahkan buat variasi dokumen yang baru'
-                    ]);
-
-                }
-                
-                
+                // }
+            if ($existingAttendance) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Dokumen Sudah Pernah Dibuat, Silahkan buat variasi dokumen yang baru'
+                ], 422);
+            }
             $al = new AttendanceList();
             $al->code_al = Str::uuid()->toString();
             $al->student_class_id = $request->student_class_id;
@@ -146,21 +150,23 @@ class A_Lecturer_DocumentController extends Controller
             $al->lecturer_id = $request->lecturer_id;
             $al->periode_id = $request->periode_id;
             $al->save();
-            Log::info('AttendanceList saved successfully.');
-
-            // Simpan data Journal
             $journal = new Journal();
             $journal->attendance_list_id = $al->id;
             $journal->save();
-            Log::info('Journal saved successfully.');
-
             DB::commit();
             Log::info('Database transaction committed.');
-            return redirect()->route('dokumen_perkuliahan.kelola.index')->with('success', 'Daftar Hadir dan Jurnal berhasil disimpan');
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Daftar Hadir dan Jurnal berhasil disimpan'
+            ], 200);
+
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Database transaction rolled back due to exception: ' . $e->getMessage());
-            return redirect()->back()->with('errors', 'System error: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()
+            ], 500);
         }
     
     }

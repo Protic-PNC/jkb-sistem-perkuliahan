@@ -35,9 +35,10 @@
 @endif --}}
 
                 
-                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambah Daftar Hadir</h2>
-                <form action="{{ route('dokumen_perkuliahan.kelola.store') }}" method="POST"
-                    enctype="multipart/form-data">
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambah Dokumen Perkuliahan</h2>
+                {{-- <form action="{{ route('dokumen_perkuliahan.kelola.store') }}" method="POST"
+                    enctype="multipart/form-data"> --}}
+                <form id="dokumenForm" enctype="multipart/form-data">
                     @csrf
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                        
@@ -90,7 +91,7 @@
                     </div>
                     <button type="submit"
                         class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
-                        Tambah
+                        Simpan
                     </button>
                 </form>
             </div>
@@ -142,6 +143,58 @@
                         .catch(error => console.error('Error:', error));
                 }
             });
+        </script>
+        <script>
+        document.getElementById('dokumenForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Menyimpan...';
+
+            fetch("{{ route('dokumen_perkuliahan.kelola.store') }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: formData
+            })
+            .then(async response => {
+                let data = await response.json();
+                if (!response.ok) throw data;
+                return data;
+            })
+            .then(data => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Daftar Hadir dan Jurnal berhasil disimpan.',
+                }).then(() => {
+                    window.location.href = "{{ route('dokumen_perkuliahan.kelola.index') }}";
+                });
+            })
+            .catch(error => {
+                let message = 'Terjadi kesalahan saat menyimpan data.';
+                if (error.errors) {
+                    message = Object.values(error.errors).flat().join('\n');
+                } else if (error.message) {
+                    message = error.message;
+                }
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: message
+                });
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Simpan';
+            });
+        });
         </script>
     @endsection
 </x-app-layout>

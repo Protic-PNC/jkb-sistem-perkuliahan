@@ -38,7 +38,7 @@
                     </div>
                 @endif
                 @if (!$attendance)
-                    <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambah Daftar Hadir</h2>
+                    <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Isi Absensi</h2>
 
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
@@ -54,6 +54,13 @@
                                 <form id="form2" action="{{ route('d.dokumen_perkuliahan.storeStudents') }}"
                                     method="POST">
                                     @csrf
+                                    <button type="button" id="checkAllPresent"
+                                        class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800 m-3">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Ceklis Semua Hadir
+                                    </button>
                                     <input type="hidden" id="attendance_list_detail_id" name="attendance_list_detail_id"
                                         value="{{ $ad->id }}">
                                     @foreach ($student_classes as $student)
@@ -65,31 +72,31 @@
                                                 <label style="display: inline-block; margin-right: 10px;">
                                                     <input type="radio"
                                                         name="attendance[{{ $student->id }}][attendance_student]"
-                                                        value="1">
+                                                        value="1" class="attendance-radio">
                                                     Hadir
                                                 </label>
                                                 <label style="display: inline-block; margin-right: 10px;">
                                                     <input type="radio"
                                                         name="attendance[{{ $student->id }}][attendance_student]"
-                                                        value="2">
+                                                        value="2" class="attendance-radio">
                                                     Telat
                                                 </label>
                                                 <label style="display: inline-block; margin-right: 10px;">
                                                     <input type="radio"
                                                         name="attendance[{{ $student->id }}][attendance_student]"
-                                                        value="3">
+                                                        value="3" class="attendance-radio">
                                                     Sakit
                                                 </label>
                                                 <label style="display: inline-block; margin-right: 10px;">
                                                     <input type="radio"
                                                         name="attendance[{{ $student->id }}][attendance_student]"
-                                                        value="4">
+                                                        value="4" class="attendance-radio">
                                                     Izin
                                                 </label>
                                                 <label style="display: inline-block; margin-right: 10px;">
                                                     <input type="radio"
                                                         name="attendance[{{ $student->id }}][attendance_student]"
-                                                        value="5">
+                                                        value="5" class="attendance-radio">
                                                     Bolos
                                                 </label>
                                             </td>
@@ -115,10 +122,13 @@
                             </tbody>
 
                         </table>
-                        <button type="submit" id="submitAttendanceDetails"
-                            class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
-                            Simpan
-                        </button>
+                        <div class="flex justify-between">
+                            
+                            <button type="submit" id="submitAttendanceDetails"
+                                class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800 m-3">
+                                Simpan
+                            </button>
+                        </div>
                         </form>
                     </div>
                 @else
@@ -206,10 +216,19 @@
                 });
             });
 
+            // Add event listener for "Ceklis Semua Hadir" button
+            document.getElementById('checkAllPresent').addEventListener('click', function() {
+                // Select all radio buttons with value 1 (Hadir)
+                document.querySelectorAll('.attendance-radio[value="1"]').forEach(function(radio) {
+                    radio.checked = true;
+                    // Trigger change event to update minutes_late fields
+                    radio.dispatchEvent(new Event('change'));
+                });
+            });
+
             document.addEventListener('DOMContentLoaded', function() {
                 document.querySelectorAll('input[type=radio][name^="attendance"]').forEach(function(radio) {
-                    radio.dispatchEvent(new Event(
-                        'change'));
+                    radio.dispatchEvent(new Event('change'));
                 });
             });
 

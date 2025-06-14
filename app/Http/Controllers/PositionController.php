@@ -15,13 +15,7 @@ class PositionController extends Controller
     public function index(Request $request)
     {
         $query = Position::query()->orderBy('id','desc');
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->where(function($q) use ($search){
-                $q->where('name', 'LIKE', "%{$search}%");
-            });
-        }
-
+        
         $data = $query->with('prodis')->paginate(5);  
         return view('masterdata.positions.index', compact('data'));
     }
@@ -73,8 +67,12 @@ class PositionController extends Controller
      */
     public function edit(Position $position)
     {
+        $prodis = StudyProgram::all(); // pastikan data prodi tersedia
         return view('masterdata.positions.edit', [
-            'position'=> $position]);
+            'position' => $position,
+            'prodis' => $prodis,
+        ]);
+        
     }
 
     /**
@@ -84,6 +82,7 @@ class PositionController extends Controller
     {
         $validated = $request->validate([
             'name'=>'required|string|max:255',
+            'prodi_id'=>'nullable|exists:study_programs,id'
             
         ]);
         DB::beginTransaction();

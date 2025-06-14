@@ -268,17 +268,21 @@
 
                                     <td class="attendance-cell">
                                         {{-- {{ $attendanceRecord->attendance_student ?? '-' }} --}}
-                                        @if ($attendanceRecord->attendance_student == 1)
-                                        H
-                                        @elseif($attendanceRecord->attendance_student == 2)
-                                        T 1:hadir, 2:telat, 3:sakit, 4:izin, 5: bolos
-                                        @elseif($attendanceRecord->attendance_student == 3)
-                                        S
-                                        @elseif($attendanceRecord->attendance_student == 4)
-                                        I
-                                        @elseif($attendanceRecord->attendance_student == 5)
-                                        B
-                                        @endif
+                                        @if($attendanceRecord)
+                                                    @if ($attendanceRecord->attendance_student == 1)
+                                                    H
+                                                    @elseif($attendanceRecord->attendance_student == 2)
+                                                    T 
+                                                    @elseif($attendanceRecord->attendance_student == 3)
+                                                    S
+                                                    @elseif($attendanceRecord->attendance_student == 4)
+                                                    I
+                                                    @elseif($attendanceRecord->attendance_student == 5)
+                                                    B
+                                                    @else
+
+                                                    @endif
+                                                @endif
                                     </td>
                                     <td class="attendance-cell">
                                         {{ $attendanceRecord->sum_late_students ?? '-' }}
@@ -309,17 +313,36 @@
                     <tr>
                         <td colspan="3" style="font-weight: bold;">Tanda tangan ketua kelas/mahasiswa</td>
                         @for ($i = 1; $i <= 16; $i++)
-                            <td colspan="2">
-                                <div class="signature-line"></div>
+                            @php
+                                $currentDetail = $attendencedetail->where('meeting_order', $i)->first();
+                            @endphp
+                            <td colspan="2" style="text-align: center;">
+                                @if ($currentDetail && $currentDetail->student && $currentDetail->student->signature)
+                                    <img src="{{ public_path('storage/' . $currentDetail->student->signature) }}" alt=""  style="max-width: 100%; max-height: 20px; object-fit: contain;" class="header-logo">
+                                @else
+                                    <span>-</span>
+                                @endif
                             </td>
+
                         @endfor
                         <td></td>
                     </tr>
                     <tr>
                         <td colspan="3" style="font-weight: bold;">Tanda tangan dosen pengampu</td>
                         @for ($i = 1; $i <= 16; $i++)
-                            <td colspan="2">
-                                <div class="signature-line"></div>
+                            @php
+                                $currentDetail = $attendencedetail->where('meeting_order', $i)->first();
+                            @endphp
+                            {{-- <td colspan="2" style="text-align: center;">
+                                <img src="{{ public_path('storage/' . $currentDetail->attendenceList?->lecturer->signature ?? '') }}" alt="" style="height: 4mm" class="header-logo">
+                                
+                            </td> --}}
+                            <td colspan="2" style="text-align: center;">
+                                @if ($currentDetail && $currentDetail->attendenceList->lecturer && $currentDetail->attendenceList?->lecturer->signature)
+                                    <img src="{{ public_path('storage/' . $currentDetail->attendenceList->lecturer->signature) }}" alt=""  style="max-width: 100%; max-height: 20px; object-fit: contain;" class="header-logo">
+                                @else
+                                    <span>-</span>
+                                @endif
                             </td>
                         @endfor
                         <td></td>
@@ -411,6 +434,23 @@
                                     <li>Dosen hanya mengisi daftar hadir mahasiswa dan jurnal dosen, sedangkan ketua kelas yang mengisi absen</li>
                                     <li>Ketua kelas mengambil absen</li>
                                 </ul>
+                            </div>
+                        </td>
+                        <td> 
+                             <div class="legend-section">
+                                @if($data->has_acc_kajur ==2)
+                                Cilacap, {{ \Carbon\Carbon::parse($data->date_acc_kajur)->format('d M Y')  }}
+                                <br>
+                                Ketua,
+                                <br>
+                                
+                                <img src="{{ public_path('storage/' . $data->kajur?->signature ?? '') }}" alt="" style="height: 8mm" class="header-logo">
+                                <br>
+                                <p style="text-decoration: underline;">
+                                {{ $data->kajur->name }}
+                                </p>
+                                NIP. {{ $data->kajur->nip }}
+                                @endif
                             </div>
                         </td>
                         

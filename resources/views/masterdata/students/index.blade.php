@@ -134,7 +134,7 @@
                             @endforelse
                         </tbody>
                     </table>
-                    {{ $students->appends(request()->query())->onEachSide(5)->links() }}
+                    {{ $students->appends(request()->query())->onEachSide(10)->links() }}
                 </div>
                 <!-- Modal -->
                 <!-- Modal -->

@@ -14,28 +14,79 @@
                     <div class="text-2xl font-semibold text-gray-600"> Selamat Datang, {{ Auth::user()->name }}!</div>
                 </div>
                  @role('dosen')
-        <p class="font-medium text-gray-900 m-4">Daftar Mata Kuliah Yang Diampu</p>
+                <p class="font-medium text-gray-900 m-4">Daftar Jadwal</p>
                 <div class="m-5">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
-            <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
-                <tr class="text-white">
-                    <th scope="col" class="px-6 py-3">No</th>
-                    <th scope="col" class="px-6 py-3">Nama Mata Kuliah</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($auth->lecturer?->course as $d)
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}</td>
-                        <td class="px-6 py-3 text-slate-800">{{ $d->name }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="2" class="px-6 py-3 text-center text-gray-500">Belum Ada Data</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                        <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
+                            <tr class="text-white mb-3">
+                                <th scope="col" class="px-6 py-3">
+                                    No
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Nama Program Studi
+                                </th>
+                               
+                                <th scope="col" class="px-6 py-3 text-center">
+                                    Aksi
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($prodis as $a)
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <td scope="row"
+                                        class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $loop->iteration }}
+                                    </td>
+                                    <td scope="row"
+                                        class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $a->name }}
+                                    </td>
+                                   
+                                    
+                                    
+                                    <td class="px-3 py-2 text-right">
+                                       
+                                            @if(!empty($a->jadwal->file))
+                                            <a  href="{{ route('jadwal.download',$a->jadwal->id) }}" data-id="{{ $a->jadwal->id }}"
+                                            class="inline-flex items-center justify-center w-24 h-10 text-center font-medium bg-green-400 text-white px-3 py-2 rounded-md hover:bg-green-500 transition duration-300 mr-2"><i class="fa fa-download mr-2"></i>Download</a>
+                                            @endif
+                                       
+
+                                        
+
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-3 py-2 text-center">Belum Ada Data</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                <p class="font-medium text-gray-900 m-4">Daftar Mata Kuliah Yang Diampu</p>
+                <div class="m-5">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
+                        <thead class="text-xs uppercase bg-gray-900 dark:text-gray-400">
+                            <tr class="text-white">
+                                <th scope="col" class="px-6 py-3">No</th>
+                                <th scope="col" class="px-6 py-3">Nama Mata Kuliah</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($auth->lecturer?->course as $d)
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{{ $loop->iteration }}</td>
+                                    <td class="px-6 py-3 text-slate-800">{{ $d->name }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="2" class="px-6 py-3 text-center text-gray-500">Belum Ada Data</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
         
         @endrole
@@ -185,31 +236,31 @@
                     </div>
                 </div>
 
-<!-- Chart.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
-    new Chart(document.getElementById('attendanceChart'), {
-        type: 'bar',
-        data: {
-            labels: {!! json_encode($labels) !!},
-            datasets: [{
-                label: 'Jumlah Mahasiswa',
-                data: {!! json_encode($data) !!},
-                backgroundColor: ['#34d399', '#facc15', '#60a5fa', '#c084fc', '#f87171']
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    precision: 0
-                }
-            }
-        }
-    });
-</script>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                <script>
+                    new Chart(document.getElementById('attendanceChart'), {
+                        type: 'bar',
+                        data: {
+                            labels: {!! json_encode($labels) !!},
+                            datasets: [{
+                                label: 'Jumlah Mahasiswa',
+                                data: {!! json_encode($data) !!},
+                                backgroundColor: ['#34d399', '#facc15', '#60a5fa', '#c084fc', '#f87171']
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    precision: 0
+                                }
+                            }
+                        }
+                    });
+                </script>
 
                 @endrole
                

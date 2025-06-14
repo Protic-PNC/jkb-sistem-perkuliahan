@@ -1,6 +1,6 @@
 <x-app-layout>
-    @section('main_folder', '/ Master Data')
-    @section('descendant_folder', '/ Daftar Hadir Kuliah')
+    @section('main_folder', '/ Dokumen Perkuliahan')
+    @section('descendant_folder', '/ Daftar /Daftar Hadir Kuliah')
 
     @section('content')
         <style>
@@ -33,13 +33,13 @@
                     Daftar Hadir Kuliah
                 </h3>
 
-                @if ($attendencedetail->count() > 3)
+                {{-- @if ($attendencedetail->count() > 3)
                     <a href="{{ route('cetak.daftar.hadir', $data->id) }}"
                     id="btn-verifikasi{{ $data->id }}"
                     class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-semibold rounded-lg text-base px-6 py-3 inline-flex items-center">
                         <i class="fa fa-print mr-2 text-lg"></i> Cetak
                     </a>
-                @endif
+                @endif --}}
             </div>
 
             <hr class="border-t-4 my-2 mb-6 rounded-sm bg-gray-300">
@@ -133,7 +133,22 @@
                                             @endphp
 
                                             <td class="attendance-cell border border-slate-800 text-center">
-                                                {{ $attendanceRecord->attendance_student ?? '-' }}
+                                                {{-- {{ $attendanceRecord->attendance_student ?? '-' }} --}}
+                                                @if($attendanceRecord)
+                                                    @if ($attendanceRecord->attendance_student == 1)
+                                                    H
+                                                    @elseif($attendanceRecord->attendance_student == 2)
+                                                    T 
+                                                    @elseif($attendanceRecord->attendance_student == 3)
+                                                    S
+                                                    @elseif($attendanceRecord->attendance_student == 4)
+                                                    I
+                                                    @elseif($attendanceRecord->attendance_student == 5)
+                                                    B
+                                                    @else
+
+                                                    @endif
+                                                @endif
                                             </td>
                                             <td class="attendance-cell border border-slate-800 text-center">
                                                 {{ $attendanceRecord->sum_late_students ?? '-' }}

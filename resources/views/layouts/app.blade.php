@@ -182,11 +182,7 @@
     </div>
     @stack('after-script')
     @include('layouts.js')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-
-        });
-    </script>
+   
     <script>
         import '@fortawesome/fontawesome-free/css/all.min.css';
         document.addEventListener('DOMContentLoaded', function() {

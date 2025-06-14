@@ -7,6 +7,7 @@ use App\Models\AttendanceListStudent;
 use App\Models\Jadwal;
 use App\Models\Lecturer;
 use App\Models\Student;
+use App\Models\StudyProgram;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,15 +27,15 @@ class DashboardController extends Controller
         $student = Student::count();
 
         $periode = $request->input('periode');
-
-    // Ambil periode yang tersedia untuk ditampilkan di dropdown
+    
         $availablePeriods = AttendanceListStudent::selectRaw("DATE_FORMAT(created_at, '%Y-%m') as period")
             ->groupBy('period')
             ->orderByDesc('period')
             ->pluck('period')
             ->toArray();
 
-        // Filter berdasarkan periode (format: 'YYYY-MM')
+       
+            
         $query = AttendanceListStudent::query();
         if ($periode) {
             $query->whereRaw("DATE_FORMAT(created_at, '%Y-%m') = ?", [$periode]);
@@ -42,13 +43,15 @@ class DashboardController extends Controller
 
         $attendanceData = $query->get();
 
-        // Hitung jumlah masing-masing status kehadiran
+        //  $attendanceData = $query->get()
+        // ->sortByDesc('created_at') // urutkan dari yang terbaru
+        // ->unique('student_id'); 
         $defaultCounts = [
-            1 => 0, // Hadir
-            2 => 0, // Telat
-            3 => 0, // Sakit
-            4 => 0, // Izin
-            5 => 0, // Bolos
+            1 => 0, 
+            2 => 0, 
+            3 => 0, 
+            4 => 0, 
+            5 => 0, 
         ];
 
         foreach ($attendanceData as $record) {
@@ -65,8 +68,9 @@ class DashboardController extends Controller
         
         $labels = ['Hadir', 'Telat', 'Sakit', 'Izin', 'Bolos'];
         $data = array_values($defaultCounts);
-        // dd($jadwal);
-        
+
+        $prodis = StudyProgram::get();
+
         return view('masterdata.dashboard', [
             'auth' => $auth,
             'user' => $user,
@@ -77,6 +81,7 @@ class DashboardController extends Controller
             'data' => $data,
             'availablePeriods' => $availablePeriods,
             'jadwal' => $jadwal,
+            'prodis' => $prodis,
         ]);
     }
    

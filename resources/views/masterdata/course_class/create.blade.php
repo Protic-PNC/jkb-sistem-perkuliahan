@@ -59,7 +59,7 @@
                                     <div class="justify-center items-center">
                                         <button type="submit"
                                             class="ml-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
-                                            Tambah
+                                            Simpan
                                         </button>
                                     </div>
 

@@ -45,7 +45,7 @@
                     </div>
                     <button type="submit"
                         class="text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 font-medium rounded-lg text-sm mt-5 px-5 py-2.5 text-center">
-                        Edit
+                        Simpan
                     </button>
                 </form>
             </div>

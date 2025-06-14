@@ -1,6 +1,6 @@
 <x-app-layout>
-    @section('main_folder', '/ Master Data')
-    @section('descendant_folder', '/ Jurnal Dosen dan Rekaman Materi Perkuliahan')
+    @section('main_folder', '/ Dokumen Perkuliahan')
+    @section('descendant_folder', '/ Daftar / Jurnal Dosen dan Rekaman Materi Perkuliahan')
 
     @section('content')
         <style>
@@ -30,13 +30,13 @@
                     Jurnal Dosen dan Rekaman Materi Perkuliahan
                 </h3>
 
-                @if ($attendencedetail->count() > 3)
+                {{-- @if ($attendencedetail->count() > 3)
                     <a href="{{ route('cetak.jurnal', $data->id) }}"
                     id="btn-verifikasi{{ $data->id }}"
                     class="text-white bg-green-600 hover:bg-green-700 transition duration-300 font-semibold rounded-lg text-base px-6 py-3 inline-flex items-center">
                         <i class="fa fa-print mr-2 text-lg"></i> Cetak
                     </a>
-                @endif
+                @endif --}}
             </div>
                
 

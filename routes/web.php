@@ -45,9 +45,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/admin/{attendanceListId}', [DashboardController::class, 'index_admin'])->name('dashboard.admin');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::prefix('dokumen-perkuliahan')->name('dokumen_perkuliahan.')->middleware(['role:super_admin'])->group(function(){
+    Route::prefix('dokumen-perkuliahan')->name('dokumen_perkuliahan.')->middleware(['role:super_admin|dosen'])->group(function(){
      Route::get('/kelola/index', [A_Lecturer_DocumentController::class,'index'])->name('kelola.index');
      Route::get('/kelola/create', [A_Lecturer_DocumentController::class, 'create'])->name('kelola.create');
      Route::get('/kelola/show/{id}', [A_Lecturer_DocumentController::class, 'show'])->name('kelola.show');

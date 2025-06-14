@@ -58,7 +58,7 @@
                         </button>
 
                         @if (request('search'))
-                            <a href="{{ route('masterdata.study_programs.index') }}"
+                            <a href="{{ route('masterdata.student_classes.index') }}"
                                 class="ml-2 bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition duration-300">
                                 Reset
                             </a>
