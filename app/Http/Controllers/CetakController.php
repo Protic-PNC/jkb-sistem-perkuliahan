@@ -22,7 +22,7 @@ class CetakController extends Controller
             $students = $student_class->students;
 
             $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)->orderBy('meeting_order', 'asc')->get();
-            $fileName = "Daftar Hadir Perkuliahan-{$data->course->code} {$data->course->name} .pdf";
+            $fileName = "Daftar Hadir Perkuliahan-{$data->course->code} - {$data->course->name} .pdf";
             $pdf = Pdf::loadView('cetak.cetak_dh', compact('data', 'semester', 'academicYear', 'students','attendencedetail'))
             ->setPaper('a4', 'portrait');
 
@@ -43,7 +43,7 @@ class CetakController extends Controller
             $students = $student_class->students;
 
             $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)->orderBy('meeting_order', 'asc')->get();
-            $fileName = "Jurnal Perkuliahan -{$data->course->code} {$data->course->name}.pdf";
+            $fileName = "Jurnal Perkuliahan -{$data->course->code} - {$data->course->name}.pdf";
             $pdf = Pdf::loadView('cetak.cetak_jurnal', compact('data', 'semester', 'academicYear', 'students','attendencedetail'))
             ->setPaper('a4', 'portrait'); 
 
