@@ -2,9 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\CourseClass;
+use App\Models\Courses;
 use Illuminate\Database\Seeder;
 use App\Models\StudentClass;
 use App\Models\StudyProgram;
+use Illuminate\Support\Facades\DB;
 
 class StudentClassSeeder extends Seeder
 {
@@ -62,6 +65,21 @@ class StudentClassSeeder extends Seeder
                         'status' => $status,
                     ]);
                 }
+            }
+        }
+
+        $classes = StudentClass::all();
+        $courses = Courses::all();
+
+        foreach ($classes as $class) {
+            // Acak 2 sampai 4 course dari daftar course
+            $randomCourses = $courses->random(rand(2, 4));
+
+            foreach ($randomCourses as $course) {
+                CourseClass::create([
+                    'student_class_id' => $class->id,
+                    'course_id' => $course->id,
+                ]);
             }
         }
     }

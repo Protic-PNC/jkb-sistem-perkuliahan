@@ -20,14 +20,14 @@ class CourseSeeder extends Seeder
                 'type' => 'praktikum',
                 'sks' => 2,
                 'hours' => 16,
-                'meeting' => 8,
+                'meeting' => 2,
             ],
             [
                 'name' => 'Algoritma dan Struktur Data',
                 'type' => 'teori',
                 'sks' => 3,
                 'hours' => 24,
-                'meeting' => 12,
+                'meeting' => 4,
             ],
             [
                 'name' => 'Basis Data',
@@ -48,14 +48,14 @@ class CourseSeeder extends Seeder
                 'type' => 'teori',
                 'sks' => 2,
                 'hours' => 16,
-                'meeting' => 8,
+                'meeting' => 2,
             ],
             [
                 'name' => 'Pemrograman Mobile',
                 'type' => 'praktikum',
                 'sks' => 2,
                 'hours' => 16,
-                'meeting' => 8,
+                'meeting' => 2,
             ],
         ];
 
