@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('nidn',20);
             $table->string('nip',20);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('position_id')->constrained()->onDelete('cascade');
+            $table->foreignId('position_id')->nullable()->constrained()->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

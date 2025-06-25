@@ -33,7 +33,7 @@
                         </div>
                         <div class="w-full">
                             <label for="nidn" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIDN</label>
-                            <input type="text" name="nidn" id="nidn" value="{{ $lecturer->nidn }}"
+                            <input type="number" name="nidn" id="nidn" value="{{ $lecturer->nidn }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                  required="">
                         </div>
@@ -48,7 +48,7 @@
                         <div class="w-full">
                             <label for="number_phone"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">number_phone</label>
-                            <input type="text" name="number_phone" id="number_phone" value="{{ $lecturer->number_phone }}"
+                            <input type="number" name="number_phone" id="number_phone" value="{{ $lecturer->number_phone }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 required="">
                         </div>
@@ -60,7 +60,7 @@
                         </div>
                         <div class="w-full">
                             <label for="nip" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIP</label>
-                            <input type="text" name="nip" id="nip" value="{{ $lecturer->nip }}"
+                            <input type="number" name="nip" id="nip" value="{{ $lecturer->nip }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                  required="">
                         </div>

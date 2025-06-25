@@ -157,7 +157,7 @@ class LecturerController extends Controller
             'position_id' => 'nullable|exists:positions,id', 
             'course_id' => 'nullable|array', 
             'course_id.*' => 'exists:courses,id', 
-            'signature' => 'required|image|mimes:png,jpg,jpeg',
+            'signature' => 'nullable|image|mimes:png,jpg,jpeg',
         ]);
         DB::beginTransaction();
         try {
