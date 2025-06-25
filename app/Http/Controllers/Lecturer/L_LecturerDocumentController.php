@@ -272,7 +272,7 @@ class L_LecturerDocumentController extends Controller
             'attendance' => 'required|array',
             'attendance.*.student_id' => 'required|exists:students,id',
             'attendance.*.attendance_student' => 'required|in:1,2,3,4,5',
-            'attendance.*.minutes_late' => 'nullable|integer|min:1|required_if:attendance.*.attendance_student,2',
+            'attendance.*.minutes_late' => 'nullable|integer|min:1|nullable_if:attendance.*.attendance_student,2',
         ]);
 
         if ($validator->fails()) {
