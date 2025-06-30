@@ -180,6 +180,17 @@
         @endrole
 
         @role('dosen')
+        @php
+                $user = Auth::user();
+                $defaultPassword = null;
+                if ($user->hasRole('dosen')) {
+                    if (Hash::check($user->lecturer->nidn, $user->password)) {
+                        $defaultPassword = true;
+                    } else {
+                        $defaultPassword = false;
+                    }
+                }
+            @endphp
             @if ($nidn)
                 {{-- <a class="flex items-center px-6 py-2 mt-4 {{ setActive('lecturer.dokumen_perkuliahan*') }} {{ setActive('lecturer.lecturer_document*') }} "
                     href="{{ route('lecturer.dokumen_perkuliahan', ['nidn' => $nidn]) }}">
@@ -237,37 +248,55 @@
                 ) ? '' : 'hidden' }}">
                 
                 <li>
-                    <a href="{{ route('d.dokumen_perkuliahan', ['nidn' => $nidn]) }}"
-                        class="flex items-center p-2 pl-11 w-full text-base font-medium {{ setActive('d.dokumen_perkuliahan*') }}">
-                        <i class="fa fa-circle mr-2"></i> Kelola
+                    <a class="flex items-center p-2 pl-11 w-full text-base font-medium
+                        {{ $defaultPassword ? 'pointer-events-none opacity-50 cursor-not-allowed' : 'hover:bg-gray-700 hover:text-gray-100' }} 
+                        text-white dark:text-white {{ setActive('d.dokumen_perkuliahan*') }}"
+                    href="{{ $defaultPassword ? '#' : route('d.dokumen_perkuliahan', ['nidn' => $nidn]) }}">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span class="mx-3">Kelola</span>
                     </a>
+                    
                 </li>
                 
                 @if ($user->lecturer->position->name == 'Koordinator Program Studi')
                 <li>
-                    <a  href="{{ route('d.daftar_persetujuan_dokumen', ['id' => $user->lecturer->position_id]) }}"
-                        class="flex items-center p-2 pl-11 w-full text-base font-medium {{ setActive('d.daftar_persetujuan_dokumen*') }}">
-                        <i class="fa fa-circle mr-2"></i> Daftar Persetujuan Kaprodi
+                    <a class="flex items-center p-2 pl-11 w-full text-base font-medium
+                        {{ $defaultPassword ? 'pointer-events-none opacity-50 cursor-not-allowed' : 'hover:bg-gray-700 hover:text-gray-100' }} 
+                        text-white dark:text-white {{ setActive('d.daftar_persetujuan_dokumen*') }}"
+                        href="{{ $defaultPassword ? '#' : route('d.daftar_persetujuan_dokumen', ['id' => $user->lecturer->position_id]) }}">
+                        <i class="fa-solid fa-folder"></i>
+                        <span class="mx-3">Daftar Persetujuan Kaprodi</span>
                     </a>
                 </li>
                     
                 @elseif ($user->lecturer->position->name == 'Kepala Jurusan')
                 <li>
-                    <a  href="{{ route('d.daftar_persetujuan_dokumen', ['id' => $user->lecturer->position_id]) }}"
-                        class="flex items-center p-2 pl-11 w-full text-base font-medium {{ setActive('d.daftar_persetujuan_dokumen*') }}">
-                        <i class="fa fa-circle mr-2"></i> Daftar Persetujuan Kepala Jurusan
+                    
+                    <a class="flex items-center p-2 pl-11 w-full text-base font-medium
+                        {{ $defaultPassword ? 'pointer-events-none opacity-50 cursor-not-allowed' : 'hover:bg-gray-700 hover:text-gray-100' }} 
+                        text-white dark:text-white {{ setActive('d.daftar_persetujuan_dokumen*') }}"
+                        href="{{ $defaultPassword ? '#' : route('d.daftar_persetujuan_dokumen', ['id' => $user->lecturer->position_id]) }}">
+                        <i class="fa-solid fa-folder"></i>
+                        <span class="mx-3">Daftar Persetujuan Kepala Jurusan</span>
                     </a>
                 </li>
                 
                 @endif
                 <li>
-                    <a href="{{ route('dokumen_perkuliahan.daftar.index') }}"
+                    {{-- <a href="{{ route('dokumen_perkuliahan.daftar.index') }}"
                         class="flex items-center p-2 pl-11 w-full text-base font-medium {{ 
                             setActive([
                                 'dokumen_perkuliahan.daftar.*',
                             ]) 
                         }}">
                         <i class="fa fa-circle mr-2"></i> Daftar
+                    </a> --}}
+                    <a class="flex items-center p-2 pl-11 w-full text-base font-medium
+                        {{ $defaultPassword ? 'pointer-events-none opacity-50 cursor-not-allowed' : 'hover:bg-gray-700 hover:text-gray-100' }} 
+                        text-white dark:text-white {{ setActive('dokumen_perkuliahan.daftar.*') }}"
+                        href="{{ $defaultPassword ? '#' : route('dokumen_perkuliahan.daftar.index') }}">
+                       <i class="fa fa-circle mr-2"></i>
+                        <span class="mx-3">Daftar</span>
                     </a>
                 </li> 
             </ul>
@@ -283,23 +312,41 @@
                 </div>
             @endif
         @endrole
-        @role('mahasiswa')
+       
+         @role('mahasiswa')
             @php
                 $user = Auth::user();
+                $defaultPassword = null;
+                if ($user->hasRole('mahasiswa')) {
+                    if (Hash::check($user->student->nim, $user->password)) {
+                        $defaultPassword = true;
+                    } else {
+                        $defaultPassword = false;
+                    }
+                }
+
+                
+
             @endphp
 
-            {{-- <a class="flex items-center px-6 py-2 mt-4 {{ setActive('student.dokumen_perkuliahan*') }} {{ setActive('student.lecturer_document*') }} "
-                href="{{ route('student.dokumen_perkuliahan', $user->student->id) }}">
-                <i class="fa-solid fa-file"></i>
+            <a class="flex items-center p-2 w-full text-base font-medium rounded-lg transition duration-75 group text-white hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 dark:text-white{{ setActive('m.dashboard*') }}"
+            href="{{ route('m.dashboard',  Auth::user()->student->id) }}">
+            <i class="fa-solid fa-house"></i>
+            <span class="mx-3">Dashboard</span>
+        </a>
+             <a class="flex items-center p-2 w-full text-base font-medium rounded-lg transition duration-75 group 
+                {{ $defaultPassword ? 'pointer-events-none opacity-50 cursor-not-allowed' : 'hover:bg-gray-700 hover:text-gray-100' }} 
+                text-white dark:text-white {{ setActive('m.dokumen_perkuliahan*') }}"
+               href="{{ $defaultPassword ? '#' : route('m.dokumen_perkuliahan', $user->student->id) }}">
+                <i class="fa-solid fa-layer-group"></i>
                 <span class="mx-3">Dokumen Perkuliahan</span>
-            </a> --}}
-            <a class="flex items-center p-2 w-full text-base font-medium rounded-lg transition duration-75 group text-white hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 dark:text-white{{ setActive('m.dokumen_perkuliahan*') }}"
-            href="{{ route('m.dokumen_perkuliahan', $user->student->id) }}"><i class="fa-solid fa-file"></i>
-            <span class="mx-3">Dokumen Perkuliahan</span>
             </a>
-            <a class="flex items-center p-2 w-full text-base font-medium rounded-lg transition duration-75 group text-white hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 dark:text-white{{ setActive('m.riwayat_absensi*') }}"
-            href="{{ route('m.riwayat_absensi', $user->student->nim) }}"><i class="fa-solid fa-layer-group"></i>
-            <span class="mx-3">Riwayat Absensi</span>
+            <a class="flex items-center p-2 w-full text-base font-medium rounded-lg transition duration-75 group 
+                {{ $defaultPassword ? 'pointer-events-none opacity-50 cursor-not-allowed' : 'hover:bg-gray-700 hover:text-gray-100' }} 
+                text-white dark:text-white {{ setActive('m.riwayat_absensi*') }}"
+                href="{{ $defaultPassword ? '#' : route('m.riwayat_absensi', $user->student->nim) }}">
+                <i class="fa-solid fa-layer-group"></i>
+                <span class="mx-3">Riwayat Absensi</span>
             </a>
             
         @endrole

@@ -280,8 +280,17 @@
                         <td>{{ $d->meeting_order }}</td>
                         <td>{{\Carbon\Carbon::parse( $d->created_at)->translatedFormat('d F Y') }}</td>
                         <td>{{ $d->sum_attendance_students }}</td>
+                        <td>@if($d->course_status == 1)
+                            Sesuai Jadwal
+                            @elseif($d->course_status == 2)
+                            Pertukaran
+                            @elseif($d->course_status == 3)
+                            Pengganti
+                            @elseif($d->course_status == 4)
+                            Tambahan
+                            @endif
+                        </td>
                         <td>{{ $d->journal_detail->learning_methods }}</td>
-                        <td>{{ $d->journal_detail->material_course }}</td>
                         <td>{{ $d->journal_detail->material_course }}</td>
                         <td><img src="{{ public_path('storage/' . $d->attendenceList->lecturer?->signature ?? '') }}" alt="" style="height: 8mm" class="header-logo"></td>
                         <td><img src="{{ public_path('storage/' . $d->journal_detail->student?->signature ?? '') }}" alt="" style="height: 8mm" class="header-logo"></td>
@@ -323,9 +332,10 @@
                                 <ul class="legend-list">
                                     <li>Status pertemuan diisi dengan:
                                         <ul>
-                                            <li>a. Sesuai Jadwal</li>
-                                            <li>b. Pengganti</li>
-                                            <li>c. Tambahan</li>
+                                            <li>Sesuai Jadwal</li>
+                                            <li>Pertukaran</li>
+                                            <li>Pengganti</li>
+                                            <li>Tambahan</li>
                                         </ul>
                                     </li>
                                     <li>1 SKS = 50 menit</li>

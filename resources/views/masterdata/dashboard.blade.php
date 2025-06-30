@@ -6,6 +6,7 @@
     </x-slot>
 
 
+
     @section('content')
         <div class="container px-6 py-8 mx-auto">
             <h3 class="text-3xl font-medium text-gray-700">Dashboard</h3>
@@ -14,6 +15,19 @@
                     <div class="text-2xl font-semibold text-gray-600"> Selamat Datang, {{ Auth::user()->name }}!</div>
                 </div>
                  @role('dosen')
+                  @if(isset($messagepass))
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                Swal.fire({
+                                    icon: '{{ $alertType == "danger" ? "error" : $alertType }}',
+                                    title: '{{ $alertType == "danger" ? "Peringatan" : "Informasi" }}',
+                                    text: '{{ $messagepass }}',
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'OK'
+                                });
+                            });
+                        </script>
+                    @endif
                 <p class="font-medium text-gray-900 m-4">Daftar Jadwal</p>
                 <div class="m-5">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-3">
@@ -92,6 +106,21 @@
         @endrole
 
         @role('mahasiswa')
+        
+        @if(isset($messagepass))
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    Swal.fire({
+                        icon: '{{ $alertType == "danger" ? "error" : $alertType }}',
+                        title: '{{ $alertType == "danger" ? "Peringatan" : "Informasi" }}',
+                        text: '{{ $messagepass }}',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    });
+                });
+            </script>
+        @endif
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 px-4">
             <div class="">
                 <h3 class="text-lg font-semibold text-gray-950 dark:text-gray-200 mb-2">

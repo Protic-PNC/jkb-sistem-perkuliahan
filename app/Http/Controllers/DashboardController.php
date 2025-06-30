@@ -9,9 +9,11 @@ use App\Models\Lecturer;
 use App\Models\Student;
 use App\Models\StudyProgram;
 use App\Models\User;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Contracts\Role;
 
 class DashboardController extends Controller
@@ -43,9 +45,7 @@ class DashboardController extends Controller
 
         $attendanceData = $query->get();
 
-        //  $attendanceData = $query->get()
-        // ->sortByDesc('created_at') // urutkan dari yang terbaru
-        // ->unique('student_id'); 
+        
         $defaultCounts = [
             1 => 0, 
             2 => 0, 
@@ -71,6 +71,20 @@ class DashboardController extends Controller
 
         $prodis = StudyProgram::get();
 
+        $messagepass = null;
+        $alertType = null;
+
+        if ($auth->hasRole('dosen')){
+            if (Hash::check($auth->lecturer->nidn, $auth->password)) {
+                $messagepass = 'Ganti Password Terlebih Dahulu';
+                $alertType = 'danger';
+            } else {
+                $messagepass = 'Berhasil Login!';
+                $alertType = 'success';
+            }
+        }
+        
+
         return view('masterdata.dashboard', [
             'auth' => $auth,
             'user' => $user,
@@ -82,8 +96,70 @@ class DashboardController extends Controller
             'availablePeriods' => $availablePeriods,
             'jadwal' => $jadwal,
             'prodis' => $prodis,
+            'messagepass' => $messagepass,
+            'alertType' => $alertType,
         ]);
     }
+
+    public function index_mahasiswa($studentId)
+    {
+        $auth = Auth::user();
+        $attendances = AttendanceListStudent::with('detail')
+        ->where('student_id', $studentId)
+        ->where('attendance_student', 5)
+        ->get();
+
+         
+
+        $totalJam = 0;
+
+        // dd($attendances->pluck('attendanceListDetail'));
+
+        foreach ($attendances as $attendance) {
+            $detail = $attendance->detail;
+//  dd($detail);
+            if ($detail) {
+                $durasi = (int)$detail->end_hour - (int)$detail->start_hour + 1;
+                $totalJam += $durasi;
+            }
+        }
+
+        $message = null;
+        $alertType = null;
+
+        // if ($totalJam < 30) {
+        //                 $message = 'Anda memenuhi syarat untuk mengikuti UAS.';
+        //     $alertType = 'success';
+            
+        // } else {
+        //     $message = 'Mohon maaf, Anda tidak memenuhi syarat mengikuti UAS karena total ketidakhadiran Anda melebihi 30 jam.';
+        //     $alertType = 'danger'; // bisa untuk styling alert
+
+        // }
+        $jadwal = null;
+        if($auth->hasRole('mahasiswa')){
+
+            $jadwal = Jadwal::where('prodi_id', $auth->student->student_class->study_program_id)->first();
+        }
+
+        // $password = DecryptException($auth->password);
+        
+        if ($auth->hasRole('mahasiswa')){
+            if (Hash::check($auth->student->nim, $auth->password)) {
+                $messagepass = 'Ganti Password Terlebih Dahulu';
+                $alertType = 'danger';
+            } else {
+                $messagepass = 'Berhasil Login!';
+                $alertType = 'success';
+            }
+        }
+        
+        
+        
+
+        return view('masterdata.dashboard', compact('totalJam', 'alertType','jadwal','messagepass'));
+    }
+
    
 
 

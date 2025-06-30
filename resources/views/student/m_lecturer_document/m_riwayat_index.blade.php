@@ -9,6 +9,19 @@
             }
         </style>
 
+        @if(isset($message))
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    Swal.fire({
+                        icon: '{{ $alertType == "danger" ? "error" : $alertType }}',
+                        title: '{{ $alertType == "danger" ? "Peringatan" : "Informasi" }}',
+                        text: '{{ $message }}',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    });
+                });
+            </script>
+        @endif
         <section class="bg-white dark:bg-gray-900">
 
             <div class="py-4 px-2 mx-auto lg:m-8 sm:m-4">

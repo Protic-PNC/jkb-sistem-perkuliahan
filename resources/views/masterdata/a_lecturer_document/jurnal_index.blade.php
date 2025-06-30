@@ -106,8 +106,17 @@
                                 <td class="px-2 py-2 text-center border border-slate-800">{{ $d->meeting_order }}</td>
                                 <td class="px-2 py-2 text-center border border-slate-800">{{\Carbon\Carbon::parse( $d->created_at)->translatedFormat('d F Y') }}</td>
                                 <td class="px-2 py-2 text-center border border-slate-800">{{ $d->sum_attendance_students }}</td>
+                                <td class="px-2 py-2 text-center border border-slate-800">@if($d->course_status == 1)
+                                    Sesuai Jadwal
+                                    @elseif($d->course_status == 2)
+                                    Pertukaran
+                                    @elseif($d->course_status == 3)
+                                    Pengganti
+                                    @elseif($d->course_status == 4)
+                                    Tambahan
+                                    @endif
+                                </td>
                                 <td class="px-2 py-2 text-center border border-slate-800">{{ $d->journal_detail->learning_methods }}</td>
-                                <td class="px-2 py-2 text-center border border-slate-800">{{ $d->journal_detail->material_course }}</td>
                                 <td class="px-2 py-2 text-center border border-slate-800">{{ $d->journal_detail->material_course }}</td>
                                 <td class="px-2 py-2 text-center border border-slate-800 "><img src="{{ Storage::url($d->attendenceList?->lecturer->signature ) }}" alt="" class="object-cover w-[20px] h-90px rounded-2xl"></td>
                                 <td class="px-2 py-2 text-center border border-slate-800 "><img src="{{ Storage::url($d->student?->signature ) }}" alt="" class="object-cover w-[20px] h-90px rounded-2xl"></td>
@@ -162,9 +171,10 @@
                                 <ul class="list-disc pl-5 text-sm">
                                     <li>Status pertemuan diisi dengan:
                                         <ul class="list-disc pl-5 mt-1">
-                                            <li>a. Sesuai Jadwal</li>
-                                            <li>b. Pengganti</li>
-                                            <li>c. Tambahan</li>
+                                            <li>Sesuai Jadwal</li>
+                                            <li>Pertukaran</li>
+                                            <li>Pengganti</li>
+                                            <li>Tambahan</li>
                                         </ul>
                                     </li>
                                     <li class="mt-1">1 SKS = 50 menit</li>

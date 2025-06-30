@@ -20,8 +20,13 @@ class AttendanceListStudent extends Model
     ];
 
     public function attendenceListDetail(){
-        return $this->belongsTo(AttendanceListDetail::class);
+       return $this->belongsTo(AttendanceListDetail::class, 'attendance_list_detail_id');
     }
+
+    public function detail()
+{
+    return $this->belongsTo(AttendanceListDetail::class, 'attendance_list_detail_id');
+}
 
     public function student(){
         return $this->belongsTo(Student::class);

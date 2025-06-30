@@ -41,8 +41,9 @@ Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login'
 
 
 Route::middleware('auth')->group(function () {
-    Route::resource('dashboard', DashboardController::class);
-    Route::get('/dashboard/admin/{attendanceListId}', [DashboardController::class, 'index_admin'])->name('dashboard.admin');
+    // Route::resource('dashboard', DashboardController::class);
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/m/dashboard/{studentId}', [DashboardController::class, 'index_mahasiswa'])->name('m.dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -147,8 +148,7 @@ Route::middleware('auth')->group(function () {
         // Route::get('attendenceList/{classId}/{code}', [AttendanceListController::class, 'index'])->name('attendenceList.index');
         // Route::get('attendenceList/create/{id}', [AttendanceListController::class, 'create'])->name('attendenceList.create');
         
-        Route::get('journal/{id}', [JournalController::class, 'index'])->name('journal.index');
-        
+       
     });
     Route::prefix('m')->name('m.')->middleware(['role:mahasiswa'])->group(function(){
         Route::get('/dokumen-perkuliahan/{id}', [M_LecturerDocumentController::class, 'index'])->name('dokumen_perkuliahan');

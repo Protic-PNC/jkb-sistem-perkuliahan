@@ -46,14 +46,12 @@ class M_LecturerDocumentController extends Controller
         $user = Auth::user();
         $student = Student::where('nim', $nim)->firstOrFail();
 
-        // Ambil semua daftar absensi untuk mahasiswa ini
         $data = AttendanceList::with(['course', 'attendanceListDetails.attendence_list_student'])
             ->whereHas('attendanceListDetails.attendence_list_student', function ($query) use ($student) {
                 $query->where('student_id', $student->id);
             })
             ->get()
             ->map(function ($item) use ($student) {
-                // Ambil semua detail absensi untuk mahasiswa ini saja
                 $details = $item->attendanceListDetails
                     ->flatMap(function ($detail) use ($student) {
                         return $detail->attendence_list_student
@@ -79,7 +77,41 @@ class M_LecturerDocumentController extends Controller
                 return $item;
             });
 
-        return view('student.m_lecturer_document.m_riwayat_index', compact('user', 'data', 'student'));
+            $auth = Auth::user();
+        $attendances = AttendanceListStudent::with('detail')
+        ->where('student_id', $student->id)
+        ->where('attendance_student', 5)
+        ->get();
+
+         
+
+        $totalJam = 0;
+
+        // dd($attendances->pluck('attendanceListDetail'));
+
+        foreach ($attendances as $attendance) {
+            $detail = $attendance->detail;
+//  dd($detail);
+            if ($detail) {
+                $durasi = (int)$detail->end_hour - (int)$detail->start_hour + 1;
+                $totalJam += $durasi;
+            }
+        }
+
+        $message = null;
+        $alertType = null;
+
+        if ($totalJam < 30) {
+                        $message = 'Anda memenuhi syarat untuk mengikuti UAS.';
+            $alertType = 'success';
+            
+        } else {
+            $message = 'Mohon maaf, Anda tidak memenuhi syarat mengikuti UAS karena total ketidakhadiran Anda melebihi 30 jam.';
+            $alertType = 'danger'; // bisa untuk styling alert
+
+        }
+
+        return view('student.m_lecturer_document.m_riwayat_index', compact('user', 'data', 'student','message','alertType'));
     }
 
 
