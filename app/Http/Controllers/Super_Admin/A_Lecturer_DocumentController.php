@@ -9,6 +9,7 @@ use App\Models\Courses;
 use App\Models\Journal;
 use App\Models\Lecturer;
 use App\Models\Periode;
+use App\Models\Student;
 use App\Models\StudentClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -80,6 +81,7 @@ class A_Lecturer_DocumentController extends Controller
 
             $data = $attendanceLists->paginate(5);
         }
+
         
         return view('masterdata.a_lecturer_document.daftar_index', compact('data'));
         
@@ -171,6 +173,40 @@ class A_Lecturer_DocumentController extends Controller
     
     }
 
+    public function mahasiswaTidakMemenuhiSyaratUAS()
+    {
+        $students = Student::with(['attendence_list_student.detail'])
+            ->get()
+            ->filter(function ($student) {
+                $totalJam = 0;
+
+                foreach ($student->attendence_list_student as $attendance) {
+                    if ($attendance->attendance_student == 5 && $attendance->detail) {
+                        $durasi = (int)$attendance->detail->end_hour - (int)$attendance->detail->start_hour + 1;
+                        $totalJam += $durasi;
+                    }
+                }
+
+                return $totalJam > 30;
+            })
+            ->map(function ($student) {
+                $totalJam = 0;
+
+                foreach ($student->attendence_list_student as $attendance) {
+                    if ($attendance->attendance_student == 5 && $attendance->detail) {
+                        $durasi = (int)$attendance->detail->end_hour - (int)$attendance->detail->start_hour + 1;
+                        $totalJam += $durasi;
+                    }
+                }
+
+                $student->total_ketidakhadiran_jam = $totalJam;
+                return $student;
+            });
+
+        return view('masterdata.a_lecturer_document.riwayat_ketidakhadiran', compact('students'));
+    }
+
+
     
     public function show(string $id)
     {
@@ -245,16 +281,22 @@ public function update(Request $request, $id)
     {
         $data = AttendanceList::findOrFail($id);
 
-        $student_class = StudentClass::with(['students', 'course'])
-            ->where('id', $data->student_class_id)
-            ->firstOrFail();
+        $student_class = StudentClass::with(['students.attendence_list_student' => function($query) use ($id) {
+            $query->whereHas('attendenceListDetail', function($q) use ($id) {
+                $q->where('attendance_list_id', $id);
+            });
+        }, 'course'])
+        ->where('id', $data->student_class_id)
+        ->firstOrFail();
 
         $students = $student_class->students;
-        $attendencedetail = AttendanceListDetail::where('attendance_list_id', $data->id)->with('attendenceList')
+        $attendencedetails = AttendanceListDetail::where('attendance_list_id', $data->id)
             ->orderBy('meeting_order')
             ->get();
-  
-        return view('masterdata.a_lecturer_document.absensi_index', compact('data',  'students','attendencedetail'));
+
+        $totalMeetings = 16;
+
+        return view('masterdata.a_lecturer_document.absensi_index', compact('data', 'students', 'attendencedetails', 'totalMeetings'));
     }
     public function jurnal_perkuliahan($id)
     {

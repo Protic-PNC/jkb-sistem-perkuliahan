@@ -59,6 +59,8 @@ Route::middleware('auth')->group(function () {
      Route::get('/daftar/daftar-index', [A_Lecturer_DocumentController::class,'daftar_index'])->name('daftar.index');
      Route::get('/daftar/absensi-perkuliahan/{id}', [A_Lecturer_DocumentController::class, 'absensi_perkuliahan'])->name('daftar.absensi-perkuliahan');
     Route::get('/daftar/jurnal-perkuliahan/{id}', [A_Lecturer_DocumentController::class, 'jurnal_perkuliahan'])->name('daftar.jurnal_perkuliahan');
+    Route::get('/mahasiswa-tidak-uas', [A_Lecturer_DocumentController::class, 'mahasiswaTidakMemenuhiSyaratUAS'])->name('mahasiswa.tidak_uas');
+
 
     });
     Route::prefix('masterdata')->name('masterdata.')->middleware(['role:super_admin'])->group(function(){

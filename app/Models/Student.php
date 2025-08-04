@@ -29,7 +29,8 @@ class Student extends Model
     }
 
     public function attendence_list_student(){
-        return $this->belongsTo(AttendanceListStudent::class, 'id', 'student_id');
+        return $this->hasMany(AttendanceListStudent::class, 'student_id');
+
     }
     
 }

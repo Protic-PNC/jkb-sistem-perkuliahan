@@ -46,6 +46,11 @@ class AttendanceListDetail extends Model
         return $this->belongsTo(Student::class, 'student_id', 'id');
     }
 
+     public function attendance_list_students()
+    {
+        return $this->hasMany(AttendanceListStudent::class, 'attendance_list_detail_id', 'id');
+    }
+
     
 
    

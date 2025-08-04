@@ -222,17 +222,7 @@
                         <th colspan="32" style="text-align: center;">PERTEMUAN KE-</th>
                         <th rowspan="2" style="width: 15mm; text-align: center;">Catatan</th>
                     </tr>
-                    {{-- <tr>
-                        @for ($i = 1; $i <= 16; $i++)
-                            <th colspan="2" style="text-align: center; padding: 0 !important;">
-                                <div class="attendance-header">{{ $i }}</div>
-                                <div style="display: flex;">
-                                    <div style="width: 50%; border-right: 0.5pt solid black;" class="attendance-header">A</div>
-                                    <div style="width: 50%;" class="attendance-header">T</div>
-                                </div>
-                            </th>
-                        @endfor
-                    </tr> --}}
+                    
                      <tr>
                                 @for ($i = 1; $i <= 16; $i++)
                                     <th colspan="2" class="attendance-cell">
@@ -244,7 +234,47 @@
                             </tr>
                 </thead>
                 <tbody>
-                    @foreach ($students as $student)
+                    {{-- @foreach ($students as $student)
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <td class="px-2 py-2 text-center border border-slate-800">{{ $loop->iteration }}</td>
+                                    <td class="px-2 py-2 border border-slate-800">{{ $student->nim }}</td>
+                                    <td class="px-2 py-2 border border-slate-800">{{ $student->name }}</td>
+                                    
+                                    @php
+                                        // Initialize empty collection if relationship returns null
+                                        $studentAttendances = $student->attendence_list_student ? $student->attendence_list_student->keyBy('attendance_list_detail_id') : collect();
+                                    @endphp
+
+                                    @foreach ($attendencedetails as $detail)
+                                        @php
+                                            $attendance = $studentAttendances->get($detail->id);
+                                        @endphp
+                                        
+                                        <td class="attendance-cell border border-slate-800 text-center">
+                                            @if($attendance)
+                                                @switch($attendance->attendance_student)
+                                                    @case(1) H @break
+                                                    @case(2) T @break
+                                                    @case(3) S @break
+                                                    @case(4) I @break
+                                                    @case(5) B @break
+                                                    @default - 
+                                                @endswitch
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+                                        <td class="attendance-cell border border-slate-800 text-center">
+                                            {{ $attendance->minutes_late ?? '-' }}
+                                        </td>
+                                    @endforeach
+
+                                    @for ($i = count($attendencedetails); $i < $totalMeetings; $i++)
+                                        <td colspan="2" class="px-1 py-1 text-center border border-slate-800">-</td>
+                                    @endfor
+                                </tr>
+                            @endforeach --}}
+                    {{-- @foreach ($students as $student)
                         <tr>
                             <td style="text-align: center;">{{ $loop->iteration }}</td>
                             <td>{{ $student->nim }}</td>
@@ -267,7 +297,6 @@
                                     @endphp
 
                                     <td class="attendance-cell">
-                                        {{-- {{ $attendanceRecord->attendance_student ?? '-' }} --}}
                                         @if($attendanceRecord)
                                                     @if ($attendanceRecord->attendance_student == 1)
                                                     H
@@ -295,7 +324,60 @@
                             @endif
                             <td></td>
                         </tr>
-                    @endforeach
+                    @endforeach --}}
+
+                    @foreach ($students as $student)
+    <tr>
+        <td style="text-align: center; border: 1px solid black; padding: 5px;">{{ $loop->iteration }}</td>
+        <td style="border: 1px solid black; padding: 5px;">{{ $student->nim }}</td>
+        <td style="border: 1px solid black; padding: 5px;">{{ $student->name }}</td>
+        
+        @php
+            $totalMeetings = 16;
+            $rendered = 0;
+            $attendanceCollection = $student->attendence_list_student ?? collect();
+        @endphp
+
+        @if ($attendencedetail->isEmpty())
+            @for ($i = 0; $i < $totalMeetings; $i++)
+                <td colspan="2" style="text-align: center; border: 1px solid black; padding: 2px;">-</td>
+            @endfor
+        @else
+            @foreach ($attendencedetail as $detail)
+                @php
+                    $attendanceRecord = $attendanceCollection->where('attendance_list_detail_id', $detail->id)->first();
+                    $rendered++;
+                @endphp
+
+                <td class="attendance-cell" style="text-align: center; border: 1px solid black; padding: 5px;">
+                    @if($attendanceRecord)
+                        @if ($attendanceRecord->attendance_student == 1)
+                            H
+                        @elseif($attendanceRecord->attendance_student == 2)
+                            T 
+                        @elseif($attendanceRecord->attendance_student == 3)
+                            S
+                        @elseif($attendanceRecord->attendance_student == 4)
+                            I
+                        @elseif($attendanceRecord->attendance_student == 5)
+                            B
+                        @endif
+                    @else
+                        -
+                    @endif
+                </td>
+                <td class="attendance-cell" style="text-align: center; border: 1px solid black; padding: 5px;">
+                    {{ $attendanceRecord->sum_late_students ?? '-' }}
+                </td>
+            @endforeach
+
+            @for ($i = $rendered; $i < $totalMeetings; $i++)
+                <td colspan="2" style="text-align: center; border: 1px solid black; padding: 2px;">-</td>
+            @endfor
+        @endif
+        <td style="border: 1px solid black;"></td>
+    </tr>
+@endforeach
 
                     <!-- Footer Tabel -->
                     <tr>

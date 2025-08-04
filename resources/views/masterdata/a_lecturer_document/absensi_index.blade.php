@@ -115,57 +115,40 @@
                                     <td class="px-2 py-2 text-center border border-slate-800">{{ $loop->iteration }}</td>
                                     <td class="px-2 py-2 border border-slate-800">{{ $student->nim }}</td>
                                     <td class="px-2 py-2 border border-slate-800">{{ $student->name }}</td>
+                                    
                                     @php
-                                        $totalMeetings = 16;
-                                        $rendered = 0;
-                                        $attendanceCollection = $student->attendence_list_student ?? collect();
+                                        // Initialize empty collection if relationship returns null
+                                        $studentAttendances = $student->attendence_list_student ? $student->attendence_list_student->keyBy('attendance_list_detail_id') : collect();
                                     @endphp
 
-                                    @if ($attendencedetail->isEmpty())
-                                        @for ($i = 0; $i < $totalMeetings; $i++)
-                                            <td colspan="2" class="px-1 py-1 text-center border border-slate-800">-</td>
-                                        @endfor
-                                    @else
-                                        @foreach ($attendencedetail as $detail)
-                                            @php
-                                                $attendanceRecord = $attendanceCollection->where('attendance_list_detail_id', $detail->id)->first();
-                                                $rendered++;
-                                            @endphp
+                                    @foreach ($attendencedetails as $detail)
+                                        @php
+                                            $attendance = $studentAttendances->get($detail->id);
+                                        @endphp
+                                        
+                                        <td class="attendance-cell border border-slate-800 text-center">
+                                            @if($attendance)
+                                                @switch($attendance->attendance_student)
+                                                    @case(1) H @break
+                                                    @case(2) T @break
+                                                    @case(3) S @break
+                                                    @case(4) I @break
+                                                    @case(5) B @break
+                                                    @default - 
+                                                @endswitch
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+                                        <td class="attendance-cell border border-slate-800 text-center">
+                                            {{ $attendance->minutes_late ?? '-' }}
+                                        </td>
+                                    @endforeach
 
-                                            <td class="attendance-cell border border-slate-800 text-center">
-                                                {{-- {{ $attendanceRecord->attendance_student ?? '-' }} --}}
-                                                @if($attendanceRecord)
-                                                    @if ($attendanceRecord->attendance_student == 1)
-                                                    H
-                                                    @elseif($attendanceRecord->attendance_student == 2)
-                                                    T 
-                                                    @elseif($attendanceRecord->attendance_student == 3)
-                                                    S
-                                                    @elseif($attendanceRecord->attendance_student == 4)
-                                                    I
-                                                    @elseif($attendanceRecord->attendance_student == 5)
-                                                    B
-                                                    @else
-
-                                                    @endif
-                                                @endif
-                                            </td>
-                                            <td class="attendance-cell border border-slate-800 text-center">
-                                                {{ $attendanceRecord->sum_late_students ?? '-' }}
-                                            </td>
-                                        @endforeach
-
-                                        @for ($i = $rendered; $i < $totalMeetings; $i++)
-                                            <td colspan="2" class="px-1 py-1 text-center border border-slate-800">-</td>
-                                        @endfor
-                                    @endif
-
-                                
-                                
-                                
-                                    
+                                    @for ($i = count($attendencedetails); $i < $totalMeetings; $i++)
+                                        <td colspan="2" class="px-1 py-1 text-center border border-slate-800">-</td>
+                                    @endfor
                                 </tr>
-                                <!-- Add more student rows as needed -->
                             @endforeach
                             <!-- Add more student rows as needed -->
 
@@ -174,7 +157,7 @@
                                 <td colspan="3" class="px-6 py-2 text-left font-semibold border border-slate-800">Jumlah mahasiswa</td>
                                 @for ($i = 1; $i <= 16; $i++)
                                     @php
-                                        $currentDetail = $attendencedetail->where('meeting_order', $i)->first();
+                                        $currentDetail = $attendencedetails->where('meeting_order', $i)->first();
                                     @endphp
                                     <td colspan="2" class="px-1 py-1 text-center border border-slate-800">
                                         {{ $currentDetail->sum_attendance_students ?? ' ' }}
@@ -197,8 +180,8 @@
                                 </td>
                                     @for ($i = 1; $i <= 16; $i++)
                                         @php
-                                            $currentDetail = $attendencedetail->where('meeting_order', $i)->first();
-                                            $signature = optional($attendencedetail->first()?->attendenceList?->lecturer)->signature;
+                                            $currentDetail = $attendencedetails->where('meeting_order', $i)->first();
+                                            $signature = optional($attendencedetails->first()?->attendenceList?->lecturer)->signature;
                                         @endphp
 
                                         <td colspan="2" class="px-1 py-1 border border-slate-800">
@@ -222,7 +205,7 @@
                                 @endfor --}}
                                 @for ($i = 1; $i <= 16; $i++)
                                     @php
-                                        $currentDetail = $attendencedetail->where('meeting_order', $i)->first();
+                                        $currentDetail = $attendencedetails->where('meeting_order', $i)->first();
                                         $date = $currentDetail ? \Carbon\Carbon::parse($currentDetail->created_at)->format('d M Y') : '';
                                     @endphp
                                     <td colspan="2" class="px-1 py-1 text-center border border-slate-800">
@@ -238,7 +221,7 @@
                                 @endfor --}}
                                 @for ($i = 1; $i <= 16; $i++)
                                     @php
-                                        $currentDetail = $attendencedetail->where('meeting_order', $i)->first();
+                                        $currentDetail = $attendencedetails->where('meeting_order', $i)->first();
                                         $start_hour = $currentDetail->start_hour ?? '-';
                                         $end_hour = $currentDetail->end_hour ?? '-';
                                     @endphp
@@ -255,7 +238,7 @@
                                 @endfor --}}
                                 @for ($i = 1; $i <= 16; $i++)
                                     @php
-                                        $currentDetail = $attendencedetail->where('meeting_order', $i)->first();
+                                        $currentDetail = $attendencedetails->where('meeting_order', $i)->first();
                                         $course_status = $currentDetail->course_status ?? '-';
                                        
                                     @endphp

@@ -17,12 +17,13 @@
     </div>
 
     <nav class="mt-10">
-        
+        @role('super_admin|dosen')
         <a class="flex items-center p-2 w-full text-base font-medium rounded-lg transition duration-75 group text-white hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 dark:text-white{{ setActive('dashboard.index') }}"
             href="{{ route('dashboard.index') }}">
             <i class="fa-solid fa-house"></i>
             <span class="mx-3">Dashboard</span>
         </a>
+        @endrole
        
 
         @role('super_admin')
@@ -57,6 +58,7 @@
                 class="py-2 space-y-2 {{ request()->routeIs(
                     'dokumen_perkuliahan.kelola.*',
                     'dokumen_perkuliahan.daftar.*',
+                    'dokumen_perkuliahan.mahasiswa.*',
                 ) ? '' : 'hidden' }}">
                 
                 <li>
@@ -73,6 +75,16 @@
                             ]) 
                         }}">
                         <i class="fa fa-circle mr-2"></i> Daftar
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('dokumen_perkuliahan.mahasiswa.tidak_uas') }}"
+                        class="flex items-center p-2 pl-11 w-full text-base font-medium {{ 
+                            setActive([
+                                'dokumen_perkuliahan.mahasiswa.*',
+                            ]) 
+                        }}">
+                        <i class="fa fa-circle mr-2"></i> Daftar Riwayat Kehadiran Mahasiswa
                     </a>
                 </li>
             </ul>
