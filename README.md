@@ -1,8 +1,8 @@
-# JKB Lecture Information System
+# JKB Attendance Information System and Lecture Journal
 
 ## Overview
 
-JKB Lecture Information System is a comprehensive academic management system designed to streamline the process of managing course attendance, journals, and other academic data for higher education institutions.
+JKB Attendance Information System and Lecture Journal is a comprehensive academic management system designed to streamline the process of managing course attendance, journals, and other academic data for higher education institutions.
 
 ## Features
 
